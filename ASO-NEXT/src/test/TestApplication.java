@@ -34,7 +34,7 @@ public class TestApplication implements NXTProtocol {
 	private void run(){
 
 		//When window is closed, close everything.
-		nxts = search("ROSS");
+		nxts = search(null);
 		System.out.println(nxts.length + " NXT's found");
 
 		for(int i = 0; i < nxts.length; i++){
