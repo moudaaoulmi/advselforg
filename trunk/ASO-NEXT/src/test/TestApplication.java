@@ -21,6 +21,9 @@ public class TestApplication {
 
 	private void run() {
 		robots[0] = new NxtController("CHANDLER");
-		robots[0].moveForward(50);
+		
+		for (int i = 0; i < robots.length; i++) {
+			robots[i].moveForward(50);
+		}
 	}
 }
