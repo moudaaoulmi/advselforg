@@ -58,10 +58,8 @@ public class TestApplication implements NXTProtocol {
 			nxtCommand.setNXTComm(nxtComms[i]);
 
 			try {
-				nxtCommand.setOutputState(0, (byte) 100, 0, 0, 0, 0, 500);
-				nxtCommand.setOutputState(0, (byte) 100, 0, 0, 0, 0, 500);
-				nxtCommand.setOutputState(0, (byte) 100, 0, 0, 0, 0, 1);
-				System.out.println("Command 1 sent");
+				nxtCommand.setOutputState(0, (byte) 50, 0, 0, 0, 0, 1500);
+				nxtCommand.setOutputState(2, (byte) 50, 0, 0, 0, 0, 1500);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
