@@ -1,2 +1,3 @@
 - verhaal over bluetooth-adapters
-- cache-bestandje correct?
+- cache-bestandje correct? Als niet alle mindstorms gevonden worden kan dit verholpen worden 
+door het verwijderen van het bestand nxj.cache. Onder windows staat deze in C:\Users\$username 
