@@ -1,13 +1,23 @@
 package org.vu.advselforg;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import lejos.nxt.addon.RFIDSensor;
 import lejos.nxt.remote.NXTCommand;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteSensorPort;
-import lejos.pc.comm.*;
 import lejos.robotics.navigation.TachoPilot;
 import lejos.nxt.LightSensor;
+import lejos.nxt.SensorConstants;
+import lejos.nxt.SoundSensor;
+import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
+import lejos.pc.comm.NXTComm;
+import lejos.pc.comm.NXTCommException;
+import lejos.pc.comm.NXTCommFactory;
+import lejos.pc.comm.NXTConnector;
+import lejos.pc.comm.NXTInfo;
 
 public class NxtController implements RobotController {
 
@@ -15,15 +25,18 @@ public class NxtController implements RobotController {
 	private NXTConnector conn;
 	private NXTInfo nxt;
 	private NXTComm nxtComm;
-	private UltrasonicSensor ultrasonicsensor;
-	private LightSensor lightsensor;
+	private ArrayList<UltrasonicSensor> ultrasonicsensors;
+	private ArrayList<LightSensor> lightsensors;
+	private ArrayList<SoundSensor> soundsensors;
+	private ArrayList<TouchSensor> touchsensors;
+	private ArrayList<RFIDSensor> rfidsensors;
 	private TachoPilot pilot;
 	private RemoteSensorPort[] sensors;
 	private RemoteMotor[] motors;
 
 	public NxtController(String robotName, int leftMotorPort,
-			int rightMotorPort, boolean motorReverse, int ultrasonicSensorPort,
-			int lightSensorPort) {
+			int rightMotorPort, boolean motorReverse, SensorType type1,
+			SensorType type2, SensorType type3, SensorType type4) {
 		conn = new NXTConnector();
 		nxt = search(robotName);
 
@@ -38,23 +51,9 @@ public class NxtController implements RobotController {
 		nxtCommand = new NXTCommand();
 		nxtCommand.setNXTComm(nxtComm);
 
-		sensors = new RemoteSensorPort[5];
-		for (int i = 0; i < 4; i++) {
-			sensors[i + 1] = new RemoteSensorPort(nxtCommand, i);
-		}
-
 		motors = new RemoteMotor[4];
 		for (int i = 0; i < 3; i++) {
 			motors[i + 1] = new RemoteMotor(nxtCommand, i);
-		}
-
-		if (ultrasonicSensorPort != 0) {
-			ultrasonicsensor = new UltrasonicSensor(
-					sensors[ultrasonicSensorPort]);
-		}
-
-		if (lightSensorPort != 0) {
-			lightsensor = new LightSensor(sensors[lightSensorPort]);
 		}
 
 		if (leftMotorPort != 0 && rightMotorPort != 0) {
@@ -62,6 +61,45 @@ public class NxtController implements RobotController {
 					motors[rightMotorPort], motorReverse);
 		}
 
+		sensors = new RemoteSensorPort[5];
+		for (int i = 0; i < 4; i++) {
+			sensors[i + 1] = new RemoteSensorPort(nxtCommand, i);
+		}
+
+		ultrasonicsensors = new ArrayList<UltrasonicSensor>();
+		lightsensors = new ArrayList<LightSensor>();
+		soundsensors = new ArrayList<SoundSensor>();
+		touchsensors = new ArrayList<TouchSensor>();
+		rfidsensors = new ArrayList<RFIDSensor>();
+
+		initSensor(sensors[1], type1);
+		initSensor(sensors[2], type2);
+		initSensor(sensors[3], type3);
+		initSensor(sensors[4], type4);
+
+	}
+
+	private void initSensor(RemoteSensorPort port, SensorType type) {
+		switch (type) {
+		case NONE:
+			port.setType(SensorConstants.TYPE_NO_SENSOR);
+			break;
+		case ULTRASONIC:
+			ultrasonicsensors.add(new UltrasonicSensor(port));
+			break;
+		case LIGHT:
+			lightsensors.add(new LightSensor(port, true));
+			break;
+		case SOUND:
+			soundsensors.add(new SoundSensor(port));
+			break;
+		case TOUCH:
+			touchsensors.add(new TouchSensor(port));
+			break;
+		case RFID:
+			rfidsensors.add(new RFIDSensor(port));
+			break;
+		}
 	}
 
 	/* Close the connection */
@@ -115,28 +153,63 @@ public class NxtController implements RobotController {
 		}
 	}
 
+	public int getDistance(int sensorIndex) {
+		if (!ultrasonicsensors.isEmpty()) {
+			return ultrasonicsensors.get(sensorIndex).getDistance();
+		} else {
+			return -1;
+		}
+	}
+
 	public int getDistance() {
-		if (ultrasonicsensor != null) {
-			return ultrasonicsensor.getDistance();
+		return getDistance(0);
+	}
+
+	public int getLightValue(int sensorIndex) {
+		if (!lightsensors.isEmpty()) {
+			return lightsensors.get(sensorIndex).getLightValue();
 		} else {
 			return -1;
 		}
 	}
 
 	public int getLightValue() {
-		if (lightsensor != null) {
-			return lightsensor.getLightValue();
+		return getLightValue(0);
+	}
+
+	public int getSoundLevel(int sensorIndex) {
+		if (!soundsensors.isEmpty()) {
+			return soundsensors.get(sensorIndex).readValue();
 		} else {
 			return -1;
 		}
 	}
 
-	public int getTouchSensorPressed() {
-		return 0;
+	public int getSoundLevel() {
+		return getSoundLevel(0);
 	}
 
-	public int getRFID() {
-		return 0;
+	public boolean getTouchSensorPressed(int sensorIndex) {
+		if (!touchsensors.isEmpty()) {
+			return touchsensors.get(sensorIndex).isPressed();
+		} else {
+			return false;
+		}
 	}
 
+	public boolean getTouchSensorPressed() {
+		return getTouchSensorPressed(0);
+	}
+
+	public long getRFID(int sensorIndex) {
+		if (!rfidsensors.isEmpty()) {
+			return rfidsensors.get(sensorIndex).readTransponderAsLong(false);
+		} else {
+			return -1;
+		}
+	}
+
+	public long getRFID() {
+		return getRFID(0);
+	}
 }
