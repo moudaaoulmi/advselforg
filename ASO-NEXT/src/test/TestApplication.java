@@ -23,15 +23,21 @@ public class TestApplication {
 		int leftMotorPort = 1;
 		int rightMotorPort = 3;
 		boolean motorReverse = false;
-		int ultrasonicSensorPort = 4;
-		int lightSensorPort = 1;
+		SensorType port1 = SensorType.TOUCH;
+		SensorType port2 = SensorType.NONE;
+		SensorType port3 = SensorType.NONE;
+		SensorType port4 = SensorType.NONE;
 
 		robots[0] = new NxtController("ROSS", leftMotorPort, rightMotorPort,
-				motorReverse, ultrasonicSensorPort, lightSensorPort);
+				motorReverse, port1, port2, port3, port4);
 
 		for (int i = 0; i < robots.length; i++) {
-			robots[i].moveForward(50, true);
-			System.out.println(robots[i].getDistance());
+			//robots[i].moveForward(10, false);
+			//robots[i].moveBackward(10, false);
+			System.out.printf("Distance: %s\n", robots[i].getDistance());
+			System.out.printf("LightValue: %s\n", robots[i].getLightValue());
+			System.out.printf("Sound: %s\n", robots[i].getSoundLevel());
+			System.out.printf("Touch: %s\n", new Boolean(robots[i].getTouchSensorPressed()).toString());
 		}
 	}
 }
