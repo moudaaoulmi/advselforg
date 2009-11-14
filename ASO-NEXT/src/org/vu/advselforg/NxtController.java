@@ -2,19 +2,31 @@ package org.vu.advselforg;
 
 import java.io.IOException;
 import lejos.nxt.remote.NXTCommand;
+import lejos.nxt.remote.RemoteMotor;
+import lejos.nxt.remote.RemoteSensorPort;
 import lejos.pc.comm.*;
+import lejos.robotics.navigation.TachoPilot;
+import lejos.nxt.LightSensor;
+import lejos.nxt.UltrasonicSensor;
 
 public class NxtController implements RobotController {
-	
+
 	private NXTCommand nxtCommand;
 	private NXTConnector conn;
 	private NXTInfo nxt;
 	private NXTComm nxtComm;
+	private UltrasonicSensor ultrasonicsensor;
+	private LightSensor lightsensor;
+	private TachoPilot pilot;
+	private RemoteSensorPort[] sensors;
+	private RemoteMotor[] motors;
 
-	public NxtController(String robotName) {
+	public NxtController(String robotName, int leftMotorPort,
+			int rightMotorPort, boolean motorReverse, int ultrasonicSensorPort,
+			int lightSensorPort) {
 		conn = new NXTConnector();
 		nxt = search(robotName);
-		
+
 		try {
 			nxtComm = NXTCommFactory.createNXTComm(nxt.protocol);
 			nxtComm.open(nxt);
@@ -22,11 +34,36 @@ public class NxtController implements RobotController {
 		} catch (NXTCommException e) {
 			e.printStackTrace();
 		}
-		
+
 		nxtCommand = new NXTCommand();
 		nxtCommand.setNXTComm(nxtComm);
+
+		sensors = new RemoteSensorPort[5];
+		for (int i = 0; i < 4; i++) {
+			sensors[i + 1] = new RemoteSensorPort(nxtCommand, i);
+		}
+
+		motors = new RemoteMotor[4];
+		for (int i = 0; i < 3; i++) {
+			motors[i + 1] = new RemoteMotor(nxtCommand, i);
+		}
+
+		if (ultrasonicSensorPort != 0) {
+			ultrasonicsensor = new UltrasonicSensor(
+					sensors[ultrasonicSensorPort]);
+		}
+
+		if (lightSensorPort != 0) {
+			lightsensor = new LightSensor(sensors[lightSensorPort]);
+		}
+
+		if (leftMotorPort != 0 && rightMotorPort != 0) {
+			pilot = new TachoPilot(1.0f, 1, 0f, motors[leftMotorPort],
+					motors[rightMotorPort], motorReverse);
+		}
+
 	}
-	
+
 	/* Close the connection */
 	protected void finalize() throws Throwable {
 		try {
@@ -41,7 +78,7 @@ public class NxtController implements RobotController {
 			super.finalize();
 		}
 	}
-	
+
 	/* Find NXT's with a given name */
 	private NXTInfo search(String robotName) {
 		NXTInfo[] nxts;
@@ -52,15 +89,54 @@ public class NxtController implements RobotController {
 			return null;
 		}
 	}
-	
+
 	/* Move the robot [distance] cm forward */
-	public void moveForward(int distance) {
-		try {
-			nxtCommand.setOutputState(0, (byte) 50, 0, 0, 0, 0, distance * 21);
-			nxtCommand.setOutputState(2, (byte) 50, 0, 0, 0, 0, distance * 21);
-		} catch (IOException e) {
-			e.printStackTrace();
+	public void moveForward(int distance, boolean immediateReturn) {
+		if (pilot != null) {
+			pilot.travel(distance, immediateReturn);
 		}
+	}
+
+	public void moveBackward(int distance, boolean immediateReturn) {
+		if (pilot != null) {
+			pilot.travel(-distance, immediateReturn);
+		}
+	}
+
+	public void turnLeft(int degrees, boolean immediateReturn) {
+		if (pilot != null) {
+			pilot.rotate((float) -degrees, immediateReturn);
+		}
+	}
+
+	public void turnRight(int degrees, boolean immediateReturn) {
+		if (pilot != null) {
+			pilot.rotate((float) degrees, immediateReturn);
+		}
+	}
+
+	public int getDistance() {
+		if (ultrasonicsensor != null) {
+			return ultrasonicsensor.getDistance();
+		} else {
+			return -1;
+		}
+	}
+
+	public int getLightValue() {
+		if (lightsensor != null) {
+			return lightsensor.getLightValue();
+		} else {
+			return -1;
+		}
+	}
+
+	public int getTouchSensorPressed() {
+		return 0;
+	}
+
+	public int getRFID() {
+		return 0;
 	}
 
 }
