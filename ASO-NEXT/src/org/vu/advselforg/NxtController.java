@@ -23,7 +23,7 @@ public class NxtController implements RobotController {
 
 	private NXTCommand nxtCommand;
 	private NXTConnector conn;
-	private NXTInfo nxt;
+	private NXTInfo[] nxts;
 	private NXTComm nxtComm;
 	private ArrayList<UltrasonicSensor> ultrasonicsensors;
 	private ArrayList<LightSensor> lightsensors;
@@ -37,41 +37,54 @@ public class NxtController implements RobotController {
 	public NxtController(String robotName, int leftMotorPort,
 			int rightMotorPort, boolean motorReverse, SensorType type1,
 			SensorType type2, SensorType type3, SensorType type4) {
+		
+		// Create a connection and search for robots named [robotName]
 		conn = new NXTConnector();
-		nxt = search(robotName);
+		nxts = search(robotName);
 
-		try {
-			nxtComm = NXTCommFactory.createNXTComm(nxt.protocol);
-			nxtComm.open(nxt);
-			System.out.println("Connected to " + nxt.name);
-		} catch (NXTCommException e) {
-			e.printStackTrace();
+		// If a NXT is found, connect to it
+		if (nxts.length > 0) {
+			try {
+				nxtComm = NXTCommFactory.createNXTComm(nxts[0].protocol);
+				nxtComm.open(nxts[0]);
+				System.out.println("Connected to " + nxts[0].name);
+			} catch (NXTCommException e) {
+				e.printStackTrace();
+			}
+		} else {
+			throw new Error("Can't find " + robotName);
 		}
 
+		// Create a command object for the NXT
 		nxtCommand = new NXTCommand();
 		nxtCommand.setNXTComm(nxtComm);
 
+		// Create 3 remote motors
 		motors = new RemoteMotor[4];
 		for (int i = 0; i < 3; i++) {
 			motors[i + 1] = new RemoteMotor(nxtCommand, i);
 		}
 
+		// Create a pilot
 		if (leftMotorPort != 0 && rightMotorPort != 0) {
 			pilot = new TachoPilot(1.0f, 1, 0f, motors[leftMotorPort],
 					motors[rightMotorPort], motorReverse);
 		}
 
+		// Create 4 remote sensor ports
 		sensors = new RemoteSensorPort[5];
 		for (int i = 0; i < 4; i++) {
 			sensors[i + 1] = new RemoteSensorPort(nxtCommand, i);
 		}
 
+		// Initialize the sensor arraylists
 		ultrasonicsensors = new ArrayList<UltrasonicSensor>();
 		lightsensors = new ArrayList<LightSensor>();
 		soundsensors = new ArrayList<SoundSensor>();
 		touchsensors = new ArrayList<TouchSensor>();
 		rfidsensors = new ArrayList<RFIDSensor>();
 
+		// Set the types of the sensors
 		initSensor(sensors[1], type1);
 		initSensor(sensors[2], type2);
 		initSensor(sensors[3], type3);
@@ -79,6 +92,7 @@ public class NxtController implements RobotController {
 
 	}
 
+	/* Set the type of sensor [port] to [type] */
 	private void initSensor(RemoteSensorPort port, SensorType type) {
 		switch (type) {
 		case NONE:
@@ -118,11 +132,11 @@ public class NxtController implements RobotController {
 	}
 
 	/* Find NXT's with a given name */
-	private NXTInfo search(String robotName) {
+	private NXTInfo[] search(String robotName) {
 		NXTInfo[] nxts;
 		nxts = conn.search(robotName, null, NXTCommFactory.BLUETOOTH);
 		if (nxts.length > 0) {
-			return nxts[0];
+			return nxts;
 		} else {
 			return null;
 		}
@@ -135,24 +149,28 @@ public class NxtController implements RobotController {
 		}
 	}
 
+	/* Move the robot [distance] cm backward */
 	public void moveBackward(int distance, boolean immediateReturn) {
 		if (pilot != null) {
 			pilot.travel(-distance, immediateReturn);
 		}
 	}
 
-	public void turnLeft(int degrees, boolean immediateReturn) {
+	/* Rotate the robot [angle] degrees to the left */
+	public void turnLeft(int angle, boolean immediateReturn) {
 		if (pilot != null) {
-			pilot.rotate((float) -degrees, immediateReturn);
+			pilot.rotate((float) -angle, immediateReturn);
 		}
 	}
 
-	public void turnRight(int degrees, boolean immediateReturn) {
+	/* Rotate the robot [angle] degrees to the right */
+	public void turnRight(int angle, boolean immediateReturn) {
 		if (pilot != null) {
-			pilot.rotate((float) degrees, immediateReturn);
+			pilot.rotate((float) angle, immediateReturn);
 		}
 	}
 
+	/* Get the distance of a ultrasonic sensor */
 	public int getDistance(int sensorIndex) {
 		if (!ultrasonicsensors.isEmpty()) {
 			return ultrasonicsensors.get(sensorIndex).getDistance();
@@ -161,10 +179,12 @@ public class NxtController implements RobotController {
 		}
 	}
 
+	/* Get the distance of the first ultrasonic sensor */
 	public int getDistance() {
 		return getDistance(0);
 	}
 
+	/* Get the light value of a light sensor */
 	public int getLightValue(int sensorIndex) {
 		if (!lightsensors.isEmpty()) {
 			return lightsensors.get(sensorIndex).getLightValue();
@@ -173,10 +193,12 @@ public class NxtController implements RobotController {
 		}
 	}
 
+	/* Get the light value of the first ligth sensor */
 	public int getLightValue() {
 		return getLightValue(0);
 	}
 
+	/* Get the sound level of a sound sensor */
 	public int getSoundLevel(int sensorIndex) {
 		if (!soundsensors.isEmpty()) {
 			return soundsensors.get(sensorIndex).readValue();
@@ -185,10 +207,12 @@ public class NxtController implements RobotController {
 		}
 	}
 
+	/* Get the sound level of the first sound sensor */
 	public int getSoundLevel() {
 		return getSoundLevel(0);
 	}
 
+	/* Get the state of a touch sensor */
 	public boolean getTouchSensorPressed(int sensorIndex) {
 		if (!touchsensors.isEmpty()) {
 			return touchsensors.get(sensorIndex).isPressed();
@@ -197,10 +221,12 @@ public class NxtController implements RobotController {
 		}
 	}
 
+	/* Get the state of the first touch sensor */
 	public boolean getTouchSensorPressed() {
 		return getTouchSensorPressed(0);
 	}
 
+	/* Read a transponder with a RFID sensor */
 	public long getRFID(int sensorIndex) {
 		if (!rfidsensors.isEmpty()) {
 			return rfidsensors.get(sensorIndex).readTransponderAsLong(false);
@@ -209,6 +235,7 @@ public class NxtController implements RobotController {
 		}
 	}
 
+	/* Read a transponder with the first RFID sensor */
 	public long getRFID() {
 		return getRFID(0);
 	}
