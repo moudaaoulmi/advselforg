@@ -3,7 +3,7 @@ package test;
 import org.vu.advselforg.*;
 
 public class TestApplication {
-	
+
 	private RobotController[] robots;
 
 	public static void main(String[] args) {
@@ -20,10 +20,18 @@ public class TestApplication {
 	}
 
 	private void run() {
-		robots[0] = new NxtController("CHANDLER");
-		
+		int leftMotorPort = 1;
+		int rightMotorPort = 3;
+		boolean motorReverse = false;
+		int ultrasonicSensorPort = 4;
+		int lightSensorPort = 1;
+
+		robots[0] = new NxtController("ROSS", leftMotorPort, rightMotorPort,
+				motorReverse, ultrasonicSensorPort, lightSensorPort);
+
 		for (int i = 0; i < robots.length; i++) {
-			robots[i].moveForward(50);
+			robots[i].moveForward(50, true);
+			System.out.println(robots[i].getDistance());
 		}
 	}
 }
