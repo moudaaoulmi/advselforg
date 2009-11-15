@@ -23,7 +23,7 @@ public class NxtController implements RobotController {
 
 	private NXTCommand nxtCommand;
 	private NXTConnector conn;
-	private NXTInfo[] nxts;
+	private NXTInfo nxt;
 	private NXTComm nxtComm;
 	private ArrayList<UltrasonicSensor> ultrasonicsensors;
 	private ArrayList<LightSensor> lightsensors;
@@ -37,17 +37,17 @@ public class NxtController implements RobotController {
 	public NxtController(String robotName, int leftMotorPort,
 			int rightMotorPort, boolean motorReverse, SensorType type1,
 			SensorType type2, SensorType type3, SensorType type4) {
-		
+
 		// Create a connection and search for robots named [robotName]
 		conn = new NXTConnector();
-		nxts = search(robotName);
+		nxt = search(robotName);
 
 		// If a NXT is found, connect to it
-		if (nxts.length > 0) {
+		if (nxt != null) {
 			try {
-				nxtComm = NXTCommFactory.createNXTComm(nxts[0].protocol);
-				nxtComm.open(nxts[0]);
-				System.out.println("Connected to " + nxts[0].name);
+				nxtComm = NXTCommFactory.createNXTComm(nxt.protocol);
+				nxtComm.open(nxt);
+				System.out.println("Connected to " + nxt.name);
 			} catch (NXTCommException e) {
 				e.printStackTrace();
 			}
@@ -69,6 +69,7 @@ public class NxtController implements RobotController {
 		if (leftMotorPort != 0 && rightMotorPort != 0) {
 			pilot = new TachoPilot(1.0f, 1, 0f, motors[leftMotorPort],
 					motors[rightMotorPort], motorReverse);
+			pilot.regulateSpeed(true);
 		}
 
 		// Create 4 remote sensor ports
@@ -132,41 +133,47 @@ public class NxtController implements RobotController {
 	}
 
 	/* Find NXT's with a given name */
-	private NXTInfo[] search(String robotName) {
+	private NXTInfo search(String robotName) {
 		NXTInfo[] nxts;
 		nxts = conn.search(robotName, null, NXTCommFactory.BLUETOOTH);
 		if (nxts.length > 0) {
-			return nxts;
+			return nxts[0];
 		} else {
 			return null;
 		}
 	}
 
 	/* Move the robot [distance] cm forward */
-	public void moveForward(int distance, boolean immediateReturn) {
+	public void moveForward(float distance, boolean immediateReturn) {
 		if (pilot != null) {
 			pilot.travel(distance, immediateReturn);
 		}
 	}
 
 	/* Move the robot [distance] cm backward */
-	public void moveBackward(int distance, boolean immediateReturn) {
+	public void moveBackward(float distance, boolean immediateReturn) {
 		if (pilot != null) {
 			pilot.travel(-distance, immediateReturn);
 		}
 	}
 
 	/* Rotate the robot [angle] degrees to the left */
-	public void turnLeft(int angle, boolean immediateReturn) {
+	public void turnLeft(float angle, boolean immediateReturn) {
 		if (pilot != null) {
-			pilot.rotate((float) -angle, immediateReturn);
+			pilot.rotate(angle, immediateReturn);
 		}
 	}
 
 	/* Rotate the robot [angle] degrees to the right */
-	public void turnRight(int angle, boolean immediateReturn) {
+	public void turnRight(float angle, boolean immediateReturn) {
 		if (pilot != null) {
-			pilot.rotate((float) angle, immediateReturn);
+			pilot.rotate(-angle, immediateReturn);
+		}
+	}
+	
+	public void stop() {
+		if (pilot != null) {
+			pilot.stop();
 		}
 	}
 
