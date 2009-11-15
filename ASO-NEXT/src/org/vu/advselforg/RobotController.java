@@ -3,10 +3,11 @@ package org.vu.advselforg;
 public interface RobotController {
 
 	// Motor actions
-	public void moveForward(int distance, boolean immediateReturn);
-	public void moveBackward(int distance, boolean immediateReturn);
-	public void turnLeft(int angle, boolean immediateReturn);
-	public void turnRight(int angle, boolean immediateReturn);
+	public void moveForward(float distance, boolean immediateReturn);
+	public void moveBackward(float distance, boolean immediateReturn);
+	public void turnLeft(float angle, boolean immediateReturn);
+	public void turnRight(float angle, boolean immediateReturn);
+	public void stop();
 	
 	// Sensor actions
 	public int getDistance(int sensorIndex);
