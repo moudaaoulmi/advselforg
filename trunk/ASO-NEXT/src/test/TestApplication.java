@@ -20,6 +20,23 @@ public class TestApplication {
 	}
 
 	private void run() {
+		connectBots();
+
+		for (int j = 0; j < 4; j++) {
+			robots[0].moveForward(32, true);
+			robots[1].moveForward(32, false);
+			robots[0].turnLeft(90, true);
+			robots[1].turnLeft(90, false);
+		}
+		
+		//out.printf("Distance: %s\n", r.getDistance());
+		//out.printf("LightValue: %s\n", r.getLightValue());
+		//out.printf("Sound: %s\n", r.getSoundLevel());
+		//out.printf("Touch: %s\n", new Boolean(r.getTouchSensorPressed()).toString());
+
+	}
+
+	private void connectBots() {
 		int leftMotorPort = 1;
 		int rightMotorPort = 3;
 		boolean motorReverse = false;
@@ -28,24 +45,12 @@ public class TestApplication {
 		SensorType port3 = SensorType.NONE;
 		SensorType port4 = SensorType.NONE;
 
-		String[] names = {"Patrick"};
+		String[] names = {"JOEY","CHANDLER"};
 
 		for (int i = 0; i < names.length; i++) {
 			robots[i] = new NxtController(names[i], leftMotorPort, rightMotorPort,
 					motorReverse, port1, port2, port3, port4);
 		}
-		
-		for (int i = 0; i < names.length; i++) {
-			RobotController r = robots[i];
-
-			for (int j = 0; j < 4; j++) {
-				r.moveForward(30, false);
-				r.turnLeft(90, false);
-			}
-			out.printf("Distance: %s\n", r.getDistance());
-			out.printf("LightValue: %s\n", r.getLightValue());
-			out.printf("Sound: %s\n", r.getSoundLevel());
-			out.printf("Touch: %s\n", new Boolean(r.getTouchSensorPressed()).toString());
-		}
 	}
+
 }
