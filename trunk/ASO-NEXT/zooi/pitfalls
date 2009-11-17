@@ -1,3 +1,4 @@
-- verhaal over bluetooth-adapters
-- cache-bestandje correct? Als niet alle mindstorms gevonden worden kan dit verholpen worden 
+- Verhaal over bluetooth-adapters
+- Cache-bestandje correct? Als niet alle mindstorms gevonden worden kan dit verholpen worden 
 door het verwijderen van het bestand nxj.cache. Onder windows staat deze in C:\Users\$username 
+- In firmware 0.85 kun je geen ultrasonic sensor aansluiten op poort 4

@@ -28,7 +28,7 @@ public class TestApplication {
 		SensorType port3 = SensorType.NONE;
 		SensorType port4 = SensorType.NONE;
 
-		String[] names = {"CHANDLER","JOEY"};
+		String[] names = {"Patrick"};
 
 		for (int i = 0; i < names.length; i++) {
 			robots[i] = new NxtController(names[i], leftMotorPort, rightMotorPort,
@@ -38,9 +38,10 @@ public class TestApplication {
 		for (int i = 0; i < names.length; i++) {
 			RobotController r = robots[i];
 
-			r.moveForward(10, true);
-			//r.moveBackward(10, false);
-			//r.turnLeft(90, false);
+			for (int j = 0; j < 4; j++) {
+				r.moveForward(30, false);
+				r.turnLeft(90, false);
+			}
 			out.printf("Distance: %s\n", r.getDistance());
 			out.printf("LightValue: %s\n", r.getLightValue());
 			out.printf("Sound: %s\n", r.getSoundLevel());
