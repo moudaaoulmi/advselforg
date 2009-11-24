@@ -101,6 +101,7 @@ public class NxtController implements RobotController {
 			break;
 		case ULTRASONIC:
 			ultrasonicsensors.add(new UltrasonicSensor(port));
+			//ultrasonicsensors.get(ultrasonicsensors.size() - 1).off();
 			break;
 		case LIGHT:
 			lightsensors.add(new LightSensor(port, true));
@@ -178,17 +179,44 @@ public class NxtController implements RobotController {
 	}
 
 	/* Get the distance of a ultrasonic sensor */
-	public int getDistance(int sensorIndex) {
-		if (!ultrasonicsensors.isEmpty()) {
-			return ultrasonicsensors.get(sensorIndex).getDistance();
+	public int getDistance(int sensorIndex, DistanceMode mode) {
+		int data[] = new int[8];
+		int result;
+		String str = "";
+		if (ultrasonicsensors.size() >= sensorIndex + 1) {
+			try {
+				for (int i = 0; i < data.length; i++) {
+					Thread.sleep(10);
+					data[i] = ultrasonicsensors.get(sensorIndex).getDistance();
+				}
+				for (int i = 0; i < data.length; i++) {
+					str += data[i] + " ";
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (mode == DistanceMode.LOWEST) {
+				result = 255;
+				for (int i = 0; i < data.length; i++) {
+					result = data[i] < result ? data[i] : result;
+				}
+			} else {
+				result = -1;
+				for (int i = 0; i < data.length; i++) {
+					result = data[i] > result && data[i] != 255 ? data[i] : result;
+				}
+				if (result == -1) result = 255;
+			}
+			System.out.println(str);
+			return result;
 		} else {
 			return -1;
 		}
 	}
 
 	/* Get the distance of the first ultrasonic sensor */
-	public int getDistance() {
-		return getDistance(0);
+	public int getDistance(DistanceMode mode) {
+		return getDistance(0, mode);
 	}
 
 	/* Get the light value of a light sensor */

@@ -10,8 +10,8 @@ public interface RobotController {
 	public void stop();
 	
 	// Sensor actions
-	public int getDistance(int sensorIndex);
-	public int getDistance();
+	public int getDistance(int sensorIndex, DistanceMode mode);
+	public int getDistance(DistanceMode mode);
 	public int getLightValue(int sensorIndex);
 	public int getLightValue();
 	public int getSoundLevel(int sensorIndex);
