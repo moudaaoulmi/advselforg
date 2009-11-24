@@ -1,0 +1,45 @@
+<agent xmlns="http://jadex.sourceforge.net/jadex"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex
+						http://jadex.sourceforge.net/jadex-0.96.xsd"
+	name="Mindstorms"
+	package="org.vu.advselforg">
+	
+	<imports>
+		<import>java.util.logging.*</import>
+		<import>java.util.*</import>
+		<import>jadex.adapter.fipa.*</import>
+		<import>jadex.util.*</import>
+	</imports>
+	
+	<beliefs>
+		<beliefset name="robot" class="NxtController"/>
+		<belief name="notInitialized" class="boolean">
+			<fact>true</fact>
+		</belief>
+		<belief name="obstacleDetected" class="boolean">
+			<fact>false</fact>
+		</belief>
+	</beliefs>
+	
+	<plans>
+		<plan name="start_robot">
+			<body>new InitPlan()</body>
+			<trigger>
+				<condition>$beliefbase.notInitialized</condition>
+			</trigger>
+		</plan>	
+		<plan name="drive">
+			<body>new DrivePlan()</body>
+			<trigger>
+				<condition>!$beliefbase.notInitialized</condition>
+			</trigger>
+		</plan>		
+	</plans>
+
+	<configurations>
+		<configuration name="default">
+		</configuration>
+	</configurations>
+
+</agent>

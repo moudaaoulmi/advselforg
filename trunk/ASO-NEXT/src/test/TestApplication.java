@@ -4,6 +4,7 @@ import java.io.PrintStream;
 
 import org.vu.advselforg.*;
 
+
 public class TestApplication {
 
 	private RobotController[] robots;
@@ -24,9 +25,9 @@ public class TestApplication {
 
 		for (int j = 0; j < 4; j++) {
 			robots[0].moveForward(32, true);
-			robots[1].moveForward(32, false);
+			//robots[1].moveForward(32, false);
 			robots[0].turnLeft(90, true);
-			robots[1].turnLeft(90, false);
+			//robots[1].turnLeft(90, false);
 		}
 		
 		//out.printf("Distance: %s\n", r.getDistance());
@@ -45,7 +46,7 @@ public class TestApplication {
 		SensorType port3 = SensorType.NONE;
 		SensorType port4 = SensorType.NONE;
 
-		String[] names = {"JOEY","CHANDLER"};
+		String[] names = {"Patrick"};
 
 		for (int i = 0; i < names.length; i++) {
 			robots[i] = new NxtController(names[i], leftMotorPort, rightMotorPort,
