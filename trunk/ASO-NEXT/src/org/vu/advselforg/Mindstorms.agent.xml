@@ -8,12 +8,13 @@
 	<imports>
 		<import>java.util.logging.*</import>
 		<import>java.util.*</import>
+		<import>jadex.adapter.fipa.SFipa</import>
 		<import>jadex.adapter.fipa.*</import>
 		<import>jadex.util.*</import>
 	</imports>
 	
 	<beliefs>
-		<beliefset name="robot" class="NxtController"/>
+		<belief name="robot" class="NxtController"/>
 		<belief name="notInitialized" class="boolean">
 			<fact>true</fact>
 		</belief>
@@ -28,14 +29,32 @@
 			<trigger>
 				<condition>$beliefbase.notInitialized</condition>
 			</trigger>
-		</plan>	
-		<plan name="drive">
+		</plan>		
+		<plan name="egtrans">
 			<body>new DrivePlan()</body>
 			<trigger>
-				<condition>!$beliefbase.notInitialized</condition>
+				<messageevent ref="berichtReceive"/>
 			</trigger>
-		</plan>		
+		
+		</plan>	
 	</plans>
+
+	<events>
+		<messageevent name="berichtSend" type="fipa" direction="send">
+			<parameter name="performative" class="String">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content" class="String"/>
+		</messageevent>
+		<messageevent name="berichtReceive" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content-start" class="String" direction="fixed">
+				<value>"TouchSensorStatus"</value>
+			</parameter>
+		</messageevent>
+	</events>
 
 	<configurations>
 		<configuration name="default">
