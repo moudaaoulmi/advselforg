@@ -1,4 +1,6 @@
-package org.vu.advselforg;
+package org.vu.advselforg.agentcontroller;
+
+import org.vu.advselforg.robotcontroller.*;
 
 import sun.awt.EmbeddedFrame;
 import jadex.adapter.fipa.AgentIdentifier;

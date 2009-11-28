@@ -1,4 +1,4 @@
-package org.vu.advselforg;
+package org.vu.advselforg.agentcontroller;
 
 import jadex.runtime.Plan;
 
