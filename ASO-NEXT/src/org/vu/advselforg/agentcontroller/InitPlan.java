@@ -61,10 +61,9 @@ public class InitPlan extends Plan implements Runnable{
 			//Send a message when there is a tachometer problem. "TachoMeterProblem"
 			//Send a message when a turn is complete, but only when it is correctly done. "TurnComplete"
 			//Send a message when a drive backwards is complete, but only when it is correctly done. "DriveBackwardComplete"
-			//Send a message for every sonar read. "SonarSensorStatus {sonarRelativeID} {distance}" 
+			//Send a message for every sonar read. "SonarSensorStatus {sonarRelativeID} {distance} {tachoMeterCount 0=default/middle}" 
 			//Send a message for light change from nothing to black or white and one for having nothing.
 			//    "LightSensorStatus {relativeLightId} {nothing|black|white}"
-			
 			
 			if(robot.getTouchSensorPressed(0)){
 			
