@@ -2,7 +2,7 @@ package org.vu.advselforg.agentcontroller;
 
 import jadex.runtime.Plan;
 
-public class ObstacleDetectionPlan extends Plan{
+public class StatusTouchSensorPlan extends Plan{
 
 	@Override
 	public void body() {

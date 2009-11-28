@@ -2,7 +2,7 @@ package org.vu.advselforg.agentcontroller;
 
 import jadex.runtime.Plan;
 
-public class TurnPlan extends Plan {
+public class StatusTurnPlan extends Plan {
 
 	@Override
 	public void body() {
