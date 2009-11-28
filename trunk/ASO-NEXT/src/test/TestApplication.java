@@ -3,6 +3,10 @@ package test;
 import java.io.PrintStream;
 
 import org.vu.advselforg.*;
+import org.vu.advselforg.robotcontroller.DistanceMode;
+import org.vu.advselforg.robotcontroller.NxtController;
+import org.vu.advselforg.robotcontroller.RobotController;
+import org.vu.advselforg.robotcontroller.SensorType;
 
 public class TestApplication {
 
