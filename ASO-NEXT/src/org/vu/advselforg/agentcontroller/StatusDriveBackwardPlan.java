@@ -1,5 +1,13 @@
 package org.vu.advselforg.agentcontroller;
 
-public class StatusDriveBackwardPlan {
+import jadex.runtime.Plan;
+
+public class StatusDriveBackwardPlan extends Plan{
+
+	@Override
+	public void body() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
