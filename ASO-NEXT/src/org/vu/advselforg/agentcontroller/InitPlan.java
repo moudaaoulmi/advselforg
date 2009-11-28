@@ -13,6 +13,14 @@ public class InitPlan extends Plan implements Runnable{
 	
 	private static final long serialVersionUID = 2961883448970106007L;
 	NxtController robot;
+	String agentName;
+	
+	public InitPlan(String agentName){
+		this.agentName = agentName;
+
+	}
+	
+	
 	@Override
 	public void body() {
 			
@@ -27,7 +35,7 @@ public class InitPlan extends Plan implements Runnable{
 			robot = new NxtController("Patrick", leftMotorPort, rightMotorPort,
 					motorReverse, port1, port2, port3, port4);	
 		} catch (Exception e) {
-			System.out.println("doet ut niet");
+			System.out.println("Whoops, does not compute. Cannot connect to robot.");
 		}
 
 		new Thread(this).start();
@@ -46,14 +54,14 @@ public class InitPlan extends Plan implements Runnable{
 		while(true){
 			if(robot.getTouchSensorPressed(0)){
 			
-				IMessageEvent me = getExternalAccess().createMessageEvent("berichtSend");
-				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier("Mindstorms",true));
+				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
+				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
 				me.setContent("TouchSensorStatus " + "Pressed 1");
 				getExternalAccess().sendMessage(me);
 			}
 			if(robot.getTouchSensorPressed(1)){
-				IMessageEvent me = getExternalAccess().createMessageEvent("berichtSend");
-				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier("Mindstorms",true));
+				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
+				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
 				me.setContent("TouchSensorStatus " + "Pressed 2");
 				getExternalAccess().sendMessage(me);
 			}
