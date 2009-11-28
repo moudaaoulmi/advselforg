@@ -1,5 +1,13 @@
 package org.vu.advselforg.agentcontroller;
 
-public class StatusSonarPlan {
+import jadex.runtime.Plan;
+
+public class StatusSonarPlan extends Plan{
+
+	@Override
+	public void body() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

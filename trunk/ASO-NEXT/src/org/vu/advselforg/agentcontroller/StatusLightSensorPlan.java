@@ -1,5 +1,13 @@
 package org.vu.advselforg.agentcontroller;
 
-public class StatusLightSensorPlan {
+import jadex.runtime.Plan;
+
+public class StatusLightSensorPlan extends Plan{
+
+	@Override
+	public void body() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

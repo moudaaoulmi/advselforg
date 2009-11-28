@@ -1,5 +1,13 @@
 package org.vu.advselforg.agentcontroller;
 
-public class StatusTachoMeterPlan {
+import jadex.runtime.Plan;
+
+public class StatusTachoMeterPlan extends Plan{
+
+	@Override
+	public void body() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
