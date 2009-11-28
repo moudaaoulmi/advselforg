@@ -23,7 +23,7 @@
 	
 	<plans>
 		<plan name="start_robot">
-			<body>new InitPlan()</body>
+			<body>new InitPlan("Mindstorms")</body>
 			<trigger>
 				<condition>$beliefbase.notInitialized</condition>
 			</trigger>
@@ -31,20 +31,20 @@
 		<plan name="egtrans">
 			<body>new DrivePlan()</body>
 			<trigger>
-				<messageevent ref="berichtReceive"/>
+				<messageevent ref="MessageReceive"/>
 			</trigger>
 		
 		</plan>	
 	</plans>
 
 	<events>
-		<messageevent name="berichtSend" type="fipa" direction="send">
+		<messageevent name="MessageSend" type="fipa" direction="send">
 			<parameter name="performative" class="String">
 				<value>SFipa.REQUEST</value>
 			</parameter>
 			<parameter name="content" class="String"/>
 		</messageevent>
-		<messageevent name="berichtReceive" direction="receive" type="fipa">
+		<messageevent name="MessageReceive" direction="receive" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>

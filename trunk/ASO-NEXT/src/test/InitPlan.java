@@ -34,7 +34,7 @@ public class InitPlan extends Plan implements Runnable{
 			robot = new NxtController("Patrick", leftMotorPort, rightMotorPort,
 					motorReverse, port1, port2, port3, port4);	
 		} catch (Exception e) {
-			System.out.println("doet ut niet");
+			System.out.println("Whoops, does not compute. Cannot connect to robot.");
 		}
 
 		new Thread(this).start();
