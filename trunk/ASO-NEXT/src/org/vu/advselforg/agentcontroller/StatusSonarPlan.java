@@ -29,6 +29,7 @@ public class StatusSonarPlan extends Plan{
 			//We need to test this part
 			System.out.println("Bottom sonar distance :" + status);
 		}
+		getBeliefbase().getBelief("sonarAngle").setFact(tachoMeterCount);
 		
 	}
 

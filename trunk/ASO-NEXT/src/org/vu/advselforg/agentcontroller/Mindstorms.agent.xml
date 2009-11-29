@@ -37,6 +37,19 @@
 		<belief name="bottomSonarDistance" class="int">
 			<fact>0</fact>
 		</belief>
+		<belief name="sonarAngle" class="int">
+			<fact>0</fact>
+		</belief>
+		
+		<belief name="tachometerProblem" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="distanceTraveled" class="int">
+			<fact>0</fact>
+		</belief>		
+		<belief name="turning" class="boolean">
+			<fact>false</fact>
+		</belief>
 	</beliefs>
 	
 	<plans>
@@ -73,9 +86,15 @@
 		<plan name="StatusSonarPlan">
 			<body>new StatusSonarPlan()</body>
 			<trigger>
-				<messageevent ref="MotorRotationReceive"/>
+				<messageevent ref="SonarSensorStatusReceive"/>
 			</trigger>
-		</plan>		
+		</plan>
+		<plan name="StatusTachoMeterPlan">
+			<body>new StatusTachoMeterPlan()</body>
+			<trigger>
+				<messageevent ref="TachoMeterStatusReceive"/>
+			</trigger>
+		</plan>			
 	</plans>
 
 	<events>
@@ -117,12 +136,20 @@
 				<value>"MotorRotationDone"</value>
 			</parameter>
 		</messageevent>
-		<messageevent name="MotorRotationReceive" direction="receive" type="fipa">
+		<messageevent name="SonarSensorStatusReceive" direction="receive" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
 			<parameter name="content-start" class="String" direction="fixed">
 				<value>"SonarSensorStatus"</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="TachoMeterStatusReceive" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content-start" class="String" direction="fixed">
+				<value>"TachoMeterProblem"</value>
 			</parameter>
 		</messageevent>
 	</events>
