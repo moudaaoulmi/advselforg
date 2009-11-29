@@ -95,6 +95,18 @@
 				<messageevent ref="TachoMeterStatusReceive"/>
 			</trigger>
 		</plan>			
+		<plan name="StatusTurnPlan">
+			<body>new StatusTurnPlan()</body>
+			<trigger>
+				<messageevent ref="TurnCompleteReceive"/>
+			</trigger>
+		</plan>			
+		<plan name="StatusTravelDistancePlan">
+			<body>new StatusTravelDistancePlan()</body>
+			<trigger>
+				<messageevent ref="TravelDistanceReceive"/>
+			</trigger>
+		</plan>			
 	</plans>
 
 	<events>
@@ -150,6 +162,22 @@
 			</parameter>
 			<parameter name="content-start" class="String" direction="fixed">
 				<value>"TachoMeterProblem"</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="TurnCompleteReceive" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content-start" class="String" direction="fixed">
+				<value>"TurnComplete"</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="TravelDistanceReceive" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content-start" class="String" direction="fixed">
+				<value>"TraveledDistance"</value>
 			</parameter>
 		</messageevent>
 	</events>
