@@ -10,14 +10,16 @@ import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
 
 public class InitPlan extends Plan implements Runnable{
-	
+
 	private static final long serialVersionUID = 2961883448970106007L;
 	NxtController robot;
 	String agentName;
 	
+	boolean touchPressed = false;
+	int oldTraveledDistance = 0;
+	
 	public InitPlan(String agentName){
 		this.agentName = agentName;
-
 	}
 	
 	
@@ -65,17 +67,77 @@ public class InitPlan extends Plan implements Runnable{
 			//Send a message for light change from nothing to black or white and one for having nothing.
 			//    "LightSensorStatus {relativeLightId} {nothing|black|white}"
 			
-			if(robot.getTouchSensorPressed(0)){
+			//Send a message when the touch sensor is pressed and it was previously not pressed.
+			if(robot.getTouchSensorPressed(0) && !touchPressed){
 			
 				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
 				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
-				me.setContent("TouchSensorStatus " + "Pressed 1");
+				me.setContent("TouchSensorStatus " + "0 pressed");
 				getExternalAccess().sendMessage(me);
+				touchPressed = true;
 			}
-			if(robot.getTouchSensorPressed(1)){
+			//Send a message when the touch sensor is released and it was previously pressed.
+			if(!robot.getTouchSensorPressed(0) && touchPressed){
 				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
 				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
-				me.setContent("TouchSensorStatus " + "Pressed 2");
+				me.setContent("TouchSensorStatus " + "0 released");
+				getExternalAccess().sendMessage(me);
+				touchPressed = false;
+			}
+			
+			//Send a message when the robot moved 1 cm forward or when it is resetted to 0.
+			if(true){
+				int traveledDistance = 0;
+				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
+				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
+				me.setContent("TraveledDistance " + traveledDistance);
+				getExternalAccess().sendMessage(me);
+				oldTraveledDistance = traveledDistance;
+			}
+			
+			//Send a message when motor rotation is done. This is needed to know when a scan is complete
+			if(true){
+				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
+				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
+				me.setContent("MotorRotationDone 0");
+				getExternalAccess().sendMessage(me);
+			}
+			
+			//Send a message when there is a tachometer problem. TachoMeterProblem
+			if(true){
+				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
+				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
+				me.setContent("TachoMeterProblem");
+				getExternalAccess().sendMessage(me);
+			}
+			//Send a message when a turn is complete, but only when it is correctly done. "TurnComplete"
+			if(true){
+				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
+				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
+				me.setContent("TurnComplete");
+				getExternalAccess().sendMessage(me);
+			}
+			//Send a message when a drive backwards is complete, but only when it is correctly done. "DriveBackwardComplete"
+			if(true){
+				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
+				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
+				me.setContent("DriveBackwardComplete");
+				getExternalAccess().sendMessage(me);
+			}
+			//Send a message for every sonar read. "SonarSensorStatus {sonarRelativeID} {distance} {tachoMeterCount 0=default/middle}"
+			if(true){
+				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
+				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
+				me.setContent("SonarSensorStatus {sonarRelativeID} {distance} {tachoMeterCount 0=default/middle}" );
+				getExternalAccess().sendMessage(me);
+			}
+			
+			//Send a message for light change from nothing to black or white and one for having nothing.
+			//    "LightSensorStatus {relativeLightId} {nothing|black|white}"
+			if(true){
+				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
+				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
+				me.setContent("");
 				getExternalAccess().sendMessage(me);
 			}
 		}
