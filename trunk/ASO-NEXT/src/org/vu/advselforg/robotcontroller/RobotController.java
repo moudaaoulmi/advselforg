@@ -1,6 +1,5 @@
 package org.vu.advselforg.robotcontroller;
 
-
 public interface RobotController {
 
 	// Motor actions
