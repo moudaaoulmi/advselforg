@@ -1,4 +1,4 @@
-package org.vu.advselforg.objectdetection;
+package org.vu.advselforg.objectdetection2;
 
 public class coordinate {
     int x, y;
