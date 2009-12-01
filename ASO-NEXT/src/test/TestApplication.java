@@ -29,11 +29,13 @@ public class TestApplication {
 		RobotController r = robots[0];
 		while (true) {
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 				out.println("");
-				out.printf("Distance onder: %d\n", r.getDistance(0, DistanceMode.LOWEST));
-				Thread.sleep(200);
-				out.printf("Distance boven: %d\n", r.getDistance(1, DistanceMode.HIGHEST_NOT255));
+				//out.printf("Distance onder: %d\n", r.getDistance(0, DistanceMode.LOWEST));
+				//Thread.sleep(200);
+				//out.printf("Distance boven: %d\n", r.getDistance(1, DistanceMode.HIGHEST_NOT255));
+				out.println(" ");
+				out.println("LightSensorValue " + r.getLightValue());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -66,12 +68,12 @@ public class TestApplication {
 		int rightMotorPort = 3;
 		boolean motorReverse = false;
 		
-		SensorType port1 = SensorType.ULTRASONIC; //onderste
-		SensorType port2 = SensorType.ULTRASONIC; //bovenste
+		SensorType port1 = SensorType.LIGHT; //onderste
+		SensorType port2 = SensorType.NONE; //bovenste
 		SensorType port3 = SensorType.NONE;
-		SensorType port4 = SensorType.TOUCH;
+		SensorType port4 = SensorType.NONE;
 
-		String[] names = {"JOEY"};
+		String[] names = {"ROSS"};
 
 		for (int i = 0; i < names.length; i++) {
 			robots[i] = new NxtController(names[i], leftMotorPort, rightMotorPort,
