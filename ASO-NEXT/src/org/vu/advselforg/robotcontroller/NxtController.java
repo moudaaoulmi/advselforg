@@ -34,6 +34,10 @@ public class NxtController implements RobotController {
 	private TachoPilot pilot;
 	private RemoteSensorPort[] sensors;
 	private RemoteMotor[] motors;
+	private MovingMode movingMode;
+	private boolean isScanning = false;
+	
+	private static final int DESIRED_SPEED_MARGIN = 1;
 
 	public NxtController(String robotName, int leftMotorPort,
 			int rightMotorPort, boolean motorReverse, SensorType type1,
@@ -64,6 +68,7 @@ public class NxtController implements RobotController {
 		motors = new RemoteMotor[4];
 		for (int i = 0; i < 3; i++) {
 			motors[i + 1] = new RemoteMotor(nxtCommand, i);
+			motors[i + 1].resetTachoCount();
 		}
 
 		// Create a pilot
@@ -147,14 +152,22 @@ public class NxtController implements RobotController {
 
 	/* Move the robot [distance] cm forward */
 	public void moveForward(float distance, boolean immediateReturn) {
+		if (distance <= 0) {
+			return;
+		}
 		if (pilot != null) {
+			movingMode = MovingMode.FORWARD;
 			pilot.travel(distance, immediateReturn);
 		}
 	}
 
 	/* Move the robot [distance] cm backward */
 	public void moveBackward(float distance, boolean immediateReturn) {
+		if (distance <= 0) {
+			return;
+		}
 		if (pilot != null) {
+			movingMode = MovingMode.BACKWARD;
 			pilot.travel(-distance, immediateReturn);
 		}
 	}
@@ -162,6 +175,7 @@ public class NxtController implements RobotController {
 	/* Rotate the robot [angle] degrees to the left */
 	public void turnLeft(float angle, boolean immediateReturn) {
 		if (pilot != null) {
+			movingMode = MovingMode.TURNING;
 			pilot.rotate(angle, immediateReturn);
 		}
 	}
@@ -169,6 +183,7 @@ public class NxtController implements RobotController {
 	/* Rotate the robot [angle] degrees to the right */
 	public void turnRight(float angle, boolean immediateReturn) {
 		if (pilot != null) {
+			movingMode = MovingMode.TURNING;
 			pilot.rotate(-angle, immediateReturn);
 		}
 	}
@@ -274,5 +289,55 @@ public class NxtController implements RobotController {
 	/* Read a transponder with the first RFID sensor */
 	public long getRFID() {
 		return getRFID(0);
+	}
+
+	public boolean atDesiredMotorSpeed() {
+		return pilot.getRightActualSpeed() >= pilot.getMoveSpeed() - DESIRED_SPEED_MARGIN &&
+			pilot.getLeftActualSpeed() >= pilot.getMoveSpeed() - DESIRED_SPEED_MARGIN;
+	}
+
+	public int getTachoMeterCount(int motorIndex) {
+		return motors[motorIndex].getTachoCount();
+	}
+
+	public int getTravelDistance() {
+		return (int) pilot.getTravelDistance();
+	}
+
+	public boolean isDrivingBackward() {
+		return pilot.isMoving() && movingMode == MovingMode.BACKWARD ;
+	}
+
+	public boolean isDrivingForward() {
+		return pilot.isMoving() && movingMode == MovingMode.FORWARD ;
+	}
+
+	public boolean isScanning(int motorIndex) {
+		if (!motors[motorIndex].isMoving()) {
+			isScanning = false;
+		}
+		return isScanning && motors[motorIndex].isMoving();
+	}
+
+	public void calibrateTurret(int motorIndex) {
+		int tachoDrift = motors[motorIndex].getTachoCount() * -1;
+		if (tachoDrift != 0) {
+			motors[motorIndex].rotateTo(tachoDrift);
+		}
+	}
+	
+	public boolean isTurning() {
+		return pilot.isMoving() && movingMode == MovingMode.TURNING;
+	}
+
+	public void performScan(int motorIndex, int fromAngle, int toAngle, int speed) {
+		motors[motorIndex].setSpeed(speed);
+		motors[motorIndex].rotateTo(fromAngle, false);
+		isScanning = true;
+		motors[motorIndex].rotateTo(toAngle, true);
+	}
+	
+	public void resetTravelDistance(){
+		pilot.reset();
 	}
 }
