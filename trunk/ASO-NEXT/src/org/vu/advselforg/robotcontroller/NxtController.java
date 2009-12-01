@@ -3,13 +3,13 @@ package org.vu.advselforg.robotcontroller;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 import lejos.nxt.addon.RFIDSensor;
 import lejos.nxt.remote.NXTCommand;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteSensorPort;
 import lejos.robotics.navigation.TachoPilot;
 import lejos.nxt.LightSensor;
+import lejos.nxt.MotorPort;
 import lejos.nxt.SensorConstants;
 import lejos.nxt.SoundSensor;
 import lejos.nxt.TouchSensor;
@@ -39,8 +39,8 @@ public class NxtController implements RobotController {
 	
 	private static final int DESIRED_SPEED_MARGIN = 1;
 
-	public NxtController(String robotName, int leftMotorPort,
-			int rightMotorPort, boolean motorReverse, SensorType type1,
+	public NxtController(String robotName, OutputPort leftMotorPort,
+			OutputPort rightMotorPort, boolean motorReverse, SensorType type1,
 			SensorType type2, SensorType type3, SensorType type4) {
 
 		// Create a connection and search for robots named [robotName]
@@ -72,9 +72,9 @@ public class NxtController implements RobotController {
 		}
 
 		// Create a pilot
-		if (leftMotorPort != 0 && rightMotorPort != 0) {
-			pilot = new TachoPilot(5.4f, 15.1f, motors[leftMotorPort],
-					motors[rightMotorPort], motorReverse);
+		if (leftMotorPort != OutputPort.NONE && rightMotorPort != OutputPort.NONE) {
+			pilot = new TachoPilot(5.4f, 15.1f, motors[leftMotorPort.ordinal()],
+					motors[rightMotorPort.ordinal()], motorReverse);
 			pilot.regulateSpeed(true);
 		}
 
@@ -296,8 +296,8 @@ public class NxtController implements RobotController {
 			pilot.getLeftActualSpeed() >= pilot.getMoveSpeed() - DESIRED_SPEED_MARGIN;
 	}
 
-	public int getTachoMeterCount(int motorIndex) {
-		return motors[motorIndex].getTachoCount();
+	public int getTachoMeterCount(OutputPort port) {
+		return motors[port.ordinal()].getTachoCount();
 	}
 
 	public int getTravelDistance() {
@@ -312,17 +312,17 @@ public class NxtController implements RobotController {
 		return pilot.isMoving() && movingMode == MovingMode.FORWARD ;
 	}
 
-	public boolean isScanning(int motorIndex) {
-		if (!motors[motorIndex].isMoving()) {
+	public boolean isScanning(OutputPort port) {
+		if (!motors[port.ordinal()].isMoving()) {
 			isScanning = false;
 		}
-		return isScanning && motors[motorIndex].isMoving();
+		return isScanning && motors[port.ordinal()].isMoving();
 	}
 
-	public void calibrateTurret(int motorIndex) {
-		int tachoDrift = motors[motorIndex].getTachoCount() * -1;
+	public void calibrateTurret(OutputPort port) {
+		int tachoDrift = motors[port.ordinal()].getTachoCount() * -1;
 		if (tachoDrift != 0) {
-			motors[motorIndex].rotateTo(tachoDrift);
+			motors[port.ordinal()].rotateTo(tachoDrift);
 		}
 	}
 	
@@ -330,11 +330,11 @@ public class NxtController implements RobotController {
 		return pilot.isMoving() && movingMode == MovingMode.TURNING;
 	}
 
-	public void performScan(int motorIndex, int fromAngle, int toAngle, int speed) {
-		motors[motorIndex].setSpeed(speed);
-		motors[motorIndex].rotateTo(fromAngle, false);
+	public void performScan(OutputPort port, int fromAngle, int toAngle, int speed) {
+		motors[port.ordinal()].setSpeed(speed);
+		motors[port.ordinal()].rotateTo(fromAngle, false);
 		isScanning = true;
-		motors[motorIndex].rotateTo(toAngle, true);
+		motors[port.ordinal()].rotateTo(toAngle, true);
 	}
 	
 	public void resetTravelDistance(){

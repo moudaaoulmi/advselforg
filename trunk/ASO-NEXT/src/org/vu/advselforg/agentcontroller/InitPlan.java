@@ -34,8 +34,8 @@ public class InitPlan extends Plan implements Runnable{
 	@Override
 	public void body() {
 			
-		int leftMotorPort = 1;
-		int rightMotorPort = 3;
+		OutputPort leftMotorPort = OutputPort.A;
+		OutputPort rightMotorPort = OutputPort.C;
 		boolean motorReverse = false;
 		SensorType port1 = SensorType.TOUCH;
 		SensorType port2 = SensorType.TOUCH;
@@ -80,7 +80,7 @@ public class InitPlan extends Plan implements Runnable{
 			}
 			
 			if(step % 100 == 0){
-				robot.calibrateTurret(2);
+				robot.calibrateTurret(OutputPort.B);
 			}
 			//Send a message when the touch sensor is pressed and it was previously not pressed.
 			if(robot.getTouchSensorPressed(0) && !touchPressed){
@@ -96,7 +96,7 @@ public class InitPlan extends Plan implements Runnable{
 			//Send a message for every sonar read. "SonarSensorStatus {sonarRelativeID} {distance} {tachoMeterCount 0=default/middle}"
 			int newBottomDistance = robot.getDistance(0, DistanceMode.LOWEST);
 			int newTopDistance = robot.getDistance(0, DistanceMode.HIGHEST_NOT255);
-			int tachoMeterCountSonarTurret = robot.getTachoMeterCount(2); 
+			int tachoMeterCountSonarTurret = robot.getTachoMeterCount(OutputPort.B); 
 			
 			if(oldBottomSonarDistance == -1 || (Math.abs(newBottomDistance - oldBottomSonarDistance)) >= 1){
 				sendMessage("SonarSensorStatus 0 " + newBottomDistance +tachoMeterCountSonarTurret );
@@ -137,7 +137,7 @@ public class InitPlan extends Plan implements Runnable{
 				wasTurning = false;
 				robot.resetTravelDistance();
 				oldTraveledDistance = 0;
-				robot.calibrateTurret(2);
+				robot.calibrateTurret(OutputPort.B);
 			}
 			if(robot.isTurning() && !wasTurning){
 				wasTurning = true;

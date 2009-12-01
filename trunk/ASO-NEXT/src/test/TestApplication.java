@@ -2,11 +2,13 @@ package test;
 
 import java.io.PrintStream;
 
-import org.vu.advselforg.*;
+import lejos.nxt.MotorPort;
+
 import org.vu.advselforg.robotcontroller.DistanceMode;
 import org.vu.advselforg.robotcontroller.NxtController;
 import org.vu.advselforg.robotcontroller.RobotController;
 import org.vu.advselforg.robotcontroller.SensorType;
+import org.vu.advselforg.robotcontroller.OutputPort;
 
 public class TestApplication {
 
@@ -64,8 +66,8 @@ public class TestApplication {
 	}
 
 	private void connectBots() {
-		int leftMotorPort = 1;
-		int rightMotorPort = 3;
+		OutputPort leftMotorPort = OutputPort.A;
+		OutputPort rightMotorPort = OutputPort.C;
 		boolean motorReverse = false;
 		
 		SensorType port1 = SensorType.LIGHT; //onderste

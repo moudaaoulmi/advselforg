@@ -13,7 +13,7 @@ public class BlobDetection {
 	// The global variable containing the clusters.
 	ArrayList pixelClusters;
 
-        BlobDetection(int width, int height, double distanceThreshold, int sizeThreshold double, double maxPixelClusterSizeRatio) {
+        BlobDetection(int width, int height, double distanceThreshold, int sizeThreshold, double maxPixelClusterSizeRatio) {
           pixelClusters = new ArrayList();
           this.width = width;
           this.height = height;
@@ -34,28 +34,16 @@ public class BlobDetection {
 			}
 		}
 
-		//Remove small clusters
+		//Remove small clusters and cluster with a wrong size ratio
 		Iterator iterator = pixelClusters.iterator();
 
 		while (iterator.hasNext()) {
 			PixelCluster cluster = (PixelCluster) iterator.next();
 
-			if (cluster.size() < sizeThreshold) {
+			if (cluster.size() < sizeThreshold || cluster.clusterSizeRatio() > maxPixelClusterSizeRatio) {
 				iterator.remove();
 			}
 		}
-
-		// Debug print
-		
-
-		for (int i = 0; i < pixelClusters.size(); i++) {
-			PixelCluster cluster = (PixelCluster) pixelClusters.get(i);
-			Coordinate coordinate = cluster.center();
-                        System.out.println(cluster.size());
-			System.out.println("Center: X=" + coordinate.getX() + " Y=" + coordinate.getY());
-		}
-
-                System.out.println(pixelClusters.size());
 
                 return pixelClusters;
 	}

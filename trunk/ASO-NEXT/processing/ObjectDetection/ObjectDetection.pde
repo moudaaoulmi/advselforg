@@ -20,7 +20,7 @@ void setup() {
   numPixels = width * height;
   colors = new int[4][numPixels];
   bools = new boolean[2][numPixels];
-  detector = new BlobDetection(width, height, 1.1, 50, 3);
+  detector = new BlobDetection(width, height, 1.1, 50, 2.5);
   loadPixels();
 }
 
@@ -112,10 +112,6 @@ void keyPressed() {
     break;
   case 'g': 
     displayMode = GREEN;
-    break;
-  case 'd':
-    plotClusters(RED);
-    plotClusters(GREEN);
     break;
   }
 }

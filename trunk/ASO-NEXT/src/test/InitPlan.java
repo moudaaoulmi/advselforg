@@ -23,8 +23,8 @@ public class InitPlan extends Plan implements Runnable{
 	@Override
 	public void body() {
 			
-		int leftMotorPort = 1;
-		int rightMotorPort = 3;
+		OutputPort leftMotorPort = OutputPort.A;
+		OutputPort rightMotorPort = OutputPort.C;
 		boolean motorReverse = false;
 		SensorType port1 = SensorType.TOUCH;
 		SensorType port2 = SensorType.TOUCH;

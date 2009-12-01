@@ -113,6 +113,45 @@ class PixelCluster implements Iterable {
 		return new Coordinate((int) centerX, (int) centerY);
 	}
 
+        public double clusterSizeRatio() {
+                int maxX = Integer.MIN_VALUE, minX = Integer.MAX_VALUE, maxY = Integer.MIN_VALUE, minY = Integer.MAX_VALUE;
+
+	        int x, y;
+
+		double difX, difY;
+
+		for (int i = 0; i < this.size(); i++) {
+			Coordinate currentCoordinate = this.get(i);
+			x = currentCoordinate.getX();
+			y = currentCoordinate.getY();
+
+			if (x > maxX) {
+				maxX = x;
+			}
+
+			if (y > maxY) {
+				maxY = y;
+			}
+
+			if (x < minX) {
+				minX = x;
+			}
+
+			if (y < minY) {
+				minY = y;
+			}
+		}
+                
+                difX = Math.abs(maxX - minX);
+                difY = Math.abs(maxY - minY);
+                
+                return max(difX/difY, difY/difX);
+        }
+        
+        double max(double a, double b) {
+          return a > b ? a : b; 
+        }
+
 	int size() {
 		// Returns the number of coordinates within this pixelCluster
 		return coordinates.size();
