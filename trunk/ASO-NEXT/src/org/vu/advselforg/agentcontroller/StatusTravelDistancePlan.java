@@ -15,7 +15,7 @@ public class StatusTravelDistancePlan extends Plan{
 		StringTokenizer st = new StringTokenizer(data);
 		
 		String messageType = (String) st.nextElement();
-		int distance = (Integer) st.nextElement();
+		int distance = Integer.parseInt((String) st.nextElement());
 		
 		
 		getBeliefbase().getBelief("distanceTraveled").setFact(distance);

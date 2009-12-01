@@ -22,6 +22,7 @@ public class InitPlan extends Plan implements Runnable{
 	int oldBottomSonarDistance =-1;
 	
 	boolean wasTurning = false;
+	boolean wasScanning = false;
 	boolean wasDrivingBackward = false;
 	
 	int step = 0;
@@ -43,7 +44,13 @@ public class InitPlan extends Plan implements Runnable{
 		SensorType port4 = SensorType.NONE;
 		try {
 			robot = new NxtController("CHANDLER", leftMotorPort, rightMotorPort,
-					motorReverse, port1, port2, port3, port4);	
+					motorReverse, port1, port2, port3, port4);
+		new Thread(this).start();
+			
+		getBeliefbase().getBelief("robot").setFact(robot);
+		System.out.println("Connected");
+			
+		getBeliefbase().getBelief("notInitialized").setFact(false);
 		} catch (Exception e) {
 			System.out.println("Whoops, does not compute. Cannot connect to robot.");
 		}
@@ -62,7 +69,7 @@ public class InitPlan extends Plan implements Runnable{
 	@Override
 	public void run() {
 		while(true){
-			
+			/*
 			//Send message when a status is changed from a press sensor "TouchSensorStatus {relativeID} {pressed|released}"
 			//Send a message for every cm that is moved forward. Reset after a stop/turn "TraveledDistance {x}"
 			//Send message for rotating a motor. Start at leftMax, go to rightMax, go to 0 position. Whenever a problem is 
@@ -92,19 +99,19 @@ public class InitPlan extends Plan implements Runnable{
 				sendMessage("TouchSensorStatus " + "0 released");
 				touchPressed = false;
 			}
-			
+			*/
 			//Send a message for every sonar read. "SonarSensorStatus {sonarRelativeID} {distance} {tachoMeterCount 0=default/middle}"
 			int newBottomDistance = robot.getDistance(0, DistanceMode.LOWEST);
 			int newTopDistance = robot.getDistance(0, DistanceMode.HIGHEST_NOT255);
 			int tachoMeterCountSonarTurret = robot.getTachoMeterCount(OutputPort.B); 
 			
 			if(oldBottomSonarDistance == -1 || (Math.abs(newBottomDistance - oldBottomSonarDistance)) >= 1){
-				sendMessage("SonarSensorStatus 0 " + newBottomDistance +tachoMeterCountSonarTurret );
+				sendMessage("SonarSensorStatus 0 " + newBottomDistance +" " +tachoMeterCountSonarTurret );
 				oldBottomSonarDistance = newBottomDistance;
 			}
 			
 			if(oldTopSonarDistance == -1 || (Math.abs(newBottomDistance - oldTopSonarDistance)) >= 1){
-				sendMessage("SonarSensorStatus 1 " + newTopDistance +tachoMeterCountSonarTurret );
+				sendMessage("SonarSensorStatus 1 " + newTopDistance + " " + tachoMeterCountSonarTurret );
 				oldTopSonarDistance = newTopDistance;
 			}
 			
@@ -114,23 +121,26 @@ public class InitPlan extends Plan implements Runnable{
 				sendMessage("TraveledDistance " + traveledDistance);
 				oldTraveledDistance = traveledDistance;
 			}
-
+			
 			//Send a message when motor rotation is done. This is needed to know when a scan is complete
-			if(!robot.isTurning()&& wasTurning){
+			boolean isScanning = robot.isScanning(OutputPort.B);  
+			if( wasScanning && isScanning){
 				sendMessage("MotorRotationDone 0");
 				robot.resetTravelDistance();
 				oldTraveledDistance = 0;
 				wasTurning = false;
 			}
-			if(robot.isTurning() && !wasTurning){
+			if(!wasTurning && isScanning){
 				wasTurning=true;
 			}
-
+			
 			
 			//Send a message when there is a tachometer problem. TachoMeterProblem
 			if(!robot.atDesiredMotorSpeed()){
 				sendMessage("TachoMeterProblem");
 			}
+			
+			/*
 			//Send a message when a turn is complete, but only when it is correctly done. "TurnComplete"
 			if(!robot.isTurning() && wasTurning){
 				sendMessage("TurnComplete");
@@ -158,8 +168,14 @@ public class InitPlan extends Plan implements Runnable{
 			if(false){
 				sendMessage("");
 			}
-			
+			*/
 			step++;
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 	}	
