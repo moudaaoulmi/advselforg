@@ -12,12 +12,15 @@ int displayMode = NORMAL;
 BlobDetection detector;
   
 void setup() {
-  size(640, 480);
-  video = new Capture(this, 640, 480, "macam #0: Logitech QuickCam Messenger", 1);
-  numPixels = video.width * video.height;
+  int width = 640;
+  int height = 480;
+  
+  size(width, height);
+  video = new Capture(this, width, height, "macam #0: Logitech QuickCam Messenger", 1);
+  numPixels = width * height;
   colors = new int[4][numPixels];
   bools = new boolean[2][numPixels];
-  detector = new BlobDetection();
+  detector = new BlobDetection(width, height, 1.1, 50, 3);
   loadPixels();
 }
 
@@ -47,10 +50,10 @@ void draw() {
       colors[GREEN][i] = 0xFF000000 | (currG << 16) | (currG << 8) | currG;
       colors[BLUE][i] = 0xFF000000 | (currB << 16) | (currB << 8) | currB;
       
-      bools[RED][i] = diffR > 30 && brightness(colors[RED][i]) > brightness(colors[GREEN][i]) + brightness(colors[BLUE][i]) - 10;
-      bools[GREEN][i] = diffG > 30 && brightness(colors[RED][i]) > 1.35 * brightness(colors[BLUE][i])
-                     && brightness(colors[GREEN][i]) > 1.35 * brightness(colors[BLUE][i])
-                     && Math.abs(brightness(colors[GREEN][i]) - brightness(colors[RED][i])) < 12;
+      bools[RED][i] = diffR > 30 && brightness(colors[RED][i]) > brightness(colors[GREEN][i]) + brightness(colors[BLUE][i]) + 20;
+      bools[GREEN][i] = diffG > 30 && brightness(colors[RED][i]) > 1.5 * brightness(colors[BLUE][i])
+                     && brightness(colors[GREEN][i]) > 1.5 * brightness(colors[BLUE][i])
+                     && Math.abs(brightness(colors[GREEN][i]) - brightness(colors[RED][i])) < 50;
       
       switch (displayMode) {
         case NORMAL:
@@ -68,12 +71,30 @@ void draw() {
       }
     }
     updatePixels();
+    plotClusters(RED);
+    plotClusters(GREEN);
   }
 }
 
-void drawBlob(int x, int y) {
-    fill(255, 0, 0, 128);
+void drawBlob(int x, int y, int drawColor) {
+    switch (drawColor) {
+        case RED:
+          fill(255, 0, 0, 128);
+          break;
+        case GREEN:
+          fill(0, 255, 0, 128);
+          break;
+    }
     ellipse(x, y, 15, 15);
+}
+
+void plotClusters(int objectColor) {
+    ArrayList clusters;
+    clusters = detector.process(bools[objectColor]);
+    for (int i = 0; i < clusters.size(); i++) {
+      PixelCluster p = (PixelCluster) clusters.get(i);
+      drawBlob(p.center().getX(), p.center().getY(), objectColor);
+    }
 }
 
 void keyPressed() {
@@ -93,11 +114,8 @@ void keyPressed() {
     displayMode = GREEN;
     break;
   case 'd':
-    ArrayList clusters = detector.process(bools[RED]);
-    for (int i = 0; i < clusters.size(); i++) {
-      PixelCluster p = (PixelCluster) clusters.get(i);
-      drawBlob(p.center().getX(), p.center().getY());
-    }
+    plotClusters(RED);
+    plotClusters(GREEN);
     break;
   }
 }
