@@ -20,5 +20,19 @@ public interface RobotController {
 	public boolean getTouchSensorPressed();
 	public long getRFID(int sensorIndex);
 	public long getRFID();
-
+	
+	//TODO implement plox :) Method namen mogen anders....
+	//public int getTachoMeterCount(int motorIndex);
+	//public boolean hasTachoMeterProblem(int motorIndex);
+	//public void performScan(int motorIndex, int fromAngle, int toAngle);
+	//Start op from angle (zal dus negatief zijn) en gaat tot to Angle. Als hij klaar is 
+	// dan zet hij de tachometer weer op positie 0. (Check dit als je het gedaan hebt ivm
+	// coast problemen).
+	//public boolean isScanningArea();
+	//public boolean isTurning();
+	//public boolean isDrivingBackwards();
+	//public int getTraveledDistance();
+	// Deze geeft een int terug en staat op 0 nadat hij een andere actie heeft uitgevoerd dan 
+	// draaien. Ik wil dus eigenlijk alleen kunnen afleiden hoeveel hij naar voren heeft
+	// gereden.
 }
