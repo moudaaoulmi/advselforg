@@ -196,7 +196,7 @@ public class NxtController implements RobotController {
 
 	/* Get the distance of a ultrasonic sensor */
 	public int getDistance(int sensorIndex, DistanceMode mode) {
-		int data[] = new int[8];
+		int data[] = new int[3];
 		int result;
 		String str = "";
 		if (ultrasonicsensors.size() >= sensorIndex + 1) {
@@ -244,7 +244,7 @@ public class NxtController implements RobotController {
 		}
 	}
 
-	/* Get the light value of the first ligth sensor */
+	/* Get the light value of the first light sensor */
 	public int getLightValue() {
 		return getLightValue(0);
 	}
