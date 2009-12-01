@@ -2,23 +2,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class BlobDetection {
-	// The picture and its sizes. It should be possible to get the sizes out of
-	// the picture itself so this could be improved.
-	int width = 640;
-	int height = 480;
+	int width;
+	int height;
 
-	// The three thresholds that decide how cluster are found.
-	final static double distanceTreshold = 2; // The maximum distance between
-	// pixels within a single
-	// cluster
-	final static int sizeThreshold = 3; // The minimum size for a cluster to be
-	// considerd an object
+	// The three parameters that decide how clusters are found
+	double distanceThreshold; // The maximum distance between pixels within a single cluster
+	int sizeThreshold; // The minimum size for a cluster to be considered an object
+        double maxPixelClusterSizeRatio;
 
 	// The global variable containing the clusters.
 	ArrayList pixelClusters;
 
-        BlobDetection() {
+        BlobDetection(int width, int height, double distanceThreshold, int sizeThreshold double, double maxPixelClusterSizeRatio) {
           pixelClusters = new ArrayList();
+          this.width = width;
+          this.height = height;
+          this.distanceThreshold = distanceThreshold;
+          this.sizeThreshold = sizeThreshold;
+          this.maxPixelClusterSizeRatio = maxPixelClusterSizeRatio;
         }
 
 	ArrayList process(boolean[] bools) {
@@ -33,7 +34,7 @@ public class BlobDetection {
 			}
 		}
 
-		// Remove small clusters
+		//Remove small clusters
 		Iterator iterator = pixelClusters.iterator();
 
 		while (iterator.hasNext()) {
@@ -45,13 +46,17 @@ public class BlobDetection {
 		}
 
 		// Debug print
-		System.out.println(pixelClusters.size());
+		
 
 		for (int i = 0; i < pixelClusters.size(); i++) {
 			PixelCluster cluster = (PixelCluster) pixelClusters.get(i);
 			Coordinate coordinate = cluster.center();
+                        System.out.println(cluster.size());
 			System.out.println("Center: X=" + coordinate.getX() + " Y=" + coordinate.getY());
 		}
+
+                System.out.println(pixelClusters.size());
+
                 return pixelClusters;
 	}
 
@@ -73,7 +78,7 @@ public class BlobDetection {
 			// store them in temp
 			for (int i = 0; i < pixelClusters.size(); i++) {
 				PixelCluster cluster = (PixelCluster) pixelClusters.get(i);
-				if (cluster.partOf(coordinate, distanceTreshold)) {
+				if (cluster.partOf(coordinate, distanceThreshold)) {
 					temp.add(pixelClusters.get(i));
 				}
 			}
@@ -87,10 +92,10 @@ public class BlobDetection {
 				// all these cluster into a single cluster
 				// And add this coordinate to this new cluster
 				PixelCluster newCluster = new PixelCluster();
-				for (int i = 0; i < pixelClusters.size(); i++) {
-					PixelCluster cluster = (PixelCluster) pixelClusters.get(i);
+				for (int i = 0; i < temp.size(); i++) {
+					PixelCluster cluster = (PixelCluster) temp.get(i);
 					newCluster.merge(cluster);
-					pixelClusters.remove(pixelClusters.get(i));
+					pixelClusters.remove(cluster);
 				}
 				newCluster.addCoordinate(coordinate);
 
