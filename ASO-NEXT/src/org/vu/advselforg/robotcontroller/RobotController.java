@@ -22,13 +22,13 @@ public interface RobotController {
 	public long getRFID();
 	
 	//TODO implement plox :) Method namen mogen anders....
-	public int getTachoMeterCount(int motorIndex);
+	public int getTachoMeterCount(OutputPort port);
 	public boolean atDesiredMotorSpeed();
-	public void performScan(int motorIndex, int fromAngle, int toAngle, int speed);
+	public void performScan(OutputPort port, int fromAngle, int toAngle, int speed);
 	//Start op from angle (zal dus negatief zijn) en gaat tot to Angle. Als hij klaar is 
 	// dan zet hij de tachometer weer op positie 0. (Check dit als je het gedaan hebt ivm
 	// coast problemen).
-	public boolean isScanning(int motorIndex);
+	public boolean isScanning(OutputPort port);
 	public boolean isTurning();
 	public boolean isDrivingForward();
 	public boolean isDrivingBackward();
