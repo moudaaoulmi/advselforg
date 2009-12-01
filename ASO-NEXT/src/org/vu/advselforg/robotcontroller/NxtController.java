@@ -307,16 +307,8 @@ public class NxtController implements RobotController {
 		return pilot.isMoving();
 	}
 	
-	public boolean isDrivingBackward() {
-		return pilot.isMoving() && lastCommand == MovingMode.BACKWARD;
-	}
-
-	public boolean isDrivingForward() {
-		return pilot.isMoving() && lastCommand == MovingMode.FORWARD;
-	}
-	
-	public boolean isTurning() {
-		return pilot.isMoving() && lastCommand == MovingMode.TURNING;
+	public MovingMode lastCommand() {
+		return lastCommand;
 	}
 
 	public boolean isScanning(OutputPort port) {
