@@ -34,7 +34,7 @@ public class NxtController implements RobotController {
 	private TachoPilot pilot;
 	private RemoteSensorPort[] sensors;
 	private RemoteMotor[] motors;
-	private MovingMode movingMode;
+	private MovingMode lastCommand;
 	private boolean isScanning = false;
 	
 	private static final int DESIRED_SPEED_MARGIN = 1;
@@ -107,7 +107,6 @@ public class NxtController implements RobotController {
 			break;
 		case ULTRASONIC:
 			ultrasonicsensors.add(new UltrasonicSensor(port));
-			//ultrasonicsensors.get(ultrasonicsensors.size() - 1).off();
 			break;
 		case LIGHT:
 			lightsensors.add(new LightSensor(port, true));
@@ -156,7 +155,7 @@ public class NxtController implements RobotController {
 			return;
 		}
 		if (pilot != null) {
-			movingMode = MovingMode.FORWARD;
+			lastCommand = MovingMode.FORWARD;
 			pilot.travel(distance, immediateReturn);
 		}
 	}
@@ -167,7 +166,7 @@ public class NxtController implements RobotController {
 			return;
 		}
 		if (pilot != null) {
-			movingMode = MovingMode.BACKWARD;
+			lastCommand = MovingMode.BACKWARD;
 			pilot.travel(-distance, immediateReturn);
 		}
 	}
@@ -175,7 +174,7 @@ public class NxtController implements RobotController {
 	/* Rotate the robot [angle] degrees to the left */
 	public void turnLeft(float angle, boolean immediateReturn) {
 		if (pilot != null) {
-			movingMode = MovingMode.TURNING;
+			lastCommand = MovingMode.TURNING;
 			pilot.rotate(angle, immediateReturn);
 		}
 	}
@@ -183,7 +182,7 @@ public class NxtController implements RobotController {
 	/* Rotate the robot [angle] degrees to the right */
 	public void turnRight(float angle, boolean immediateReturn) {
 		if (pilot != null) {
-			movingMode = MovingMode.TURNING;
+			lastCommand = MovingMode.TURNING;
 			pilot.rotate(-angle, immediateReturn);
 		}
 	}
@@ -305,11 +304,11 @@ public class NxtController implements RobotController {
 	}
 
 	public boolean isDrivingBackward() {
-		return pilot.isMoving() && movingMode == MovingMode.BACKWARD ;
+		return pilot.isMoving() && lastCommand == MovingMode.BACKWARD ;
 	}
 
 	public boolean isDrivingForward() {
-		return pilot.isMoving() && movingMode == MovingMode.FORWARD ;
+		return pilot.isMoving() && lastCommand == MovingMode.FORWARD ;
 	}
 
 	public boolean isScanning(OutputPort port) {
@@ -327,7 +326,7 @@ public class NxtController implements RobotController {
 	}
 	
 	public boolean isTurning() {
-		return pilot.isMoving() && movingMode == MovingMode.TURNING;
+		return pilot.isMoving() && lastCommand == MovingMode.TURNING;
 	}
 
 	public void performScan(OutputPort port, int fromAngle, int toAngle, int speed) {
