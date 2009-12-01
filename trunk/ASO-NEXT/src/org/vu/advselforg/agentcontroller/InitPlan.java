@@ -38,10 +38,10 @@ public class InitPlan extends Plan implements Runnable{
 		OutputPort leftMotorPort = OutputPort.A;
 		OutputPort rightMotorPort = OutputPort.C;
 		boolean motorReverse = false;
-		SensorType port1 = SensorType.TOUCH;
-		SensorType port2 = SensorType.TOUCH;
-		SensorType port3 = SensorType.NONE;
-		SensorType port4 = SensorType.NONE;
+		SensorType port1 = SensorType.ULTRASONIC;
+		SensorType port2 = SensorType.ULTRASONIC;
+		SensorType port3 = SensorType.LIGHT;
+		SensorType port4 = SensorType.TOUCH;
 		try {
 			robot = new NxtController("CHANDLER", leftMotorPort, rightMotorPort,
 					motorReverse, port1, port2, port3, port4);
@@ -81,7 +81,7 @@ public class InitPlan extends Plan implements Runnable{
 			//Send a message for every sonar read. "SonarSensorStatus {sonarRelativeID} {distance} {tachoMeterCount 0=default/middle}" 
 			//Send a message for light change from nothing to black or white and one for having nothing.
 			//    "LightSensorStatus {relativeLightId} {nothing|black|white}"
-			
+			*/
 			if(step == Integer.MAX_VALUE){
 				step = 0;
 			}
@@ -89,20 +89,10 @@ public class InitPlan extends Plan implements Runnable{
 			if(step % 100 == 0){
 				robot.calibrateTurret(OutputPort.B);
 			}
-			//Send a message when the touch sensor is pressed and it was previously not pressed.
-			if(robot.getTouchSensorPressed(0) && !touchPressed){
-				sendMessage("TouchSensorStatus " + "0 pressed");
-				touchPressed = true;
-			}
-			//Send a message when the touch sensor is released and it was previously pressed.
-			if(!robot.getTouchSensorPressed(0) && touchPressed){
-				sendMessage("TouchSensorStatus " + "0 released");
-				touchPressed = false;
-			}
-			*/
 			//Send a message for every sonar read. "SonarSensorStatus {sonarRelativeID} {distance} {tachoMeterCount 0=default/middle}"
-			int newBottomDistance = robot.getDistance(0, DistanceMode.LOWEST);
+			/*
 			int newTopDistance = robot.getDistance(0, DistanceMode.HIGHEST_NOT255);
+			int newBottomDistance = robot.getDistance(1, DistanceMode.LOWEST);
 			int tachoMeterCountSonarTurret = robot.getTachoMeterCount(OutputPort.B); 
 			
 			if(oldBottomSonarDistance == -1 || (Math.abs(newBottomDistance - oldBottomSonarDistance)) >= 1){
@@ -114,13 +104,30 @@ public class InitPlan extends Plan implements Runnable{
 				sendMessage("SonarSensorStatus 1 " + newTopDistance + " " + tachoMeterCountSonarTurret );
 				oldTopSonarDistance = newTopDistance;
 			}
+			*/
+			
+			boolean touched = robot.getTouchSensorPressed(0); 
+			//Send a message when the touch sensor is pressed and it was previously not pressed.
+			if(touched && !touchPressed){
+				sendMessage("TouchSensorStatus " + "0 pressed");
+				touchPressed = true;
+			}
+			//Send a message when the touch sensor is released and it was previously pressed.
+			if(!touched && touchPressed){
+				sendMessage("TouchSensorStatus " + "0 released");
+				touchPressed = false;
+			}
+			
+
 			
 			//Send a message when the robot moved 1 cm forward or when it is resetted to 0.
 			int traveledDistance = robot.getTravelDistance();
-			if((traveledDistance - oldTraveledDistance) >= 1 ){
+			//if((traveledDistance - oldTraveledDistance) >= 1 ){
 				sendMessage("TraveledDistance " + traveledDistance);
-				oldTraveledDistance = traveledDistance;
-			}
+			//	oldTraveledDistance = traveledDistance;
+			//}
+			boolean isMoving = robot.isMoving();
+			MovingMode lastCommand = robot.lastCommand();
 			
 			//Send a message when motor rotation is done. This is needed to know when a scan is complete
 			boolean isScanning = robot.isScanning(OutputPort.B);  
@@ -140,29 +147,30 @@ public class InitPlan extends Plan implements Runnable{
 				sendMessage("TachoMeterProblem");
 			}
 			
-			/*
+			
 			//Send a message when a turn is complete, but only when it is correctly done. "TurnComplete"
-			if(!robot.isTurning() && wasTurning){
+			if(!isMoving && lastCommand == MovingMode.TURNING  && wasTurning){
 				sendMessage("TurnComplete");
 				wasTurning = false;
 				robot.resetTravelDistance();
 				oldTraveledDistance = 0;
 				robot.calibrateTurret(OutputPort.B);
 			}
-			if(robot.isTurning() && !wasTurning){
+			if(isMoving && lastCommand == MovingMode.TURNING && !wasTurning){
 				wasTurning = true;
 			}
+			
 			//Send a message when a drive backwards is complete, but only when it is correctly done. "DriveBackwardComplete"
-			if(!robot.isDrivingBackward() && wasDrivingBackward){
+			if(!isMoving && lastCommand == MovingMode.BACKWARD && wasDrivingBackward){
 				sendMessage("DriveBackwardComplete");
 				wasDrivingBackward = false;
 				robot.resetTravelDistance();
 				oldTraveledDistance = 0;
 			}
-			if(robot.isDrivingBackward() && !wasDrivingBackward){
+			if(isMoving && lastCommand == MovingMode.BACKWARD && !wasDrivingBackward){
 				wasDrivingBackward = true;
 			}
-
+			/*
 			//Send a message for light change from nothing to black or white and one for having nothing.
 			//    "LightSensorStatus {relativeLightId} {nothing|black|white}"
 			if(false){
@@ -170,12 +178,12 @@ public class InitPlan extends Plan implements Runnable{
 			}
 			*/
 			step++;
-			try {
+			/*try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 		}
 		
 	}	

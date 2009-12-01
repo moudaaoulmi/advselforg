@@ -9,7 +9,6 @@ public class StatusTouchSensorPlan extends Plan{
 
 	@Override
 	public void body() {
-		// TODO Auto-generated method stub
 		IMessageEvent em = (IMessageEvent)getInitialEvent();
 		String data = em.getContent().toString();
 		System.out.println("received "+data);
