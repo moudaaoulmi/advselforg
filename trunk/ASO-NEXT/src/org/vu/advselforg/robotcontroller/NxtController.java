@@ -303,12 +303,20 @@ public class NxtController implements RobotController {
 		return (int) pilot.getTravelDistance();
 	}
 
+	public boolean isMoving() {
+		return pilot.isMoving();
+	}
+	
 	public boolean isDrivingBackward() {
-		return pilot.isMoving() && lastCommand == MovingMode.BACKWARD ;
+		return pilot.isMoving() && lastCommand == MovingMode.BACKWARD;
 	}
 
 	public boolean isDrivingForward() {
-		return pilot.isMoving() && lastCommand == MovingMode.FORWARD ;
+		return pilot.isMoving() && lastCommand == MovingMode.FORWARD;
+	}
+	
+	public boolean isTurning() {
+		return pilot.isMoving() && lastCommand == MovingMode.TURNING;
 	}
 
 	public boolean isScanning(OutputPort port) {
@@ -323,10 +331,6 @@ public class NxtController implements RobotController {
 		if (tachoDrift != 0) {
 			motors[port.ordinal()].rotateTo(tachoDrift);
 		}
-	}
-	
-	public boolean isTurning() {
-		return pilot.isMoving() && lastCommand == MovingMode.TURNING;
 	}
 
 	public void performScan(OutputPort port, int fromAngle, int toAngle, int speed) {

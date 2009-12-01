@@ -29,6 +29,7 @@ public interface RobotController {
 	// dan zet hij de tachometer weer op positie 0. (Check dit als je het gedaan hebt ivm
 	// coast problemen).
 	public boolean isScanning(OutputPort port);
+	public boolean isMoving();
 	public boolean isTurning();
 	public boolean isDrivingForward();
 	public boolean isDrivingBackward();
