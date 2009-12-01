@@ -198,16 +198,16 @@ public class NxtController implements RobotController {
 	public int getDistance(int sensorIndex, DistanceMode mode) {
 		int data[] = new int[3];
 		int result;
-		String str = "";
+		//String str = "";
 		if (ultrasonicsensors.size() >= sensorIndex + 1) {
 			try {
 				for (int i = 0; i < data.length; i++) {
 					Thread.sleep(10);
 					data[i] = ultrasonicsensors.get(sensorIndex).getDistance();
 				}
-				for (int i = 0; i < data.length; i++) {
+				/*for (int i = 0; i < data.length; i++) {
 					str += data[i] + " ";
-				}
+				}*/
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -223,7 +223,7 @@ public class NxtController implements RobotController {
 				}
 				if (result == -1) result = 255;
 			}
-			System.out.println(str);
+			//System.out.println(str);
 			return result;
 		} else {
 			return -1;
