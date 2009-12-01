@@ -16,7 +16,7 @@ public class StatusTouchSensorPlan extends Plan{
 		StringTokenizer st = new StringTokenizer(data);
 		
 		String messageType = (String) st.nextElement();
-		int relativePortNumber = (Integer) st.nextElement();
+		int relativePortNumber = Integer.parseInt((String) st.nextElement());
 		String status = (String) st.nextElement();
 		
 		if(status.equals("pressed")){
