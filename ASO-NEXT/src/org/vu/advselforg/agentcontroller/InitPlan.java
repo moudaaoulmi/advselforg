@@ -76,7 +76,7 @@ public class InitPlan extends Plan implements Runnable{
 			//    "LightSensorStatus {relativeLightId} {nothing|black|white}"
 			
 			if(step == Integer.MAX_VALUE){
-				step =0;
+				step = 0;
 			}
 			
 			if(step % 100 == 0){
@@ -116,10 +116,14 @@ public class InitPlan extends Plan implements Runnable{
 			}
 
 			//Send a message when motor rotation is done. This is needed to know when a scan is complete
-			if(true){
+			if(!robot.isTurning()&& wasTurning){
 				sendMessage("MotorRotationDone 0");
 				robot.resetTravelDistance();
 				oldTraveledDistance = 0;
+				wasTurning = false;
+			}
+			if(robot.isTurning() && !wasTurning){
+				wasTurning=true;
 			}
 
 			
@@ -133,6 +137,7 @@ public class InitPlan extends Plan implements Runnable{
 				wasTurning = false;
 				robot.resetTravelDistance();
 				oldTraveledDistance = 0;
+				robot.calibrateTurret(2);
 			}
 			if(robot.isTurning() && !wasTurning){
 				wasTurning = true;
