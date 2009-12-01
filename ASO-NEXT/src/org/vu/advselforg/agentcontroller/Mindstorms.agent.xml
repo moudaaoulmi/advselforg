@@ -65,6 +65,12 @@
 				<condition>!$beliefbase.notInitialized</condition>
 			</trigger>		
 		</plan>
+		<plan name="actionDriveBackwards">
+			<body>new DriveBackwardsPlan()</body>
+			<trigger>
+				<condition>$beliefbase.clusterDetected</condition>
+			</trigger>
+		</plan>
 		<plan name="StatusTouchSensorPlan">
 			<body>new StatusTouchSensorPlan()</body>
 			<trigger>

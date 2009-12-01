@@ -75,6 +75,7 @@ public class NxtController implements RobotController {
 		if (leftMotorPort != OutputPort.NONE && rightMotorPort != OutputPort.NONE) {
 			pilot = new TachoPilot(5.4f, 15.1f, motors[leftMotorPort.ordinal()],
 					motors[rightMotorPort.ordinal()], motorReverse);
+			pilot.setMoveSpeed(15);
 			pilot.regulateSpeed(true);
 		}
 

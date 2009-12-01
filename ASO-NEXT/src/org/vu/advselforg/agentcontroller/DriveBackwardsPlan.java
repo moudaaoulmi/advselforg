@@ -9,7 +9,7 @@ public class DriveBackwardsPlan extends Plan{
 	@Override
 	public void body() {
 		RobotController robot = (RobotController) getBeliefbase().getBelief("robot").getFact();
-		robot.moveBackward(10, true);
+		robot.moveBackward(60, true);
 		
 	} 
 

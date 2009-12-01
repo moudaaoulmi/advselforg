@@ -9,7 +9,10 @@ public class StatusTravelDistancePlan extends Plan{
 
 	@Override
 	public void body() {
+		
+			
 		IMessageEvent em = (IMessageEvent)getInitialEvent();
+		
 		String data = em.getContent().toString();
 		System.out.println("received "+data);
 		StringTokenizer st = new StringTokenizer(data);
@@ -20,8 +23,8 @@ public class StatusTravelDistancePlan extends Plan{
 		
 		getBeliefbase().getBelief("distanceTraveled").setFact(distance);
 		System.out.println("Traveled " + distance + " cm.");
+		}		
 		
-		
-	}
+	
 
 }
