@@ -30,9 +30,7 @@ public interface RobotController {
 	// coast problemen).
 	public boolean isScanning(OutputPort port);
 	public boolean isMoving();
-	public boolean isTurning();
-	public boolean isDrivingForward();
-	public boolean isDrivingBackward();
+	public MovingMode lastCommand();
 	public int getTravelDistance();
 	public void resetTravelDistance();
 	// Deze geeft een int terug en staat op 0 nadat hij een andere actie heeft uitgevoerd dan 
