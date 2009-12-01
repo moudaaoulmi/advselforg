@@ -42,7 +42,7 @@ public class InitPlan extends Plan implements Runnable{
 		SensorType port3 = SensorType.NONE;
 		SensorType port4 = SensorType.NONE;
 		try {
-			robot = new NxtController("Patrick", leftMotorPort, rightMotorPort,
+			robot = new NxtController("CHANDLER", leftMotorPort, rightMotorPort,
 					motorReverse, port1, port2, port3, port4);	
 		} catch (Exception e) {
 			System.out.println("Whoops, does not compute. Cannot connect to robot.");

@@ -59,6 +59,12 @@
 				<condition>$beliefbase.notInitialized</condition>
 			</trigger>
 		</plan>		
+		<plan name="actionDrive">
+			<body> new ActionDriveForward()</body>
+			<trigger>
+				<condition>!$beliefbase.notInitialized</condition>
+			</trigger>		
+		</plan>
 		<plan name="StatusTouchSensorPlan">
 			<body>new StatusTouchSensorPlan()</body>
 			<trigger>
