@@ -16,10 +16,13 @@ public class InitPlan extends Plan implements Runnable{
 	String agentName;
 	
 	boolean touchPressed = false;
-	int oldTraveledDistance = 0;
 	
+	int oldTraveledDistance = 0;
 	int oldTopSonarDistance =-1;
 	int oldBottomSonarDistance =-1;
+	
+	boolean wasTurning = false;
+	boolean wasDrivingBackward = false;
 	
 	public InitPlan(String agentName){
 		this.agentName = agentName;
@@ -72,19 +75,12 @@ public class InitPlan extends Plan implements Runnable{
 			
 			//Send a message when the touch sensor is pressed and it was previously not pressed.
 			if(robot.getTouchSensorPressed(0) && !touchPressed){
-			
-				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
-				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
-				me.setContent("TouchSensorStatus " + "0 pressed");
-				getExternalAccess().sendMessage(me);
+				sendMessage("TouchSensorStatus " + "0 pressed");
 				touchPressed = true;
 			}
 			//Send a message when the touch sensor is released and it was previously pressed.
 			if(!robot.getTouchSensorPressed(0) && touchPressed){
-				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
-				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
-				me.setContent("TouchSensorStatus " + "0 released");
-				getExternalAccess().sendMessage(me);
+				sendMessage("TouchSensorStatus " + "0 released");
 				touchPressed = false;
 			}
 			
@@ -92,73 +88,71 @@ public class InitPlan extends Plan implements Runnable{
 			int newBottomDistance = robot.getDistance(0, DistanceMode.LOWEST);
 			int newTopDistance = robot.getDistance(0, DistanceMode.HIGHEST_NOT255);
 			//TODO tacho implementeren
-			int tachoMeterCountSonarTurret = 0; 
+			int tachoMeterCountSonarTurret = robot.getTachoMeterCount(2); 
 			
 			if(oldBottomSonarDistance == -1 || (Math.abs(newBottomDistance - oldBottomSonarDistance)) >= 1){
-				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
-				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
-				me.setContent("SonarSensorStatus 0 " + newBottomDistance +tachoMeterCountSonarTurret );
-				getExternalAccess().sendMessage(me);
+				sendMessage("SonarSensorStatus 0 " + newBottomDistance +tachoMeterCountSonarTurret );
 				oldBottomSonarDistance = newBottomDistance;
 			}
 			
 			if(oldTopSonarDistance == -1 || (Math.abs(newBottomDistance - oldTopSonarDistance)) >= 1){
-				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
-				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
-				me.setContent("SonarSensorStatus 1 " + newTopDistance +tachoMeterCountSonarTurret );
-				getExternalAccess().sendMessage(me);
+				sendMessage("SonarSensorStatus 1 " + newTopDistance +tachoMeterCountSonarTurret );
 				oldTopSonarDistance = newTopDistance;
 			}
 			
 			//Send a message when the robot moved 1 cm forward or when it is resetted to 0.
-			if(false){
-				int traveledDistance = 0;
-				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
-				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
-				me.setContent("TraveledDistance " + traveledDistance);
-				getExternalAccess().sendMessage(me);
+			int traveledDistance = robot.getTravelDistance();
+			if((traveledDistance - oldTraveledDistance) >= 1 ){
+				sendMessage("TraveledDistance " + traveledDistance);
 				oldTraveledDistance = traveledDistance;
 			}
-			
+
 			//Send a message when motor rotation is done. This is needed to know when a scan is complete
-			if(false){
-				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
-				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
-				me.setContent("MotorRotationDone 0");
-				getExternalAccess().sendMessage(me);
+			if(true){
+				sendMessage("MotorRotationDone 0");
+				robot.resetTravelDistance();
+				oldTraveledDistance = 0;
 			}
+
 			
 			//Send a message when there is a tachometer problem. TachoMeterProblem
-			if(false){
-				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
-				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
-				me.setContent("TachoMeterProblem");
-				getExternalAccess().sendMessage(me);
+			if(!robot.atDesiredMotorSpeed()){
+				sendMessage("TachoMeterProblem");
 			}
 			//Send a message when a turn is complete, but only when it is correctly done. "TurnComplete"
-			if(false){
-				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
-				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
-				me.setContent("TurnComplete");
-				getExternalAccess().sendMessage(me);
+			if(!robot.isTurning() && wasTurning){
+				sendMessage("TurnComplete");
+				wasTurning = false;
+				robot.resetTravelDistance();
+				oldTraveledDistance = 0;
+			}
+			if(robot.isTurning() && !wasTurning){
+				wasTurning = true;
 			}
 			//Send a message when a drive backwards is complete, but only when it is correctly done. "DriveBackwardComplete"
-			if(false){
-				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
-				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
-				me.setContent("DriveBackwardComplete");
-				getExternalAccess().sendMessage(me);
+			if(!robot.isDrivingBackward() && wasDrivingBackward){
+				sendMessage("DriveBackwardComplete");
+				wasDrivingBackward = false;
+				robot.resetTravelDistance();
+				oldTraveledDistance = 0;
+			}
+			if(robot.isDrivingBackward() && !wasDrivingBackward){
+				wasDrivingBackward = true;
 			}
 
 			//Send a message for light change from nothing to black or white and one for having nothing.
 			//    "LightSensorStatus {relativeLightId} {nothing|black|white}"
 			if(false){
-				IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
-				me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
-				me.setContent("");
-				getExternalAccess().sendMessage(me);
+				sendMessage("");
 			}
 		}
-	}		
+		
+	}	
+	private void sendMessage(String message){
+		IMessageEvent me = getExternalAccess().createMessageEvent("MessageSend");
+		me.getParameterSet(SFipa.RECEIVERS).addValue(new AgentIdentifier(agentName,true));
+		me.setContent(message);
+		getExternalAccess().sendMessage(me);
+	}
 }
 
