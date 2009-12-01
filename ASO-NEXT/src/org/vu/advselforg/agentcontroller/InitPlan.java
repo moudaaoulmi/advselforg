@@ -24,6 +24,8 @@ public class InitPlan extends Plan implements Runnable{
 	boolean wasTurning = false;
 	boolean wasDrivingBackward = false;
 	
+	int step = 0;
+	
 	public InitPlan(String agentName){
 		this.agentName = agentName;
 	}
@@ -73,6 +75,13 @@ public class InitPlan extends Plan implements Runnable{
 			//Send a message for light change from nothing to black or white and one for having nothing.
 			//    "LightSensorStatus {relativeLightId} {nothing|black|white}"
 			
+			if(step == Integer.MAX_VALUE){
+				step =0;
+			}
+			
+			if(step % 100 == 0){
+				robot.calibrateTurret(2);
+			}
 			//Send a message when the touch sensor is pressed and it was previously not pressed.
 			if(robot.getTouchSensorPressed(0) && !touchPressed){
 				sendMessage("TouchSensorStatus " + "0 pressed");
@@ -87,7 +96,6 @@ public class InitPlan extends Plan implements Runnable{
 			//Send a message for every sonar read. "SonarSensorStatus {sonarRelativeID} {distance} {tachoMeterCount 0=default/middle}"
 			int newBottomDistance = robot.getDistance(0, DistanceMode.LOWEST);
 			int newTopDistance = robot.getDistance(0, DistanceMode.HIGHEST_NOT255);
-			//TODO tacho implementeren
 			int tachoMeterCountSonarTurret = robot.getTachoMeterCount(2); 
 			
 			if(oldBottomSonarDistance == -1 || (Math.abs(newBottomDistance - oldBottomSonarDistance)) >= 1){
@@ -145,6 +153,8 @@ public class InitPlan extends Plan implements Runnable{
 			if(false){
 				sendMessage("");
 			}
+			
+			step++;
 		}
 		
 	}	
