@@ -292,6 +292,10 @@ public class NxtController implements RobotController {
 	}
 
 	public boolean atDesiredMotorSpeed() {
+		System.out.println("Right:  " + motors[1].getRotationSpeed());
+		System.out.println("Left:   " + motors[3].getRotationSpeed());
+		System.out.println("Actual: " + pilot.getMoveSpeed());
+		
 		return pilot.getRightActualSpeed() >= pilot.getMoveSpeed() - DESIRED_SPEED_MARGIN &&
 			pilot.getLeftActualSpeed() >= pilot.getMoveSpeed() - DESIRED_SPEED_MARGIN;
 	}
@@ -304,8 +308,10 @@ public class NxtController implements RobotController {
 		return (int) pilot.getTravelDistance();
 	}
 
-	public boolean isMoving() {
-		return pilot.isMoving();
+	public boolean isTurningOrDrivingBack() {
+		if(lastCommand != MovingMode.FORWARD){
+			return pilot.isMoving();
+		}else{return false;}
 	}
 	
 	public MovingMode lastCommand() {
@@ -321,7 +327,7 @@ public class NxtController implements RobotController {
 
 	public void calibrateTurret(OutputPort port) {
 		int tachoDrift = motors[port.ordinal()].getTachoCount() * -1;
-		if (tachoDrift != 0) {
+		if (Math.abs(tachoDrift) > 2) {
 			motors[port.ordinal()].rotateTo(tachoDrift);
 		}
 	}

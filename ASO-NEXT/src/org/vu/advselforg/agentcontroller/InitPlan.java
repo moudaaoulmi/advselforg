@@ -9,7 +9,7 @@ import jadex.runtime.IFilter;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
 
-public class InitPlan extends Plan implements Runnable{
+public class InitPlan extends Plan{
 
 	private static final long serialVersionUID = 2961883448970106007L;
 	NxtController robot;
@@ -43,32 +43,22 @@ public class InitPlan extends Plan implements Runnable{
 		SensorType port3 = SensorType.LIGHT;
 		SensorType port4 = SensorType.TOUCH;
 		try {
-			robot = new NxtController("CHANDLER", leftMotorPort, rightMotorPort,
+			robot = new NxtController("JOEY", leftMotorPort, rightMotorPort,
 					motorReverse, port1, port2, port3, port4);
-		new Thread(this).start();
+		
 			
 		getBeliefbase().getBelief("robot").setFact(robot);
 		System.out.println("Connected");
 			
-		getBeliefbase().getBelief("notInitialized").setFact(false);
+		getBeliefbase().getBelief("Initialized").setFact(true);
 		} catch (Exception e) {
 			System.out.println("Whoops, does not compute. Cannot connect to robot.");
 		}
-
-		new Thread(this).start();
-		
-		getBeliefbase().getBelief("robot").setFact(robot);
-		System.out.println("Connected");
-		
-		getBeliefbase().getBelief("notInitialized").setFact(false);
-		waitFor(IFilter.NEVER);
-		
 	}
+
 	
-	
-	@Override
 	public void run() {
-		while(true){
+		//while(true){
 			/*
 			//Send message when a status is changed from a press sensor "TouchSensorStatus {relativeID} {pressed|released}"
 			//Send a message for every cm that is moved forward. Reset after a stop/turn "TraveledDistance {x}"
@@ -81,7 +71,7 @@ public class InitPlan extends Plan implements Runnable{
 			//Send a message for every sonar read. "SonarSensorStatus {sonarRelativeID} {distance} {tachoMeterCount 0=default/middle}" 
 			//Send a message for light change from nothing to black or white and one for having nothing.
 			//    "LightSensorStatus {relativeLightId} {nothing|black|white}"
-			*/
+			
 			if(step == Integer.MAX_VALUE){
 				step = 0;
 			}
@@ -90,7 +80,6 @@ public class InitPlan extends Plan implements Runnable{
 				robot.calibrateTurret(OutputPort.B);
 			}
 			//Send a message for every sonar read. "SonarSensorStatus {sonarRelativeID} {distance} {tachoMeterCount 0=default/middle}"
-			/*
 			int newTopDistance = robot.getDistance(0, DistanceMode.HIGHEST_NOT255);
 			int newBottomDistance = robot.getDistance(1, DistanceMode.LOWEST);
 			int tachoMeterCountSonarTurret = robot.getTachoMeterCount(OutputPort.B); 
@@ -104,7 +93,7 @@ public class InitPlan extends Plan implements Runnable{
 				sendMessage("SonarSensorStatus 1 " + newTopDistance + " " + tachoMeterCountSonarTurret );
 				oldTopSonarDistance = newTopDistance;
 			}
-			*/
+			
 			
 			boolean touched = robot.getTouchSensorPressed(0); 
 			//Send a message when the touch sensor is pressed and it was previously not pressed.
@@ -176,7 +165,7 @@ public class InitPlan extends Plan implements Runnable{
 			if(false){
 				sendMessage("");
 			}
-			*/
+	
 			step++;
 			/*try {
 				Thread.sleep(100);
@@ -184,7 +173,7 @@ public class InitPlan extends Plan implements Runnable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}*/
-		}
+		//}
 		
 	}	
 	private void sendMessage(String message){
