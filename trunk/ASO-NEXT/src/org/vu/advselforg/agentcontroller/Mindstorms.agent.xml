@@ -16,10 +16,13 @@
 	
 	<beliefs>
 		<belief name="robot" class="NxtController"/>
-		<belief name="notInitialized" class="boolean">
-			<fact>true</fact>
+		<belief name="Initialized" class="boolean">
+			<fact>false</fact>
 		</belief>
 		<belief name="clusterDetected" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="WIMRunning" class="boolean">
 			<fact>false</fact>
 		</belief>
 		<belief name="drivingBackwards" class="boolean">
@@ -56,13 +59,19 @@
 		<plan name="start_robot">
 			<body>new InitPlan("Mindstorms")</body>
 			<trigger>
-				<condition>$beliefbase.notInitialized</condition>
+				<condition>!$beliefbase.Initialized </condition>
 			</trigger>
 		</plan>		
+		<plan name="StartWorldUpdatePlan">
+			<body> new WorldBeliefUpdatePlan()</body>
+			<trigger>
+				<condition>$beliefbase.Initialized</condition>
+			</trigger>		
+		</plan>
 		<plan name="actionDrive">
 			<body> new ActionDriveForward()</body>
 			<trigger>
-				<condition>!$beliefbase.notInitialized</condition>
+				<condition>$beliefbase.WIMRunning  &amp;&amp; !$beliefbase.drivingBackwards </condition>
 			</trigger>		
 		</plan>
 		<plan name="actionDriveBackwards">
@@ -70,130 +79,10 @@
 			<trigger>
 				<condition>$beliefbase.clusterDetected</condition>
 			</trigger>
-		</plan>
-		<plan name="StatusTouchSensorPlan">
-			<body>new StatusTouchSensorPlan()</body>
-			<trigger>
-				<messageevent ref="TouchSensorReceive"/>
-			</trigger>
-		</plan>	
-		<plan name="StatusDriveBackwardPlan">
-			<body>new StatusTouchSensorPlan()</body>
-			<trigger>
-				<messageevent ref="DriveBackwardReceive"/>
-			</trigger>
-		</plan>	
-		<plan name="StatusLightSensorPlan">
-			<body>new StatusLightSensorPlan()</body>
-			<trigger>
-				<messageevent ref="LightSensorReceive"/>
-			</trigger>
-		</plan>	
-		<plan name="StatusMotorRotationPlan">
-			<body>new StatusMotorRotationPlan()</body>
-			<trigger>
-				<messageevent ref="MotorRotationReceive"/>
-			</trigger>
-		</plan>
-		<plan name="StatusSonarPlan">
-			<body>new StatusSonarPlan()</body>
-			<trigger>
-				<messageevent ref="SonarSensorStatusReceive"/>
-			</trigger>
-		</plan>
-		<plan name="StatusTachoMeterPlan">
-			<body>new StatusTachoMeterPlan()</body>
-			<trigger>
-				<messageevent ref="TachoMeterStatusReceive"/>
-			</trigger>
-		</plan>			
-		<plan name="StatusTurnPlan">
-			<body>new StatusTurnPlan()</body>
-			<trigger>
-				<messageevent ref="TurnCompleteReceive"/>
-			</trigger>
-		</plan>			
-		<plan name="StatusTravelDistancePlan">
-			<body>new StatusTravelDistancePlan()</body>
-			<trigger>
-				<messageevent ref="TravelDistanceReceive"/>
-			</trigger>
-		</plan>			
+		</plan>		
 	</plans>
 
-	<events>
-		<messageevent name="MessageSend" type="fipa" direction="send">
-			<parameter name="performative" class="String">
-				<value>SFipa.REQUEST</value>
-			</parameter>
-			<parameter name="content" class="String"/>
-		</messageevent>
-		<messageevent name="TouchSensorReceive" direction="receive" type="fipa">
-			<parameter name="performative" class="String" direction="fixed">
-				<value>SFipa.REQUEST</value>
-			</parameter>
-			<parameter name="content-start" class="String" direction="fixed">
-				<value>"TouchSensorStatus"</value>
-			</parameter>
-		</messageevent>
-		<messageevent name="DriveBackwardReceive" direction="receive" type="fipa">
-			<parameter name="performative" class="String" direction="fixed">
-				<value>SFipa.REQUEST</value>
-			</parameter>
-			<parameter name="content-start" class="String" direction="fixed">
-				<value>"DriveBackwardComplete"</value>
-			</parameter>
-		</messageevent>
-		<messageevent name="LightSensorReceive" direction="receive" type="fipa">
-			<parameter name="performative" class="String" direction="fixed">
-				<value>SFipa.REQUEST</value>
-			</parameter>
-			<parameter name="content-start" class="String" direction="fixed">
-				<value>"LightSensorStatus"</value>
-			</parameter>
-		</messageevent>
-		<messageevent name="MotorRotationReceive" direction="receive" type="fipa">
-			<parameter name="performative" class="String" direction="fixed">
-				<value>SFipa.REQUEST</value>
-			</parameter>
-			<parameter name="content-start" class="String" direction="fixed">
-				<value>"MotorRotationDone"</value>
-			</parameter>
-		</messageevent>
-		<messageevent name="SonarSensorStatusReceive" direction="receive" type="fipa">
-			<parameter name="performative" class="String" direction="fixed">
-				<value>SFipa.REQUEST</value>
-			</parameter>
-			<parameter name="content-start" class="String" direction="fixed">
-				<value>"SonarSensorStatus"</value>
-			</parameter>
-		</messageevent>
-		<messageevent name="TachoMeterStatusReceive" direction="receive" type="fipa">
-			<parameter name="performative" class="String" direction="fixed">
-				<value>SFipa.REQUEST</value>
-			</parameter>
-			<parameter name="content-start" class="String" direction="fixed">
-				<value>"TachoMeterProblem"</value>
-			</parameter>
-		</messageevent>
-		<messageevent name="TurnCompleteReceive" direction="receive" type="fipa">
-			<parameter name="performative" class="String" direction="fixed">
-				<value>SFipa.REQUEST</value>
-			</parameter>
-			<parameter name="content-start" class="String" direction="fixed">
-				<value>"TurnComplete"</value>
-			</parameter>
-		</messageevent>
-		<messageevent name="TravelDistanceReceive" direction="receive" type="fipa">
-			<parameter name="performative" class="String" direction="fixed">
-				<value>SFipa.REQUEST</value>
-			</parameter>
-			<parameter name="content-start" class="String" direction="fixed">
-				<value>"TraveledDistance"</value>
-			</parameter>
-		</messageevent>
-	</events>
-
+	
 	<configurations>
 		<configuration name="default">
 		</configuration>

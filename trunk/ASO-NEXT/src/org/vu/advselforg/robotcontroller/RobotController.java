@@ -29,10 +29,11 @@ public interface RobotController {
 	// dan zet hij de tachometer weer op positie 0. (Check dit als je het gedaan hebt ivm
 	// coast problemen).
 	public boolean isScanning(OutputPort port);
-	public boolean isMoving();
+	public boolean isTurningOrDrivingBack();
 	public MovingMode lastCommand();
 	public int getTravelDistance();
 	public void resetTravelDistance();
+	public void calibrateTurret(OutputPort port);
 	// Deze geeft een int terug en staat op 0 nadat hij een andere actie heeft uitgevoerd dan 
 	// draaien. Ik wil dus eigenlijk alleen kunnen afleiden hoeveel hij naar voren heeft
 	// gereden.

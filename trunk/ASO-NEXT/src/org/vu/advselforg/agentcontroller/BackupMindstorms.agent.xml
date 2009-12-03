@@ -1,0 +1,202 @@
+<agent xmlns="http://jadex.sourceforge.net/jadex"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex
+						http://jadex.sourceforge.net/jadex-0.96.xsd"
+	name="BackupMindstorms"
+	package="org.vu.advselforg.agentcontroller">
+	
+	<imports>
+		<import>java.util.logging.*</import>
+		<import>java.util.*</import>
+		<import>jadex.adapter.fipa.SFipa</import>
+		<import>jadex.adapter.fipa.*</import>
+		<import>jadex.util.*</import>
+		<import>org.vu.advselforg.robotcontroller.*</import>
+	</imports>
+	
+	<beliefs>
+		<belief name="robot" class="NxtController"/>
+		<belief name="notInitialized" class="boolean">
+			<fact>true</fact>
+		</belief>
+		<belief name="clusterDetected" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="drivingBackwards" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="objectInGripper" class="String">
+			<fact>"nothing"</fact>
+		</belief>
+		<belief name="scanningArea" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="topSonarDistance" class="int">
+			<fact>0</fact>
+		</belief>
+		<belief name="bottomSonarDistance" class="int">
+			<fact>0</fact>
+		</belief>
+		<belief name="sonarAngle" class="int">
+			<fact>0</fact>
+		</belief>
+		
+		<belief name="tachometerProblem" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="distanceTraveled" class="int">
+			<fact>0</fact>
+		</belief>		
+		<belief name="turning" class="boolean">
+			<fact>false</fact>
+		</belief>
+	</beliefs>
+	
+	<plans>
+		<plan name="start_robot">
+			<body>new InitPlan("Mindstorms")</body>
+			<trigger>
+				<condition>$beliefbase.notInitialized </condition>
+			</trigger>
+		</plan>		
+		<plan name="actionDrive">
+			<body> new ActionDriveForward()</body>
+			<trigger>
+				<condition>!$beliefbase.notInitialized</condition>
+			</trigger>		
+		</plan>
+		<plan name="actionDriveBackwards">
+			<body>new DriveBackwardsPlan()</body>
+			<trigger>
+				<condition>$beliefbase.clusterDetected &#38;&#38; !$beliefbase.notInitialized </condition>
+			</trigger>
+		</plan>
+		<plan name="StatusTouchSensorPlan">
+			<body>new StatusTouchSensorPlan()</body>
+			<trigger>
+				<messageevent ref="TouchSensorReceive"/>
+			</trigger>
+		</plan>	
+		<plan name="StatusDriveBackwardPlan">
+			<body>new StatusTouchSensorPlan()</body>
+			<trigger>
+				<messageevent ref="DriveBackwardReceive"/>
+			</trigger>
+		</plan>	
+		<plan name="StatusLightSensorPlan">
+			<body>new StatusLightSensorPlan()</body>
+			<trigger>
+				<messageevent ref="LightSensorReceive"/>
+			</trigger>
+		</plan>	
+		<plan name="StatusMotorRotationPlan">
+			<body>new StatusMotorRotationPlan()</body>
+			<trigger>
+				<messageevent ref="MotorRotationReceive"/>
+			</trigger>
+		</plan>
+		<plan name="StatusSonarPlan">
+			<body>new StatusSonarPlan()</body>
+			<trigger>
+				<messageevent ref="SonarSensorStatusReceive"/>
+			</trigger>
+		</plan>
+		<plan name="StatusTachoMeterPlan">
+			<body>new StatusTachoMeterPlan()</body>
+			<trigger>
+				<messageevent ref="TachoMeterStatusReceive"/>
+			</trigger>
+		</plan>			
+		<plan name="StatusTurnPlan">
+			<body>new StatusTurnPlan()</body>
+			<trigger>
+				<messageevent ref="TurnCompleteReceive"/>
+			</trigger>
+		</plan>			
+		<plan name="StatusTravelDistancePlan">
+			<body>new StatusTravelDistancePlan()</body>
+			<trigger>
+				<messageevent ref="TravelDistanceReceive"/>
+			</trigger>
+		</plan>			
+	</plans>
+
+	<events>
+		<messageevent name="MessageSend" type="fipa" direction="send">
+			<parameter name="performative" class="String">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content" class="String"/>
+		</messageevent>
+		<messageevent name="TouchSensorReceive" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content-start" class="String" direction="fixed">
+				<value>"TouchSensorStatus"</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="DriveBackwardReceive" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content-start" class="String" direction="fixed">
+				<value>"DriveBackwardComplete"</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="LightSensorReceive" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content-start" class="String" direction="fixed">
+				<value>"LightSensorStatus"</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="MotorRotationReceive" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content-start" class="String" direction="fixed">
+				<value>"MotorRotationDone"</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="SonarSensorStatusReceive" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content-start" class="String" direction="fixed">
+				<value>"SonarSensorStatus"</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="TachoMeterStatusReceive" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content-start" class="String" direction="fixed">
+				<value>"TachoMeterProblem"</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="TurnCompleteReceive" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content-start" class="String" direction="fixed">
+				<value>"TurnComplete"</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="TravelDistanceReceive" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="content-start" class="String" direction="fixed">
+				<value>"TraveledDistance"</value>
+			</parameter>
+		</messageevent>
+	</events>
+
+	<configurations>
+		<configuration name="default">
+		</configuration>
+	</configurations>
+
+</agent>
