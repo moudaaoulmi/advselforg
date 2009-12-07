@@ -3,6 +3,8 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import lejos.pc.comm.*;
 public class PCBrains {
@@ -18,12 +20,11 @@ public class PCBrains {
 		conn.connectTo("btspp://JOEY");
 		
 		DataOutputStream outDat = conn.getDataOut();
-        DataInputStream inDat = conn.getDataIn();
-        
-        //BufferedReader reader = new BufferedReader(inDat.);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         
         outDat.writeChars("Message from laptop");
         
+        System.out.println(reader.readLine());
         
 		
 		

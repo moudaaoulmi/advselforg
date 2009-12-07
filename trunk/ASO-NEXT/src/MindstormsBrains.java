@@ -1,16 +1,14 @@
-package test;
+
+
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
-
 import java.io.*;
 
 
 public class MindstormsBrains {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+	@SuppressWarnings("deprecation")
+	public static void main(String[] args) throws IOException{
 		//Compile nxjc  MindstormsBrains.java
 		//Upload nxj -r MindstormsBrains -N JOEY
 		
@@ -22,8 +20,14 @@ public class MindstormsBrains {
         LCD.drawString("Connected", 0, 0);
         DataOutputStream outDat = conn.openDataOutputStream();
         DataInputStream inDat = conn.openDataInputStream();
+        //BufferedReader d = new BufferedReader(new InputStreamReader(inDat));
+
         
+        //BufferedReader reader = new BufferedReader(new InputStreamReader(conn.openInputStream()));
+        LCD.clear();
+        //LCD.drawString(d.readLine(), 0, 0);
         
+        outDat.writeChars("Message from Mindstorms");
         
         //OpticalDistanceSensor USS = new OpticalDistanceSensor(SensorPort.S2);
         Button.waitForPress();
