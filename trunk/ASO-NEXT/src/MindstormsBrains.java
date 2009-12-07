@@ -20,12 +20,12 @@ public class MindstormsBrains {
         LCD.drawString("Connected", 0, 0);
         DataOutputStream outDat = conn.openDataOutputStream();
         DataInputStream inDat = conn.openDataInputStream();
-        //BufferedReader d = new BufferedReader(new InputStreamReader(inDat));
+        BufferedReader d = new BufferedReader(new InputStreamReader(inDat));
 
         
         //BufferedReader reader = new BufferedReader(new InputStreamReader(conn.openInputStream()));
         LCD.clear();
-        //LCD.drawString(d.readLine(), 0, 0);
+        LCD.drawString(d.readLine(), 0, 0);
         
         outDat.writeChars("Message from Mindstorms");
         
