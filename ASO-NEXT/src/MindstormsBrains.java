@@ -11,8 +11,7 @@ public class MindstormsBrains {
 	public static void main(String[] args) throws IOException{
 		//Compile nxjc  MindstormsBrains.java
 		//Upload nxj -r MindstormsBrains -N JOEY
-		
-		// TODO Auto-generated method stub
+
         LCD.drawString("Waiting...", 0, 0);
         LCD.refresh();
         BTConnection conn = Bluetooth.waitForConnection();
@@ -20,17 +19,18 @@ public class MindstormsBrains {
         LCD.drawString("Connected", 0, 0);
         DataOutputStream outDat = conn.openDataOutputStream();
         DataInputStream inDat = conn.openDataInputStream();
-        BufferedReader d = new BufferedReader(new InputStreamReader(inDat));
+        try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+        	byte[] b = new byte[10];
+        	inDat.read(b);
+        	String s = new String(b);
+        	LCD.drawString(s, 0, 0);
 
-        
-        //BufferedReader reader = new BufferedReader(new InputStreamReader(conn.openInputStream()));
-        LCD.clear();
-        LCD.drawString(d.readLine(), 0, 0);
-        
-        outDat.writeChars("Message from Mindstorms");
-        
-        //OpticalDistanceSensor USS = new OpticalDistanceSensor(SensorPort.S2);
-        Button.waitForPress();
+     Button.waitForPress();   
         
 	}
 

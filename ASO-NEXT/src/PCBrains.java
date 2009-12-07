@@ -1,4 +1,4 @@
-package test;
+
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -20,14 +20,13 @@ public class PCBrains {
 		conn.connectTo("btspp://JOEY");
 		
 		DataOutputStream outDat = conn.getDataOut();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        //BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         
-        outDat.writeChars("Message from laptop");
+		byte[] byteArray = new byte[] {87, 79, 87, 46, 46, 46};
+		//outDat.write
+        //outDat.write(byteArray, 0, 6);
         
-        System.out.println(reader.readLine());
-        
-		
-		
+        //System.out.println(reader.readLine());
 		
 	}
 
