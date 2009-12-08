@@ -1,33 +1,58 @@
-
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.IOException;
+import lejos.pc.comm.NXTConnector;
 
-import lejos.pc.comm.*;
 public class PCBrains {
 
-	/**
-	 * @param args
-	 * @throws IOException 
-	 */
-	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-		NXTConnector conn = new NXTConnector();
+	NXTConnector conn;
+	InputStream in;
+	OutputStream out;
+	
+	InputStreamReader reader;
+	BufferedReader buff;
 
-		conn.connectTo("btspp://JOEY");
+	PCBrains() throws Exception {
+		conn = new NXTConnector();
+		conn.connectTo("btspp://ROSS");
 		
-		DataOutputStream outDat = conn.getDataOut();
-        //BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        
-		byte[] byteArray = new byte[] {87, 79, 87, 46, 46, 46};
-		//outDat.write
-        //outDat.write(byteArray, 0, 6);
-        
-        //System.out.println(reader.readLine());
+		in = conn.getInputStream();
+		out = conn.getOutputStream();
 		
+		reader = new InputStreamReader(in);
+		buff = new BufferedReader(reader);
+		
+		Thread.sleep(500);
+	}
+	
+	private void run() throws Exception {
+		
+		char[] chars = new char[30];
+		String message;
+		
+		for (int i = 0; i < 200; i++) {
+			message = "2;";
+			out.write(message.getBytes());
+			out.flush();
+			System.out.println("Message " + i + " sent");
+			buff.
+			System.out.println(new String(chars));
+		}
+
+		stop();
+	}
+	
+	private void stop() throws Exception{
+		out.write(new String("0;").getBytes());
+		out.flush();
+		conn.close();
 	}
 
+	public static void main(String[] args) throws Exception {
+		new PCBrains().run();
+	}
+	
 }
