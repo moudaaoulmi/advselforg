@@ -1,34 +1,35 @@
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
+import lejos.nxt.remote.RemoteSensorPort;
 import lejos.robotics.navigation.TachoPilot;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
 public class MindstormsBrains {
-
-	private OutputStream outDat;
-	private InputStream inDat;
+	
+	private OutputStream out;
+	private InputStream in;
 	
 	private Motor[] motors;
+	private SensorPort[] sensors;
 	private TachoPilot pilot;
 	
 	MindstormsBrains() {
 		initMotors();
-		initPilot();
 		
 		LCD.drawString("Waiting...", 0, 0);
 		LCD.refresh();
 		BTConnection conn = Bluetooth.waitForConnection();
 		LCD.clear();
 		LCD.drawString("Connected", 0, 0);
-		outDat = conn.openOutputStream();
-		inDat = conn.openInputStream();
+		out = conn.openOutputStream();
+		in = conn.openInputStream();
 	}
 	
 	private void run() throws Exception {
-		int i = 0;
-		while (true) {
+		int step = 0;
+		while (step < 1000) {
 			String[] message = getMessage();
 			
 			if (message[0].charAt(0) != '\u0000') {
@@ -38,31 +39,35 @@ public class MindstormsBrains {
 						System.exit(0);
 						break;
 					case 1:
-						LCD.drawString("Forward!", 0, 0);
-						float distance = new Float(message[1]);
-						pilot.travel(distance, false);
+						sendMessage("1;");
+						init(message);
 						break;
 					case 2:
-						String ack = "2;";
-						outDat.write(ack.getBytes(""));
-						outDat.flush();
-						LCD.drawString("ACK " + i + " sent", 0, 0);
 						break;
 					default:
 						LCD.drawString("No command!", 0, 0);
 						break;
 				}
 			}
-			LCD.drawString("Step " + i, 0, 3);
-			i++;
+			LCD.drawString("Step " + step, 0, 3);
+			step++;
 		}
+	}
+	
+	private void init(String[] config) {
+		
 	}
 
 	private void initMotors() {
-		motors = new Motor[3];
-		motors[0] = new Motor(MotorPort.A);
-		motors[1] = new Motor(MotorPort.B);
-		motors[2] = new Motor(MotorPort.C);
+		motors = new Motor[4];
+		motors[1] = new Motor(MotorPort.A);
+		motors[2] = new Motor(MotorPort.B);
+		motors[3] = new Motor(MotorPort.C);
+	}
+	
+	private void initSensor() {
+		sensors = new SensorPort[5];
+
 	}
 	
 	private void initPilot() {
@@ -70,12 +75,18 @@ public class MindstormsBrains {
 		pilot.setMoveSpeed(15);
 		pilot.regulateSpeed(true);
 	}
+	
+	private void sendMessage(String message) throws IOException {
+		out.write(message.getBytes(""));
+		out.write(-1);
+		out.flush();
+	}
 
 	private String[] getMessage() throws Exception {
 		String[] message = new String[10];
 		byte[] buffer = new byte[30];
 
-		inDat.read(buffer, 0, buffer.length);
+		in.read(buffer, 0, buffer.length);
 		String s = new String(buffer);
 
 		StringTokenizer st = new StringTokenizer(s, ";");
