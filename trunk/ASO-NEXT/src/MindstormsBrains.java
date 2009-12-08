@@ -1,9 +1,10 @@
 import lejos.nxt.*;
+import lejos.nxt.addon.RFIDSensor;
 import lejos.nxt.comm.*;
-import lejos.nxt.remote.RemoteSensorPort;
 import lejos.robotics.navigation.TachoPilot;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class MindstormsBrains {
@@ -12,11 +13,20 @@ public class MindstormsBrains {
 	private InputStream in;
 	
 	private Motor[] motors;
-	private SensorPort[] sensors;
 	private TachoPilot pilot;
 	
+	private ArrayList<UltrasonicSensor> ultrasonicSensors;
+	private ArrayList<LightSensor> lightSensors;
+	private ArrayList<SoundSensor> soundSensors;
+	private ArrayList<TouchSensor> touchSensors;
+	private ArrayList<RFIDSensor> rfidSensors;
+	
 	MindstormsBrains() {
-		initMotors();
+		ultrasonicSensors = new ArrayList<UltrasonicSensor>();
+		lightSensors = new ArrayList<LightSensor>();
+		soundSensors = new ArrayList<SoundSensor>();
+		touchSensors = new ArrayList<TouchSensor>();
+		rfidSensors = new ArrayList<RFIDSensor>();
 		
 		LCD.drawString("Waiting...", 0, 0);
 		LCD.refresh();
@@ -42,7 +52,13 @@ public class MindstormsBrains {
 						sendMessage("1;");
 						init(message);
 						break;
-					case 2:
+					case 4:
+						sendMessage("4;");
+						forward(message);
+						break;
+					case 5:
+						sendMessage("5;");
+						backward(message);
 						break;
 					default:
 						LCD.drawString("No command!", 0, 0);
@@ -55,7 +71,18 @@ public class MindstormsBrains {
 	}
 	
 	private void init(String[] config) {
+		initMotors();
 		
+		initSensor(SensorPort.S1, new Integer(config[1]));
+		initSensor(SensorPort.S2, new Integer(config[2]));
+		initSensor(SensorPort.S3, new Integer(config[3]));
+		initSensor(SensorPort.S4, new Integer(config[4]));
+		
+		boolean motorReverse = new Integer(config[9]) == 1 ? true : false;
+		pilot = new TachoPilot(new Float(config[7]), new Float(config[8]),
+				motors[new Integer(config[5])], motors[new Integer(config[6])], motorReverse);
+		pilot.setMoveSpeed(15);
+		pilot.regulateSpeed(true);
 	}
 
 	private void initMotors() {
@@ -65,15 +92,33 @@ public class MindstormsBrains {
 		motors[3] = new Motor(MotorPort.C);
 	}
 	
-	private void initSensor() {
-		sensors = new SensorPort[5];
-
+	private void initSensor(SensorPort port, int type) {
+		switch (type) {
+			case 0:
+				break;
+			case 1:
+				ultrasonicSensors.add(new UltrasonicSensor(port));
+			case 2:
+				touchSensors.add(new TouchSensor(port));
+				break;
+			case 3:
+				lightSensors.add(new LightSensor(port, true));
+				break;
+			case 4:
+				soundSensors.add(new SoundSensor(port));
+				break;
+			case 5:
+				rfidSensors.add(new RFIDSensor(port));
+				break;
+		}
 	}
 	
-	private void initPilot() {
-		pilot = new TachoPilot(5.4f, 15.1f, motors[0], motors[2], false);
-		pilot.setMoveSpeed(15);
-		pilot.regulateSpeed(true);
+	private void forward(String[] message) {
+		pilot.travel(new Float(message[1]));
+	}
+	
+	private void backward(String[] message) {
+		pilot.travel(new Float(message[1]) * -1);
 	}
 	
 	private void sendMessage(String message) throws IOException {
@@ -83,8 +128,8 @@ public class MindstormsBrains {
 	}
 
 	private String[] getMessage() throws Exception {
-		String[] message = new String[10];
-		byte[] buffer = new byte[30];
+		String[] message = new String[20];
+		byte[] buffer = new byte[50];
 
 		in.read(buffer, 0, buffer.length);
 		String s = new String(buffer);

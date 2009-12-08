@@ -20,7 +20,7 @@ response: [SENSORVALUE_1,SENSORVALUE_2,SENSORVALUE_3,SENSORVALUE_4,TACHO_1,TACHO
 
 SENSORTYPE
 0 = none
-1 = sonar
+1 = ultrasonic
 2 = touch
 3 = light
 4 = sound
