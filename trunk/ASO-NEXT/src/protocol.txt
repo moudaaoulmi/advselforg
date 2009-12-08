@@ -1,0 +1,39 @@
+[COMMAND_TYPE];{PARAM;}
+
+COMMAND_TYPE
+0	exit
+1	init
+2	sensordata		[-]	
+4	forward			[int distance]
+5	backward		[int distance]
+6	turn_left		[int angle]
+7	turn_right		[int angle]
+8	reset_traveldistance	[-]
+9	perform_scan		[int port, int from_angle, int to_angle, int speed]
+
+
+
+init: [SENSORTYPE_1;SENSORTYPE_2;SENSORTYPE_3;SENSORTYPE_4;
+	PILOTPORT_LEFT;PILOTPORT_RIGHT;WHEEL_DIAM;TRACK_WIDTH;MOTOR_REVERSE]
+response: [SENSORVALUE_1,SENSORVALUE_2,SENSORVALUE_3,SENSORVALUE_4,TACHO_1,TACHO_2,TACHO_3,
+	TRAVEL_DISTANCE,IS_MOVING,IS_SCANNING]
+
+SENSORTYPE
+0 = none
+1 = sonar
+2 = touch
+3 = light
+4 = sound
+5 = rfid
+
+PILOTPORT
+1-3
+
+WHEEL_DIAM
+float
+
+TRACK_WIDTH
+float
+
+MOTOR_REVERSE
+0/1
