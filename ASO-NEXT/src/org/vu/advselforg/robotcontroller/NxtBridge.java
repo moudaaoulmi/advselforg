@@ -1,25 +1,17 @@
 package org.vu.advselforg.robotcontroller;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
 import java.util.StringTokenizer;
 
 import lejos.pc.comm.NXTConnector;
 
 public class NxtBridge {
+
 	NXTConnector conn;
 	InputStream in;
 	OutputStream out;
-	
-	DataInputStream din;
-	
-	InputStreamReader reader;
-	BufferedReader buff;
 	
 	public NxtBridge(String nxtName, SensorType port1, SensorType port2, SensorType port3, SensorType port4, 
 			Motorport pilotPortLeft, Motorport pilotPortRight, float wheelDiameter, float trackWidth, Boolean MotorReverse) throws InterruptedException, IOException
@@ -62,21 +54,19 @@ public class NxtBridge {
 		
 	}
 	
-	public void Drive(Double distance){
-		StringBuilder driveMessage = new StringBuilder();
+	public void Drive(int distance) throws IOException{
+		StringBuffer driveMessage = new StringBuffer();
 		driveMessage.append(4);
 		driveMessage.append(";");
 		driveMessage.append(distance);
 		driveMessage.append(";");
-		
+		writeMessage(driveMessage.toString());
 	}
 	
 	private void writeMessage(String message) throws IOException{
 		out.write(message.getBytes());
 		out.flush();
 		getMessage();
-		
-		
 	}
 	
 	public void close() throws IOException{
@@ -84,18 +74,21 @@ public class NxtBridge {
 	}
 	
 	private boolean getMessage() throws IOException{
-		StringBuffer chars = new StringBuffer();
+		StringBuffer sb = new StringBuffer();
+		byte b;
 		
-		byte x;
-		while((x = (byte) in.read()) != -1){
-			chars.append(x);
+		while((b = (byte) in.read()) != -1){
+			sb.append((char) b);
 		}
-		String incMessage = chars.toString();
+		System.out.println(sb.toString());
+		sb.setLength(0);
+
+		String incMessage = sb.toString();
         
-		StringTokenizer st = new StringTokenizer(incMessage);
-		if(chars.charAt(0) == 3){
+		/*StringTokenizer st = new StringTokenizer(incMessage);
+		if(sb.charAt(0) == 3){
 			processRespnse(incMessage);
-		}		
+		}*/
 		return true;
 	}
 
