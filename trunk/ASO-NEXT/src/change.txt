@@ -1,0 +1,19 @@
+String ack = "2;";
+byte[] bitjes = new byte[ack.length() + 1];
+bitjes = ack.getBytes("");
+bitjes[bitjes.length-1] = -1;
+outDat.write(bitjes);
+outDat.flush();
+LCD.drawString("ACK " + i + " sent", 0, 0);
+break;
+						
+						
+						
+message = "2;";
+out.write(message.getBytes());
+out.flush();
+System.out.println("Message " + i + " sent");
+byte x;
+while((x = (byte) in.read()) != -1){
+chars.put(x);
+System.out.println(x);
