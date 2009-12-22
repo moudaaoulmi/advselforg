@@ -58,7 +58,7 @@ public class MindstormsBrains {
 			int command = new Integer(message[0]);
 			switch (command) {
 				case NxtProtocol.STOP:
-					System.exit(0);
+					stop();
 					break;
 				case NxtProtocol.INIT:
 					sendMessage(NxtProtocol.INIT + ";");
@@ -68,20 +68,20 @@ public class MindstormsBrains {
 					sendSensorData();
 					break;
 				case NxtProtocol.FORWARD:
-					sendMessage(NxtProtocol.FORWARD + ";");
 					forward(message);
+					sendMessage(NxtProtocol.FORWARD + ";");
 					break;
 				case NxtProtocol.BACKWARD:
-					sendMessage(NxtProtocol.BACKWARD + ";");
 					backward(message);
+					sendMessage(NxtProtocol.BACKWARD + ";");
 					break;
 				case NxtProtocol.TURN_LEFT:
-					sendMessage(NxtProtocol.TURN_LEFT + ";");
 					turnLeft(message);
+					sendMessage(NxtProtocol.TURN_LEFT + ";");
 					break;
 				case NxtProtocol.TURN_RIGHT:
-					sendMessage(NxtProtocol.TURN_RIGHT + ";");
 					turnRight(message);
+					sendMessage(NxtProtocol.TURN_RIGHT + ";");
 					break;
 				case NxtProtocol.RESET_TRAVEL_DISTANCE:
 					sendMessage(NxtProtocol.RESET_TRAVEL_DISTANCE + ";");
@@ -96,9 +96,7 @@ public class MindstormsBrains {
 		}
 	}
 	
-	private void sendSensorData() {
-		
-	}
+	// Initialization stuff
 	
 	private void init(String[] config) {
 		initMotors();
@@ -149,10 +147,20 @@ public class MindstormsBrains {
 		}
 	}
 	
+	// Commands
+	
+	private void stop() {
+		System.exit(0);
+	}
+	
+	private void sendSensorData() {
+		
+	}
+	
 	private void forward(String[] message) {
 		float distance = new Float(message[1]);
 		if (distance > 0) {
-			pilot.travel(distance);
+			pilot.travel(distance, true); // Non-blocking call
 		}
 	}
 	
@@ -181,6 +189,8 @@ public class MindstormsBrains {
 		pilot.reset();
 	}
 	
+	// Message-related stuff
+	
 	private void sendMessage(String message) throws IOException {
 		out.write(message.getBytes(""));
 		out.write(-1);
@@ -205,6 +215,8 @@ public class MindstormsBrains {
 		return message;
 	}
 
+	// Extra stuff
+	
 	public static void main(String[] args) {
 		try {
 			new MindstormsBrains().run();
