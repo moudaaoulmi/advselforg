@@ -1,4 +1,4 @@
-public class Protocol {
+public class NxtProtocol {
 
 	// Commands
 	final static int STOP = 0;
