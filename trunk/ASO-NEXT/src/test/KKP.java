@@ -19,7 +19,7 @@ public class KKP {
 		
 		NxtBridge bridge = new NxtBridge("ROSS", SensorType.ULTRASONIC, SensorType.ULTRASONIC, SensorType.LIGHT, 
 				SensorType.NONE, Motorport.A, Motorport.C, 5.4f, 15.1f, false);
-		bridge.Drive(20);
+		bridge.MoveForward(20);
 		bridge.close();
 		
 		

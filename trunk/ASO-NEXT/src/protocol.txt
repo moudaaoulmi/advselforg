@@ -1,7 +1,7 @@
 [COMMAND_TYPE];{PARAM;}
 
 COMMAND_TYPE
-0	exit
+0	stop
 1	init
 2	sensordata		[-]	
 4	forward			[int distance]
