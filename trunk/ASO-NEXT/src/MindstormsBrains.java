@@ -21,6 +21,8 @@ public class MindstormsBrains {
 	private Motor[] motors;
 	private TachoPilot pilot;
 	
+	// Construction and startup
+	
 	MindstormsBrains() {
 		ultrasonicSensors = new ArrayList<UltrasonicSensor>();
 		lightSensors = new ArrayList<LightSensor>();
@@ -43,29 +45,31 @@ public class MindstormsBrains {
 	}
 	
 	private void run() throws Exception {
-		int step = 0;
-		while (step < 1000) {
+		while (true) {
 			String[] message = getMessage();
 			parseMessage(message);
-			
-			LCD.drawString("Step " + step, 0, 3);
-			step++;
 		}
 	}
+	
+	// Parsing stuff
 	
 	private void parseMessage(String[] message) throws Exception {
 		if (message[0].charAt(0) != '\u0000') {
 			int command = new Integer(message[0]);
 			switch (command) {
-				case NxtProtocol.STOP:
-					stop();
+				case NxtProtocol.EXIT:
+					exit();
 					break;
 				case NxtProtocol.INIT:
-					sendMessage(NxtProtocol.INIT + ";");
 					init(message);
+					sendMessage(NxtProtocol.INIT + ";");
 					break;
 				case NxtProtocol.SENSOR_DATA:
 					sendSensorData();
+					break;
+				case NxtProtocol.STOP:
+					stop();
+					sendMessage(NxtProtocol.STOP + ";");
 					break;
 				case NxtProtocol.FORWARD:
 					forward(message);
@@ -84,10 +88,12 @@ public class MindstormsBrains {
 					sendMessage(NxtProtocol.TURN_RIGHT + ";");
 					break;
 				case NxtProtocol.RESET_TRAVEL_DISTANCE:
-					sendMessage(NxtProtocol.RESET_TRAVEL_DISTANCE + ";");
 					resetTravelDistance();
+					sendMessage(NxtProtocol.RESET_TRAVEL_DISTANCE + ";");
 					break;
 				case NxtProtocol.PERFORM_SCAN:
+					performScan();
+					sendMessage(NxtProtocol.PERFORM_SCAN + ";");
 					break;
 				default:
 					LCD.drawString("No command!", 0, 0);
@@ -149,12 +155,16 @@ public class MindstormsBrains {
 	
 	// Commands
 	
-	private void stop() {
+	private void exit() {
 		System.exit(0);
 	}
 	
 	private void sendSensorData() {
-		
+		// Todo
+	}
+	
+	private void stop() {
+		pilot.stop();
 	}
 	
 	private void forward(String[] message) {
@@ -187,6 +197,10 @@ public class MindstormsBrains {
 	
 	private void resetTravelDistance() {
 		pilot.reset();
+	}
+	
+	private void performScan() {
+		// Todo
 	}
 	
 	// Message-related stuff
