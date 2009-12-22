@@ -46,6 +46,7 @@ public class MindstormsBrains {
 			String[] message = getMessage();
 			parseMessage(message);
 		}
+		exit();
 	}
 	
 	// Parsing stuff
@@ -55,6 +56,7 @@ public class MindstormsBrains {
 			int command = new Integer(message[0]);
 			switch (command) {
 				case NxtProtocol.EXIT:
+					sendMessage(NxtProtocol.EXIT + ";");
 					exit();
 					break;
 				case NxtProtocol.INIT:
@@ -157,6 +159,7 @@ public class MindstormsBrains {
 	// Commands
 	
 	private void exit() {
+		monitor = null;
 		System.exit(0);
 	}
 	
@@ -168,6 +171,16 @@ public class MindstormsBrains {
 			result.append(data.sensorValues[i]);
 			result.append(';');
 		}
+		for(int i = 0; i < data.tachoCounts.length; i++) {
+			result.append(data.tachoCounts[i]);
+			result.append(';');
+		}
+		result.append(data.travelDistance);
+		result.append(';');
+		result.append(data.isMoving);
+		result.append(';');
+		result.append(data.isScanning);
+		result.append(';');
 		sendMessage(result.toString());
 	}
 	
