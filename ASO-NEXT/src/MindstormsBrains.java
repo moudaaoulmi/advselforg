@@ -57,22 +57,22 @@ public class MindstormsBrains {
 		if (message[0].charAt(0) != '\u0000') {
 			int command = new Integer(message[0]);
 			switch (command) {
-				case Protocol.STOP:
+				case NxtProtocol.STOP:
 					System.exit(0);
 					break;
-				case Protocol.INIT:
+				case NxtProtocol.INIT:
 					sendMessage("1;");
 					init(message);
 					break;
-				case Protocol.FORWARD:
+				case NxtProtocol.FORWARD:
 					sendMessage("4;");
 					forward(message);
 					break;
-				case Protocol.BACKWARD:
+				case NxtProtocol.BACKWARD:
 					sendMessage("5;");
 					backward(message);
 					break;
-				case Protocol.RESET_TRAVEL_DISTANCE:
+				case NxtProtocol.RESET_TRAVEL_DISTANCE:
 					sendMessage("8;");
 					pilot.reset();
 					break;
