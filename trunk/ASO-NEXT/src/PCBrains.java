@@ -11,7 +11,7 @@ public class PCBrains {
 
 	PCBrains() throws Exception {
 		conn = new NXTConnector();
-		conn.connectTo("btspp://ROSS");
+		conn.connectTo("btspp://JOEY");
 		
 		in = conn.getInputStream();
 		out = conn.getOutputStream();
