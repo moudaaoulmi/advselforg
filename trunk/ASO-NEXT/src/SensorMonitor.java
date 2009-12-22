@@ -16,7 +16,7 @@ public class SensorMonitor extends Thread {
 			for(int i = 0; i < data.tachoCounts.length; i++) {
 				data.tachoCounts[i] = new Integer(parent.motors[i].getTachoCount()).toString();
 			}
-			data.travelDistance = new Float(parent.pilot.getTravelDistance()).toString();
+			data.travelDistance = new Integer((int) parent.pilot.getTravelDistance()).toString();
 			data.isMoving = parent.pilot.isMoving() ? "1" : "0";
 			data.isScanning = "0";
 		}
