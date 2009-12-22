@@ -61,26 +61,43 @@ public class MindstormsBrains {
 					System.exit(0);
 					break;
 				case NxtProtocol.INIT:
-					sendMessage("1;");
+					sendMessage(NxtProtocol.INIT + ";");
 					init(message);
 					break;
+				case NxtProtocol.SENSOR_DATA:
+					sendSensorData();
+					break;
 				case NxtProtocol.FORWARD:
-					sendMessage("4;");
+					sendMessage(NxtProtocol.FORWARD + ";");
 					forward(message);
 					break;
 				case NxtProtocol.BACKWARD:
-					sendMessage("5;");
+					sendMessage(NxtProtocol.BACKWARD + ";");
 					backward(message);
 					break;
+				case NxtProtocol.TURN_LEFT:
+					sendMessage(NxtProtocol.TURN_LEFT + ";");
+					turnLeft(message);
+					break;
+				case NxtProtocol.TURN_RIGHT:
+					sendMessage(NxtProtocol.TURN_RIGHT + ";");
+					turnRight(message);
+					break;
 				case NxtProtocol.RESET_TRAVEL_DISTANCE:
-					sendMessage("8;");
-					pilot.reset();
+					sendMessage(NxtProtocol.RESET_TRAVEL_DISTANCE + ";");
+					resetTravelDistance();
+					break;
+				case NxtProtocol.PERFORM_SCAN:
 					break;
 				default:
 					LCD.drawString("No command!", 0, 0);
 					break;
 			}
 		}
+	}
+	
+	private void sendSensorData() {
+		
 	}
 	
 	private void init(String[] config) {
@@ -133,11 +150,35 @@ public class MindstormsBrains {
 	}
 	
 	private void forward(String[] message) {
-		pilot.travel(new Float(message[1]));
+		float distance = new Float(message[1]);
+		if (distance > 0) {
+			pilot.travel(distance);
+		}
 	}
 	
 	private void backward(String[] message) {
-		pilot.travel(new Float(message[1]) * -1);
+		float distance = new Float(message[1]);
+		if (distance > 0) {
+			pilot.travel(distance * -1);
+		}
+	}
+	
+	private void turnLeft(String[] message) {
+		float angle = new Float(message[1]);
+		if (angle > 0) {
+			pilot.rotate(angle);
+		}
+	}
+	
+	private void turnRight(String[] message) {
+		float angle = new Float(message[1]);
+		if (angle > 0) {
+			pilot.rotate(angle * -1);
+		}
+	}
+	
+	private void resetTravelDistance() {
+		pilot.reset();
 	}
 	
 	private void sendMessage(String message) throws IOException {
