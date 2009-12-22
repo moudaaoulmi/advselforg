@@ -72,6 +72,10 @@ public class MindstormsBrains {
 					sendMessage("5;");
 					backward(message);
 					break;
+				case Protocol.RESET_TRAVEL_DISTANCE:
+					sendMessage("8;");
+					pilot.reset();
+					break;
 				default:
 					LCD.drawString("No command!", 0, 0);
 					break;
