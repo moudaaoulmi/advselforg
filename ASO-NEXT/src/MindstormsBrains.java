@@ -1,34 +1,27 @@
 import lejos.nxt.*;
-import lejos.nxt.addon.RFIDSensor;
 import lejos.nxt.comm.*;
 import lejos.robotics.navigation.TachoPilot;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class MindstormsBrains {
 	
-	private ArrayList<UltrasonicSensor> ultrasonicSensors;
-	private ArrayList<LightSensor> lightSensors;
-	private ArrayList<SoundSensor> soundSensors;
-	private ArrayList<TouchSensor> touchSensors;
-	private ArrayList<RFIDSensor> rfidSensors;
+	protected Sensor[] sensors;
+	protected Motor[] motors;
+	protected TachoPilot pilot;
+
+	protected SensorData data;
+	private Thread monitor;
 	
 	private OutputStream out;
 	private InputStream in;
-	
-	private Motor[] motors;
-	private TachoPilot pilot;
-	
+
 	// Construction and startup
 	
 	MindstormsBrains() {
-		ultrasonicSensors = new ArrayList<UltrasonicSensor>();
-		lightSensors = new ArrayList<LightSensor>();
-		soundSensors = new ArrayList<SoundSensor>();
-		touchSensors = new ArrayList<TouchSensor>();
-		rfidSensors = new ArrayList<RFIDSensor>();
+		data = new SensorData();
+		monitor = new SensorMonitor(this, data);
 		
 		waitForConnection();
 	}
@@ -45,7 +38,11 @@ public class MindstormsBrains {
 	}
 	
 	private void run() throws Exception {
-		while (true) {
+		/*while (true) {
+			String[] message = getMessage();
+			parseMessage(message);
+		}*/
+		for (int step = 0; step < 1000; step++) {
 			String[] message = getMessage();
 			parseMessage(message);
 		}
@@ -108,49 +105,53 @@ public class MindstormsBrains {
 		initMotors();
 		initSensors(config);
 		initPilot(config);
+		
+		monitor.start();
 	}
 
 	private void initMotors() {
-		motors = new Motor[4];
-		motors[1] = new Motor(MotorPort.A);
-		motors[2] = new Motor(MotorPort.B);
-		motors[3] = new Motor(MotorPort.C);
+		motors = new Motor[3];
+		motors[0] = new Motor(MotorPort.A);
+		motors[1] = new Motor(MotorPort.B);
+		motors[2] = new Motor(MotorPort.C);
 	}
 	
 	private void initSensors(String[] config) {
-		initSensor(SensorPort.S1, new Integer(config[1]));
-		initSensor(SensorPort.S2, new Integer(config[2]));
-		initSensor(SensorPort.S3, new Integer(config[3]));
-		initSensor(SensorPort.S4, new Integer(config[4]));
+		sensors = new Sensor[4];
+		initSensor(SensorPort.S1, 0, new Integer(config[1]));
+		initSensor(SensorPort.S2, 1, new Integer(config[2]));
+		initSensor(SensorPort.S3, 2, new Integer(config[3]));
+		initSensor(SensorPort.S4, 3, new Integer(config[4]));
+	}
+	
+	private void initSensor(SensorPort port, int portNumber, int type) {
+		switch (type) {
+			case NxtProtocol.NO_SENSOR:
+				break;
+			case NxtProtocol.ULTRASONIC_SENSOR:
+				sensors[portNumber] = new NxtUltrasonicSensor(port);
+				break;
+			case NxtProtocol.LIGHT_SENSOR:
+				sensors[portNumber] = new NxtLightSensor(port);
+				break;
+			case NxtProtocol.SOUND_SENSOR:
+				sensors[portNumber] = new NxtSoundSensor(port);
+				break;
+			case NxtProtocol.TOUCH_SENSOR:
+				sensors[portNumber] = new NxtTouchSensor(port);
+				break;
+			case NxtProtocol.RFID_SENSOR:
+				sensors[portNumber] = new NxtRFIDSensor(port);
+				break;
+		}
 	}
 	
 	private void initPilot(String[] config) {
 		boolean motorReverse = new Integer(config[9]) == 1 ? true : false;
 		pilot = new TachoPilot(new Float(config[7]), new Float(config[8]),
-				motors[new Integer(config[5])], motors[new Integer(config[6])], motorReverse);
+				motors[new Integer(config[5]) - 1], motors[new Integer(config[6]) - 1], motorReverse);
 		pilot.setMoveSpeed(15);
 		pilot.regulateSpeed(true);
-	}
-	
-	private void initSensor(SensorPort port, int type) {
-		switch (type) {
-			case 0:
-				break;
-			case 1:
-				ultrasonicSensors.add(new UltrasonicSensor(port));
-			case 2:
-				touchSensors.add(new TouchSensor(port));
-				break;
-			case 3:
-				lightSensors.add(new LightSensor(port, true));
-				break;
-			case 4:
-				soundSensors.add(new SoundSensor(port));
-				break;
-			case 5:
-				rfidSensors.add(new RFIDSensor(port));
-				break;
-		}
 	}
 	
 	// Commands
@@ -159,8 +160,15 @@ public class MindstormsBrains {
 		System.exit(0);
 	}
 	
-	private void sendSensorData() {
-		// Todo
+	private void sendSensorData() throws Exception {
+		StringBuffer result = new StringBuffer();
+		result.append(NxtProtocol.SENSOR_DATA);
+		result.append(';');
+		for(int i = 0; i < data.sensorValues.length; i++) {
+			result.append(data.sensorValues[i]);
+			result.append(';');
+		}
+		sendMessage(result.toString());
 	}
 	
 	private void stop() {

@@ -1,3 +1,4 @@
+
 public class NxtProtocol {
 
 	// Commands
@@ -11,5 +12,13 @@ public class NxtProtocol {
 	final static int TURN_RIGHT = 7;
 	final static int RESET_TRAVEL_DISTANCE = 8;
 	final static int PERFORM_SCAN = 9;
+	
+	// Sensors
+	final static int NO_SENSOR = 0;
+	final static int ULTRASONIC_SENSOR = 1;
+	final static int LIGHT_SENSOR = 2;
+	final static int SOUND_SENSOR = 3;
+	final static int TOUCH_SENSOR = 4;
+	final static int RFID_SENSOR = 5;
 	
 }
