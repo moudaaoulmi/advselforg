@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.StringTokenizer;
 
+import lejos.nxt.remote.NXTProtocol;
 import lejos.pc.comm.NXTConnector;
 
 public class NxtBridge {
@@ -54,14 +55,73 @@ public class NxtBridge {
 		
 	}
 	
-	public void Drive(int distance) throws IOException{
+	public void MoveForward(int distance) throws IOException{
 		StringBuffer driveMessage = new StringBuffer();
-		driveMessage.append(4);
+		driveMessage.append(NxtProtocol.FORWARD);
 		driveMessage.append(";");
 		driveMessage.append(distance);
 		driveMessage.append(";");
 		writeMessage(driveMessage.toString());
 	}
+	
+	public void RequestSensorData() throws IOException{
+		StringBuffer driveMessage = new StringBuffer();
+		driveMessage.append(NxtProtocol.SENSOR_DATA);
+		driveMessage.append(";");
+		writeMessage(driveMessage.toString());
+	}	
+	
+	public void MoveBackward(int distance) throws IOException{
+		StringBuffer driveMessage = new StringBuffer();
+		driveMessage.append(NxtProtocol.BACKWARD);
+		driveMessage.append(";");
+		driveMessage.append(distance);
+		driveMessage.append(";");
+		writeMessage(driveMessage.toString());
+	}
+	
+	public void TurnLeft(int angle) throws IOException{
+		StringBuffer driveMessage = new StringBuffer();
+		driveMessage.append(NxtProtocol.TURN_LEFT);
+		driveMessage.append(";");
+		driveMessage.append(angle);
+		driveMessage.append(";");
+		writeMessage(driveMessage.toString());
+	}	
+	
+	public void TurnRight(int angle) throws IOException{
+		StringBuffer driveMessage = new StringBuffer();
+		driveMessage.append(NxtProtocol.TURN_RIGHT);
+		driveMessage.append(";");
+		driveMessage.append(angle);
+		driveMessage.append(";");
+		writeMessage(driveMessage.toString());
+	}	
+	
+	public void ResetTrafeldistance() throws IOException{
+		StringBuffer driveMessage = new StringBuffer();
+		driveMessage.append(NxtProtocol.RESET_TRAVEL_DISTANCE);
+		driveMessage.append(";");
+		writeMessage(driveMessage.toString());
+	}	
+	public void PerformScan(int port, int fromAngle, int toAngle, int speed) throws IOException{
+		StringBuffer driveMessage = new StringBuffer();
+		driveMessage.append(NxtProtocol.PERFORM_SCAN);
+		driveMessage.append(";");
+		driveMessage.append(fromAngle);
+		driveMessage.append(";");
+		driveMessage.append(toAngle);
+		driveMessage.append(";");
+		driveMessage.append(speed);
+		driveMessage.append(";");
+		writeMessage(driveMessage.toString());
+	}	
+	public void Stop() throws IOException{
+		StringBuffer driveMessage = new StringBuffer();
+		driveMessage.append(NxtProtocol.STOP);
+		driveMessage.append(";");
+		writeMessage(driveMessage.toString());
+	}	
 	
 	private void writeMessage(String message) throws IOException{
 		out.write(message.getBytes());
