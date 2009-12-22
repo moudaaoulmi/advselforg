@@ -1,5 +1,6 @@
 public class Protocol {
 
+	// Commands
 	final static int STOP = 0;
 	final static int INIT = 1;
 	final static int SENSOR_DATA = 2;
