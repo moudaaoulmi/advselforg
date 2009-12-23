@@ -149,8 +149,8 @@ public class MindstormsBrains {
 	}
 	
 	private void initPilot(String[] config) {
-		boolean motorReverse = new Integer(config[9]) == 1 ? true : false;
-		pilot = new TachoPilot(new Float(config[7]), new Float(config[8]),
+		boolean motorReverse = new Integer(config[7]) == 1 ? true : false;
+		pilot = new TachoPilot(new Float(config[8]), new Float(config[9]),
 				motors[new Integer(config[5]) - 1], motors[new Integer(config[6]) - 1], motorReverse);
 		pilot.setMoveSpeed(15);
 		pilot.regulateSpeed(true);
@@ -198,7 +198,7 @@ public class MindstormsBrains {
 	private void backward(String[] message) {
 		float distance = new Float(message[1]);
 		if (distance > 0) {
-			pilot.travel(distance * -1);
+			pilot.travel(distance * -1, true);
 		}
 	}
 	

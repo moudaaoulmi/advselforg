@@ -1,6 +1,10 @@
 package org.vu.advselforg.agentcontroller;
 
 
+import java.io.IOException;
+
+import org.vu.advselforg.robotcontroller.NxtBridge;
+
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
 
@@ -8,13 +12,14 @@ public class DrivePlan extends Plan{
 
 	@Override
 	public void body() {
-		
-		IMessageEvent em = (IMessageEvent)getInitialEvent();
-		String data = em.getContent().toString();
-		System.out.println("received "+data);
-		// TODO Auto-generated method stub
-		//RobotController robot = (RobotController)getBeliefbase().getBelief("robot");
-		//robot.moveForward(0, true);
+
+		NxtBridge robot = (NxtBridge)getBeliefbase().getBelief("robot");
+		try {
+			robot.MoveForward(0);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 

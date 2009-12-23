@@ -10,12 +10,14 @@ import lejos.pc.comm.NXTConnector;
 
 public class NxtBridge {
 
-	NXTConnector conn;
+	NXTConnector conn; 
 	InputStream in;
 	OutputStream out;
 	
+	private String[] receiveData;
+	
 	public NxtBridge(String nxtName, SensorType port1, SensorType port2, SensorType port3, SensorType port4, 
-			Motorport pilotPortLeft, Motorport pilotPortRight, float wheelDiameter, float trackWidth, Boolean MotorReverse) throws InterruptedException, IOException
+			Motorport pilotPortLeft, Motorport pilotPortRight , Boolean MotorReverse, float wheelDiameter, float trackWidth) throws InterruptedException, IOException
 	{
 		
 		conn = new NXTConnector();
@@ -25,136 +27,118 @@ public class NxtBridge {
 		out = conn.getOutputStream();
 		Thread.sleep(500);
 		
-		StringBuffer initMessage = new StringBuffer();
-		initMessage.append(1);
-		initMessage.append(";");
-		initMessage.append(port1.ordinal());
-		initMessage.append(";");
-		initMessage.append(port2.ordinal());
-		initMessage.append(";");
-		initMessage.append(port3.ordinal());
-		initMessage.append(";");
-		initMessage.append(port4.ordinal());
-		initMessage.append(";");
-		initMessage.append(pilotPortLeft.ordinal());
-		initMessage.append(";");
-		initMessage.append(pilotPortRight.ordinal());
-		initMessage.append(";");
-		initMessage.append(wheelDiameter);
-		initMessage.append(";");
-		initMessage.append(trackWidth);
-		initMessage.append(";");
-		if(MotorReverse){
-			initMessage.append(1);
-		}else{
-			initMessage.append(0);
-		}
-		initMessage.append(";");
+		int reverse = MotorReverse ? 1 : 0;
 		
-		writeMessage(initMessage.toString());
+		String initMessage = buildMessage(wheelDiameter, trackWidth, NxtProtocol.INIT, port1.ordinal(), port2.ordinal(), 
+				port3.ordinal(), port4.ordinal(), pilotPortLeft.ordinal(), pilotPortRight.ordinal(), reverse);
+
+		communicateToNxt(initMessage);
 		
 	}
 	
 	public void MoveForward(int distance) throws IOException{
-		StringBuffer driveMessage = new StringBuffer();
-		driveMessage.append(NxtProtocol.FORWARD);
-		driveMessage.append(";");
-		driveMessage.append(distance);
-		driveMessage.append(";");
-		writeMessage(driveMessage.toString());
+		String message = buildMessage(NxtProtocol.FORWARD, distance);
+		communicateToNxt(message);
 	}
 	
-	public void RequestSensorData() throws IOException{
-		StringBuffer driveMessage = new StringBuffer();
-		driveMessage.append(NxtProtocol.SENSOR_DATA);
-		driveMessage.append(";");
-		writeMessage(driveMessage.toString());
+	public String[] RequestSensorData() throws IOException{
+		String message = buildMessage(NxtProtocol.SENSOR_DATA);
+		String[] sensorData = communicateToNxt(message);
+		
+		return processResponse(sensorData);
 	}	
 	
 	public void MoveBackward(int distance) throws IOException{
-		StringBuffer driveMessage = new StringBuffer();
-		driveMessage.append(NxtProtocol.BACKWARD);
-		driveMessage.append(";");
-		driveMessage.append(distance);
-		driveMessage.append(";");
-		writeMessage(driveMessage.toString());
+		String message = buildMessage(NxtProtocol.BACKWARD, distance);
+		communicateToNxt(message);
 	}
 	
 	public void TurnLeft(int angle) throws IOException{
-		StringBuffer driveMessage = new StringBuffer();
-		driveMessage.append(NxtProtocol.TURN_LEFT);
-		driveMessage.append(";");
-		driveMessage.append(angle);
-		driveMessage.append(";");
-		writeMessage(driveMessage.toString());
+		String message = buildMessage(NxtProtocol.TURN_LEFT, angle);
+		communicateToNxt(message);
 	}	
 	
 	public void TurnRight(int angle) throws IOException{
-		StringBuffer driveMessage = new StringBuffer();
-		driveMessage.append(NxtProtocol.TURN_RIGHT);
-		driveMessage.append(";");
-		driveMessage.append(angle);
-		driveMessage.append(";");
-		writeMessage(driveMessage.toString());
+		String message = buildMessage(NxtProtocol.TURN_RIGHT, angle);
+		communicateToNxt(message);
 	}	
 	
 	public void ResetTrafeldistance() throws IOException{
-		StringBuffer driveMessage = new StringBuffer();
-		driveMessage.append(NxtProtocol.RESET_TRAVEL_DISTANCE);
-		driveMessage.append(";");
-		writeMessage(driveMessage.toString());
+		String message = buildMessage(NxtProtocol.RESET_TRAVEL_DISTANCE);
+		communicateToNxt(message);
 	}	
 	public void PerformScan(int port, int fromAngle, int toAngle, int speed) throws IOException{
-		StringBuffer driveMessage = new StringBuffer();
-		driveMessage.append(NxtProtocol.PERFORM_SCAN);
-		driveMessage.append(";");
-		driveMessage.append(fromAngle);
-		driveMessage.append(";");
-		driveMessage.append(toAngle);
-		driveMessage.append(";");
-		driveMessage.append(speed);
-		driveMessage.append(";");
-		writeMessage(driveMessage.toString());
+		String message = buildMessage(NxtProtocol.PERFORM_SCAN, fromAngle, toAngle, speed);
+		communicateToNxt(message);
 	}	
 	public void Stop() throws IOException{
-		StringBuffer driveMessage = new StringBuffer();
-		driveMessage.append(NxtProtocol.STOP);
-		driveMessage.append(";");
-		writeMessage(driveMessage.toString());
+		String message = buildMessage(NxtProtocol.STOP);
+		communicateToNxt(message);
+	}
+	
+	public void Exit() throws IOException{
+		String message = buildMessage(NxtProtocol.EXIT);
+		communicateToNxt(message);
 	}	
+	
+	public void close() throws IOException{
+		this.Stop();
+		this.Exit();
+		conn.close();
+	}
+	//Build a normal message
+	private String buildMessage(int ... params){
+		
+		StringBuilder sb = new StringBuilder();
+		for (int cnt = 0; cnt < params.length; cnt++) {
+				sb.append(params[cnt]);
+				sb.append(";");
+		}
+		return sb.toString();
+	}
+	//Build the initMessage
+	private String buildMessage(Float diameter, Float width, int ... params ){
+		
+		StringBuilder sb = new StringBuilder(buildMessage(params));
+		sb.append(diameter);
+		//sb.append("f");
+		sb.append(";");
+		sb.append(width);
+		//sb.append("f");
+		sb.append(";");
+		return sb.toString();
+	}
+	
+	private synchronized String[] communicateToNxt(String message) throws IOException{
+		writeMessage(message);
+		return getMessage();
+	}
 	
 	private void writeMessage(String message) throws IOException{
 		out.write(message.getBytes());
 		out.flush();
-		getMessage();
-	}
+	}	
 	
-	public void close() throws IOException{
-		conn.close();
-	}
-	
-	private boolean getMessage() throws IOException{
+	private String[] getMessage() throws IOException{
 		StringBuffer sb = new StringBuffer();
 		byte b;
 		
 		while((b = (byte) in.read()) != -1){
 			sb.append((char) b);
 		}
-		System.out.println(sb.toString());
-		sb.setLength(0);
-
-		String incMessage = sb.toString();
-        
-		/*StringTokenizer st = new StringTokenizer(incMessage);
-		if(sb.charAt(0) == 3){
-			processRespnse(incMessage);
-		}*/
-		return true;
+		return sb.toString().split(";");
 	}
 
 
-	private void processRespnse(String incMessage) {
-		// TODO Auto-generated method stub
+	private String[] processResponse(String[] incMessage) throws IOException {
+		
+
+		//
+		
+		//if(st[0].equals("2")){
+		//	processResponse(st);
+		//}
+		return incMessage;
 		
 	}
 	
