@@ -15,7 +15,7 @@
 	</imports>
 	
 	<beliefs>
-		<belief name="robot" class="NxtController"/>
+		<belief name="robot" class="NxtBridge"/>
 		<belief name="Initialized" class="boolean">
 			<fact>false</fact>
 		</belief>
@@ -71,7 +71,7 @@
 		<plan name="actionDrive">
 			<body> new ActionDriveForward()</body>
 			<trigger>
-				<condition>$beliefbase.WIMRunning  &amp;&amp; !$beliefbase.drivingBackwards </condition>
+				<condition>!$beliefbase.drivingBackwards &amp;&amp; $beliefbase.WIMRunning </condition>
 			</trigger>		
 		</plan>
 		<plan name="actionDriveBackwards">
