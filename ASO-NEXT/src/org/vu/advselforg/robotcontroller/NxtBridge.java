@@ -13,7 +13,7 @@ public class NxtBridge {
 	NXTConnector conn; 
 	InputStream in;
 	OutputStream out;
-	
+
 	private String[] receiveData;
 	
 	public NxtBridge(String nxtName, SensorType port1, SensorType port2, SensorType port3, SensorType port4, 
