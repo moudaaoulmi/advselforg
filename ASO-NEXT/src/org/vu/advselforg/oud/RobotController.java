@@ -1,6 +1,5 @@
 package org.vu.advselforg.oud;
 
-import org.vu.advselforg.common.EDistanceMode;
 import org.vu.advselforg.common.EMovingMode;
 import org.vu.advselforg.common.EMotorPort;
 

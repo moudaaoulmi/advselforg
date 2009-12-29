@@ -4,9 +4,9 @@ import java.io.PrintStream;
 
 import lejos.nxt.MotorPort;
 
-import org.vu.advselforg.common.EDistanceMode;
 import org.vu.advselforg.common.EMotorPort;
 import org.vu.advselforg.common.ESensorType;
+import org.vu.advselforg.oud.EDistanceMode;
 import org.vu.advselforg.oud.NxtController;
 import org.vu.advselforg.oud.RobotController;
 

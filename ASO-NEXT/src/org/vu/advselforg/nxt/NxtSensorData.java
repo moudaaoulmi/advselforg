@@ -1,6 +1,8 @@
-package org.vu.advselforg.common;
+package org.vu.advselforg.nxt;
 
-public class SensorData {
+import org.vu.advselforg.common.ESensorType;
+
+public class NxtSensorData {
 
 	public String[] sensorValues;
 	public ESensorType[] sensorTypes;
@@ -8,10 +10,14 @@ public class SensorData {
 	public String travelDistance;
 	public String isMoving, isScanning;
 	
-	public SensorData() {
+	public NxtSensorData() {
 		sensorValues = new String[4];
 		for(int i = 0; i < sensorValues.length; i++) {
 			sensorValues[i] = "-1";
+		}
+		sensorTypes = new ESensorType[4];
+		for(int i = 0; i < sensorTypes.length; i++) {
+			sensorTypes[i] = ESensorType.NONE;
 		}
 		tachoCounts = new String[3];
 		for(int i = 0; i < tachoCounts.length; i++) {
