@@ -8,7 +8,6 @@ public class Sensor {
 	private int sensorValue;
 	
 	public Sensor(ESensorType s){
-		
 		this.sensorType = s;
 	}
 	
