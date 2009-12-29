@@ -2,6 +2,7 @@ package test;
 
 import org.vu.advselforg.common.EMotorPort;
 import org.vu.advselforg.common.ESensorType;
+import org.vu.advselforg.oud.NxtController;
 import org.vu.advselforg.robotcontroller.*;
 
 import sun.awt.EmbeddedFrame;

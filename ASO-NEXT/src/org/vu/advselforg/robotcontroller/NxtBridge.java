@@ -90,6 +90,7 @@ public class NxtBridge {
 		this.Exit();
 		conn.close();
 	}
+
 	//Build a normal message
 	private String buildMessage(int ... params){
 		
@@ -100,15 +101,14 @@ public class NxtBridge {
 		}
 		return sb.toString();
 	}
+
 	//Build the initMessage
 	private String buildMessage(Float diameter, Float width, int ... params ){
 		
 		StringBuilder sb = new StringBuilder(buildMessage(params));
 		sb.append(diameter);
-		//sb.append("f");
 		sb.append(";");
 		sb.append(width);
-		//sb.append("f");
 		sb.append(";");
 		return sb.toString();
 	}

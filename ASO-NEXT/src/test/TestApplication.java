@@ -7,8 +7,8 @@ import lejos.nxt.MotorPort;
 import org.vu.advselforg.common.EDistanceMode;
 import org.vu.advselforg.common.EMotorPort;
 import org.vu.advselforg.common.ESensorType;
-import org.vu.advselforg.robotcontroller.NxtController;
-import org.vu.advselforg.robotcontroller.RobotController;
+import org.vu.advselforg.oud.NxtController;
+import org.vu.advselforg.oud.RobotController;
 
 public class TestApplication {
 
