@@ -45,11 +45,11 @@ public class NxtBridge {
 		communicateToNxt(message);
 	}
 	
-	public String[] RequestSensorData() throws IOException{
+	public SensorData RequestSensorData() throws IOException{
 		String message = buildMessage(NxtProtocol.SENSOR_DATA);
 		String[] sensorData = communicateToNxt(message);
-		
-		return processResponse(sensorData);
+		//TODO
+		return new SensorData();//processResponse(sensorData);
 	}	
 	
 	public void MoveBackward(int distance) throws IOException{

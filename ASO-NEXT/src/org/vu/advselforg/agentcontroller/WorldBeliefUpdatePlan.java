@@ -5,9 +5,8 @@ import java.io.IOException;
 
 import org.vu.advselforg.common.EMovingMode;
 import org.vu.advselforg.common.EMotorPort;
-import org.vu.advselforg.oud.NxtController;
-import org.vu.advselforg.oud.RobotController;
 import org.vu.advselforg.robotcontroller.NxtBridge;
+import org.vu.advselforg.robotcontroller.SensorData;
 
 import jadex.runtime.IFilter;
 import jadex.runtime.Plan;
@@ -26,7 +25,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 	boolean wasTurning = false;
 	boolean wasScanning = false;
 	boolean wasDrivingBackward = false;
-
+	SensorData sensorData; 
 	public void body() {
 		initialize();
 	}
@@ -37,44 +36,72 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		new Thread(this).start();
 		waitFor(IFilter.NEVER);
 	}
-	// Mainline
+	boolean wasTurningOrDrivingBack = false;
+	boolean performExtraProcessStep = false;
+
 	public void run() {
-		try{
-			while (true) {
 
-				String[] sensorData = robot.RequestSensorData();
-				System.out.println(sensorData[4]);
-				processTouchSensor(sensorData[4]);
-				//stepProcessing();			
-				//processTachoMeterReding();
-
+		while (true) {
+			try {
+				sensorData = robot.RequestSensorData();
+			
+			boolean isTurningOrDrivingBack = sensorData.isTurningOrDrivingBack();
+			EMovingMode lastCommand = sensorData.lastCommand();
+			if(step != 0){
+				if(!isTurningOrDrivingBack && wasTurningOrDrivingBack){
+					performExtraProcessStep = true;
+				}
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+			
+			if(isTurningOrDrivingBack || performExtraProcessStep){
+				if(!performExtraProcessStep){
+					wasTurningOrDrivingBack = true;
+				}else{
+					wasTurningOrDrivingBack = false;
+				}
+				processTurningUpdate(isTurningOrDrivingBack, lastCommand);
+				processDriveBackwardUpdate(isTurningOrDrivingBack, lastCommand);
+				System.out.println("AAAAAAAAAA");
+				performExtraProcessStep = false;
+				
+			}else{
+				processTouchSensor();
+				processSonarSensor();
+				processTravelDistance();
+				processMotorRotation();
+				System.out.println("BBBBBBBBB");
+				wasTurningOrDrivingBack = false;
+				
+			}
+			stepProcessing();			
+			//processTachoMeterReding();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
-	private void processTurningUpdate(boolean isTurningOrDrivingBack, EMovingMode lastCommand) {
+	private void processTurningUpdate(boolean isTurningOrDrivingBack, EMovingMode lastCommand) throws IOException {
 		if (!isTurningOrDrivingBack && lastCommand == EMovingMode.TURNING && wasTurning) {
 			setBelief("turning", false);
 			System.out.println("Turn completed.");
 			wasTurning = false;
-			//robot.ResetTravelDistance();
+			robot.ResetTrafeldistance();
 			oldTraveledDistance = 0;
-			//robot.calibrateTurret(OutputPort.B);
+			//TODO CALIBRATE
+			//robot.calibrateTurret(EMotorPort.B);
 		}
 		if (isTurningOrDrivingBack && lastCommand == EMovingMode.TURNING && !wasTurning) {
 			wasTurning = true;
 		}
 	}
 
-	private void processDriveBackwardUpdate(boolean isTurningOrDrivingBack, EMovingMode lastCommand) {
+	private void processDriveBackwardUpdate(boolean isTurningOrDrivingBack, EMovingMode lastCommand) throws IOException {
 		if (!isTurningOrDrivingBack && lastCommand == EMovingMode.BACKWARD && wasDrivingBackward) {
 			setBelief("drivingBackwards", false);
 			System.out.println("Driving backwards completed.");
 			wasDrivingBackward = false;
-			//robot.resetTravelDistance();
+			robot.ResetTrafeldistance();
 			oldTraveledDistance = 0;
 		}
 		if (isTurningOrDrivingBack && lastCommand == EMovingMode.BACKWARD && !wasDrivingBackward) {
@@ -83,33 +110,33 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 	}
 
 	private void processTachoMeterReding() {
-		//if (!robot.atDesiredMotorSpeed()) {
-		//	setBelief("tachometerProblem", true);
-		//	System.out.println("Tachometer problem encountered.");
-		//}
+		if (!sensorData.atDesiredMotorSpeed()) {
+			setBelief("tachometerProblem", true);
+			System.out.println("Tachometer problem encountered.");
+		}
 	}
 
 	private void processTravelDistance() {
-		//int traveledDistance = robot.getTravelDistance();
+		int traveledDistance = sensorData.getTravelDistance();
 		//if ((traveledDistance - oldTraveledDistance) >= 1) {
-		//	setBelief("distanceTraveled", traveledDistance);
-		//	oldTraveledDistance = traveledDistance;
-		//	System.out.println("Traveled " + traveledDistance + " cm.");
+			setBelief("distanceTraveled", traveledDistance);
+			oldTraveledDistance = traveledDistance;
+			System.out.println("Traveled " + traveledDistance + " cm.");
 		//}
 	}
 
-	private void processMotorRotation() {
-		//boolean isScanning = robot.isScanning(OutputPort.B);
-		//if (wasScanning && !isScanning) {
-		//	setBelief("scanningArea", false);
-		//	System.out.println("Motor rotation completed.");
-		//	robot.resetTravelDistance();
-		//	oldTraveledDistance = 0;
-		//	wasTurning = false;
-		//}
-		//if (!wasTurning && isScanning) {
-		//	wasTurning = true;
-		//}
+	private void processMotorRotation() throws IOException {
+		boolean isScanning = sensorData.isScanning(EMotorPort.B);
+		if (wasScanning && !isScanning) {
+			setBelief("scanningArea", false);
+			System.out.println("Motor rotation completed.");
+			robot.ResetTrafeldistance();
+			oldTraveledDistance = 0;
+			wasTurning = false;
+		}
+		if (!wasTurning && isScanning) {
+			wasTurning = true;
+		}
 	}
 
 	private void processSonarSensor() {
@@ -133,10 +160,9 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		 */
 	}
 
-	private void processTouchSensor(String value) {
+	private void processTouchSensor() {
 
-		boolean touched = value.equals("1") ? true : false;
-			
+		boolean touched = sensorData.getTouchSensorPressed();
 		if (touched && !touchPressed) {
 			setBelief("clusterDetected", true);
 			System.out.println("Cluster detected.");
@@ -163,7 +189,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		}
 		// Calibrate turret each 100 steps.
 		if (step % 100 == 0) {
-			//robot.calibrateTurret(OutputPort.B);
+			//robot.calibrateTurret(EMotorPort.B);
 		}
 	}
 }

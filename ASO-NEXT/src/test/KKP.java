@@ -15,6 +15,7 @@ import javax.management.timer.TimerNotification;
 import org.vu.advselforg.common.EMotorPort;
 import org.vu.advselforg.common.ESensorType;
 import org.vu.advselforg.robotcontroller.NxtBridge;
+import org.vu.advselforg.robotcontroller.SensorData;
 
 public class KKP {
 
@@ -36,10 +37,10 @@ public class KKP {
 		bridge.MoveForward(500);
 		for(int i = 0; i <100; i++){
 			oldTime = System.currentTimeMillis();
-			String[] incMessage = bridge.RequestSensorData();
-			if(incMessage[4].equals("1")){
-				bridge.Stop();
-			}
+			SensorData incMessage = bridge.RequestSensorData();
+			//if(incMessage[4].equals("1")){
+			//	bridge.Stop();
+			//}
 			newTime = System.currentTimeMillis();
 			System.out.println(newTime - oldTime);
 			oldTime = newTime;
