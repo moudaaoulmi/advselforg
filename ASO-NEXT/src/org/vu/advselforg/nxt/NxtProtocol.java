@@ -1,3 +1,4 @@
+package org.vu.advselforg.nxt;
 public class NxtProtocol {
 
 	// Commands
