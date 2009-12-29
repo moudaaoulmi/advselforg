@@ -20,7 +20,7 @@ public class MindstormsBrains {
 	protected Motor[] motors;
 	protected TachoPilot pilot;
 
-	protected SensorData data;
+	protected NxtSensorData data;
 	private Thread monitor;
 	
 	private OutputStream out;
@@ -29,7 +29,7 @@ public class MindstormsBrains {
 	// Construction and startup
 	
 	MindstormsBrains() {
-		data = new SensorData();
+		data = new NxtSensorData();
 		monitor = new NxtSensorMonitor(this, data);
 		
 		waitForConnection();
@@ -138,21 +138,28 @@ public class MindstormsBrains {
 	private void initSensor(SensorPort port, int portNumber, int type) {
 		switch (type) {
 			case NxtProtocol.NO_SENSOR:
+				sensors[portNumber] = null;
+				data.sensorTypes[portNumber] = ESensorType.NONE;
 				break;
 			case NxtProtocol.ULTRASONIC_SENSOR:
 				sensors[portNumber] = new NxtUltrasonicSensor(port);
+				data.sensorTypes[portNumber] = ESensorType.ULTRASONIC;
 				break;
 			case NxtProtocol.LIGHT_SENSOR:
 				sensors[portNumber] = new NxtLightSensor(port);
+				data.sensorTypes[portNumber] = ESensorType.LIGHT;
 				break;
 			case NxtProtocol.SOUND_SENSOR:
 				sensors[portNumber] = new NxtSoundSensor(port);
+				data.sensorTypes[portNumber] = ESensorType.SOUND;
 				break;
 			case NxtProtocol.TOUCH_SENSOR:
 				sensors[portNumber] = new NxtTouchSensor(port);
+				data.sensorTypes[portNumber] = ESensorType.TOUCH;
 				break;
 			case NxtProtocol.RFID_SENSOR:
 				sensors[portNumber] = new NxtRFIDSensor(port);
+				data.sensorTypes[portNumber] = ESensorType.RFID;
 				break;
 		}
 	}

@@ -3,7 +3,6 @@ package org.vu.advselforg.oud;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.vu.advselforg.common.EDistanceMode;
 import org.vu.advselforg.common.EMovingMode;
 import org.vu.advselforg.common.EMotorPort;
 import org.vu.advselforg.common.ESensorType;
@@ -14,7 +13,6 @@ import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteSensorPort;
 import lejos.robotics.navigation.TachoPilot;
 import lejos.nxt.LightSensor;
-import lejos.nxt.MotorPort;
 import lejos.nxt.SensorConstants;
 import lejos.nxt.SoundSensor;
 import lejos.nxt.TouchSensor;

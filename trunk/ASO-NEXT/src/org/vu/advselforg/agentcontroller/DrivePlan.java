@@ -1,6 +1,5 @@
 package org.vu.advselforg.agentcontroller;
 
-
 import java.io.IOException;
 
 import org.vu.advselforg.robotcontroller.NxtBridge;
