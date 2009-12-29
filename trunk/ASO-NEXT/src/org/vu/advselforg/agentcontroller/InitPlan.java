@@ -1,5 +1,7 @@
 package org.vu.advselforg.agentcontroller;
 
+import org.vu.advselforg.common.EMotorPort;
+import org.vu.advselforg.common.ESensorType;
 import org.vu.advselforg.robotcontroller.*;
 
 import sun.awt.EmbeddedFrame;
@@ -26,13 +28,13 @@ public class InitPlan extends Plan{
 		NxtBridge robot;
 
 		
-		Motorport leftMotorPort = Motorport.A;
-		Motorport rightMotorPort = Motorport.C;
+		EMotorPort leftMotorPort = EMotorPort.A;
+		EMotorPort rightMotorPort = EMotorPort.C;
 		boolean motorReverse = false;
-		SensorType port1 = SensorType.ULTRASONIC;
-		SensorType port2 = SensorType.ULTRASONIC;
-		SensorType port3 = SensorType.LIGHT;
-		SensorType port4 = SensorType.TOUCH;
+		ESensorType port1 = ESensorType.ULTRASONIC;
+		ESensorType port2 = ESensorType.ULTRASONIC;
+		ESensorType port3 = ESensorType.LIGHT;
+		ESensorType port4 = ESensorType.TOUCH;
 		try {
 			robot = new NxtBridge("JOEY", port1, port2, port3, 
 					port4, leftMotorPort, rightMotorPort, motorReverse, 5.4f, 15.1f);
