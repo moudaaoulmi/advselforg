@@ -1,16 +1,18 @@
 package org.vu.advselforg.robotcontroller;
 
+import org.vu.advselforg.common.ESensorType;
+
 public class Sensor {
 	
-	private SensorType sensorType;
+	private ESensorType sensorType;
 	private int sensorValue;
 	
-	public Sensor(SensorType s){
+	public Sensor(ESensorType s){
 		
 		this.sensorType = s;
 	}
 	
-	public SensorType getSensorType(){
+	public ESensorType getSensorType(){
 		return this.sensorType;
 	}
 	

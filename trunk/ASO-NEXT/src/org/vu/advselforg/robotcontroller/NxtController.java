@@ -3,6 +3,11 @@ package org.vu.advselforg.robotcontroller;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.vu.advselforg.common.EDistanceMode;
+import org.vu.advselforg.common.EMovingMode;
+import org.vu.advselforg.common.EMotorPort;
+import org.vu.advselforg.common.ESensorType;
+
 import lejos.nxt.addon.RFIDSensor;
 import lejos.nxt.remote.NXTCommand;
 import lejos.nxt.remote.RemoteMotor;
@@ -34,14 +39,14 @@ public class NxtController implements RobotController {
 	private TachoPilot pilot;
 	private RemoteSensorPort[] sensors;
 	private RemoteMotor[] motors;
-	private MovingMode lastCommand;
+	private EMovingMode lastCommand;
 	private boolean isScanning = false;
 	
 	private static final int DESIRED_SPEED_MARGIN = 1;
 
-	public NxtController(String robotName, OutputPort leftMotorPort,
-			OutputPort rightMotorPort, boolean motorReverse, SensorType type1,
-			SensorType type2, SensorType type3, SensorType type4) {
+	public NxtController(String robotName, EMotorPort leftMotorPort,
+			EMotorPort rightMotorPort, boolean motorReverse, ESensorType type1,
+			ESensorType type2, ESensorType type3, ESensorType type4) {
 
 		// Create a connection and search for robots named [robotName]
 		conn = new NXTConnector();
@@ -72,7 +77,7 @@ public class NxtController implements RobotController {
 		}
 
 		// Create a pilot
-		if (leftMotorPort != OutputPort.NONE && rightMotorPort != OutputPort.NONE) {
+		if (leftMotorPort != EMotorPort.NONE && rightMotorPort != EMotorPort.NONE) {
 			pilot = new TachoPilot(5.4f, 15.1f, motors[leftMotorPort.ordinal()],
 					motors[rightMotorPort.ordinal()], motorReverse);
 			pilot.setMoveSpeed(15);
@@ -101,7 +106,7 @@ public class NxtController implements RobotController {
 	}
 
 	/* Set the type of sensor [port] to [type] */
-	private void initSensor(RemoteSensorPort port, SensorType type) {
+	private void initSensor(RemoteSensorPort port, ESensorType type) {
 		switch (type) {
 		case NONE:
 			port.setType(SensorConstants.TYPE_NO_SENSOR);
@@ -156,7 +161,7 @@ public class NxtController implements RobotController {
 			return;
 		}
 		if (pilot != null) {
-			lastCommand = MovingMode.FORWARD;
+			lastCommand = EMovingMode.FORWARD;
 			pilot.travel(distance, immediateReturn);
 		}
 	}
@@ -167,7 +172,7 @@ public class NxtController implements RobotController {
 			return;
 		}
 		if (pilot != null) {
-			lastCommand = MovingMode.BACKWARD;
+			lastCommand = EMovingMode.BACKWARD;
 			pilot.travel(-distance, immediateReturn);
 		}
 	}
@@ -175,7 +180,7 @@ public class NxtController implements RobotController {
 	/* Rotate the robot [angle] degrees to the left */
 	public void turnLeft(float angle, boolean immediateReturn) {
 		if (pilot != null) {
-			lastCommand = MovingMode.TURNING;
+			lastCommand = EMovingMode.TURNING;
 			pilot.rotate(angle, immediateReturn);
 		}
 	}
@@ -183,7 +188,7 @@ public class NxtController implements RobotController {
 	/* Rotate the robot [angle] degrees to the right */
 	public void turnRight(float angle, boolean immediateReturn) {
 		if (pilot != null) {
-			lastCommand = MovingMode.TURNING;
+			lastCommand = EMovingMode.TURNING;
 			pilot.rotate(-angle, immediateReturn);
 		}
 	}
@@ -195,7 +200,7 @@ public class NxtController implements RobotController {
 	}
 
 	/* Get the distance of a ultrasonic sensor */
-	public int getDistance(int sensorIndex, DistanceMode mode) {
+	public int getDistance(int sensorIndex, EDistanceMode mode) {
 		int data[] = new int[3];
 		int result;
 		//String str = "";
@@ -211,7 +216,7 @@ public class NxtController implements RobotController {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			if (mode == DistanceMode.LOWEST) {
+			if (mode == EDistanceMode.LOWEST) {
 				result = 255;
 				for (int i = 0; i < data.length; i++) {
 					result = data[i] < result ? data[i] : result;
@@ -231,7 +236,7 @@ public class NxtController implements RobotController {
 	}
 
 	/* Get the distance of the first ultrasonic sensor */
-	public int getDistance(DistanceMode mode) {
+	public int getDistance(EDistanceMode mode) {
 		return getDistance(0, mode);
 	}
 
@@ -300,7 +305,7 @@ public class NxtController implements RobotController {
 			pilot.getLeftActualSpeed() >= pilot.getMoveSpeed() - DESIRED_SPEED_MARGIN;
 	}
 
-	public int getTachoMeterCount(OutputPort port) {
+	public int getTachoMeterCount(EMotorPort port) {
 		return motors[port.ordinal()].getTachoCount();
 	}
 
@@ -309,30 +314,30 @@ public class NxtController implements RobotController {
 	}
 
 	public boolean isTurningOrDrivingBack() {
-		if(lastCommand != MovingMode.FORWARD){
+		if(lastCommand != EMovingMode.FORWARD){
 			return pilot.isMoving();
 		}else{return false;}
 	}
 	
-	public MovingMode lastCommand() {
+	public EMovingMode lastCommand() {
 		return lastCommand;
 	}
 
-	public boolean isScanning(OutputPort port) {
+	public boolean isScanning(EMotorPort port) {
 		if (!motors[port.ordinal()].isMoving()) {
 			isScanning = false;
 		}
 		return isScanning && motors[port.ordinal()].isMoving();
 	}
 
-	public void calibrateTurret(OutputPort port) {
+	public void calibrateTurret(EMotorPort port) {
 		int tachoDrift = motors[port.ordinal()].getTachoCount() * -1;
 		if (Math.abs(tachoDrift) > 2) {
 			motors[port.ordinal()].rotateTo(tachoDrift);
 		}
 	}
 
-	public void performScan(OutputPort port, int fromAngle, int toAngle, int speed) {
+	public void performScan(EMotorPort port, int fromAngle, int toAngle, int speed) {
 		motors[port.ordinal()].setSpeed(speed);
 		motors[port.ordinal()].rotateTo(fromAngle, false);
 		isScanning = true;
