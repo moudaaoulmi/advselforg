@@ -1,4 +1,12 @@
 package org.vu.advselforg.nxt;
+
+import org.vu.advselforg.common.*;
+import org.vu.advselforg.nxt.sensors.NxtLightSensor;
+import org.vu.advselforg.nxt.sensors.NxtRFIDSensor;
+import org.vu.advselforg.nxt.sensors.NxtSoundSensor;
+import org.vu.advselforg.nxt.sensors.NxtTouchSensor;
+import org.vu.advselforg.nxt.sensors.NxtUltrasonicSensor;
+
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
 import lejos.robotics.navigation.TachoPilot;
@@ -8,7 +16,7 @@ import java.util.StringTokenizer;
 
 public class MindstormsBrains {
 	
-	protected Sensor[] sensors;
+	protected INxtSensor[] sensors;
 	protected Motor[] motors;
 	protected TachoPilot pilot;
 
@@ -22,7 +30,7 @@ public class MindstormsBrains {
 	
 	MindstormsBrains() {
 		data = new SensorData();
-		monitor = new SensorMonitor(this, data);
+		monitor = new NxtSensorMonitor(this, data);
 		
 		waitForConnection();
 	}
@@ -120,7 +128,7 @@ public class MindstormsBrains {
 	}
 	
 	private void initSensors(String[] config) {
-		sensors = new Sensor[4];
+		sensors = new INxtSensor[4];
 		initSensor(SensorPort.S1, 0, new Integer(config[1]));
 		initSensor(SensorPort.S2, 1, new Integer(config[2]));
 		initSensor(SensorPort.S3, 2, new Integer(config[3]));
