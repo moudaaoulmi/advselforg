@@ -1,10 +1,13 @@
 package org.vu.advselforg.nxt;
-public class SensorMonitor extends Thread {
+
+import org.vu.advselforg.common.SensorData;
+
+public class NxtSensorMonitor extends Thread {
 	
 	MindstormsBrains parent;
 	SensorData data;
 	
-	SensorMonitor(MindstormsBrains parent, SensorData data) {
+	NxtSensorMonitor(MindstormsBrains parent, SensorData data) {
 		this.data = data;
 		this.parent = parent;
 	}
