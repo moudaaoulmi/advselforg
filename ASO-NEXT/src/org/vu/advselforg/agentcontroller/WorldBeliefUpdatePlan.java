@@ -3,10 +3,10 @@ package org.vu.advselforg.agentcontroller;
 import java.io.Console;
 import java.io.IOException;
 
-import org.vu.advselforg.robotcontroller.MovingMode;
+import org.vu.advselforg.common.EMovingMode;
+import org.vu.advselforg.common.EMotorPort;
 import org.vu.advselforg.robotcontroller.NxtBridge;
 import org.vu.advselforg.robotcontroller.NxtController;
-import org.vu.advselforg.robotcontroller.OutputPort;
 import org.vu.advselforg.robotcontroller.RobotController;
 
 import jadex.runtime.IFilter;
@@ -55,8 +55,8 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		} 
 	}
 
-	private void processTurningUpdate(boolean isTurningOrDrivingBack, MovingMode lastCommand) {
-		if (!isTurningOrDrivingBack && lastCommand == MovingMode.TURNING && wasTurning) {
+	private void processTurningUpdate(boolean isTurningOrDrivingBack, EMovingMode lastCommand) {
+		if (!isTurningOrDrivingBack && lastCommand == EMovingMode.TURNING && wasTurning) {
 			setBelief("turning", false);
 			System.out.println("Turn completed.");
 			wasTurning = false;
@@ -64,20 +64,20 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 			oldTraveledDistance = 0;
 			//robot.calibrateTurret(OutputPort.B);
 		}
-		if (isTurningOrDrivingBack && lastCommand == MovingMode.TURNING && !wasTurning) {
+		if (isTurningOrDrivingBack && lastCommand == EMovingMode.TURNING && !wasTurning) {
 			wasTurning = true;
 		}
 	}
 
-	private void processDriveBackwardUpdate(boolean isTurningOrDrivingBack, MovingMode lastCommand) {
-		if (!isTurningOrDrivingBack && lastCommand == MovingMode.BACKWARD && wasDrivingBackward) {
+	private void processDriveBackwardUpdate(boolean isTurningOrDrivingBack, EMovingMode lastCommand) {
+		if (!isTurningOrDrivingBack && lastCommand == EMovingMode.BACKWARD && wasDrivingBackward) {
 			setBelief("drivingBackwards", false);
 			System.out.println("Driving backwards completed.");
 			wasDrivingBackward = false;
 			//robot.resetTravelDistance();
 			oldTraveledDistance = 0;
 		}
-		if (isTurningOrDrivingBack && lastCommand == MovingMode.BACKWARD && !wasDrivingBackward) {
+		if (isTurningOrDrivingBack && lastCommand == EMovingMode.BACKWARD && !wasDrivingBackward) {
 			wasDrivingBackward = true;
 		}
 	}
