@@ -1,6 +1,5 @@
 package org.vu.advselforg.nxt;
 
-
 public class NxtSensorMonitor extends Thread {
 	
 	MindstormsBrains parent;
