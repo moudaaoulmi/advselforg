@@ -4,11 +4,11 @@ import java.io.PrintStream;
 
 import lejos.nxt.MotorPort;
 
-import org.vu.advselforg.robotcontroller.DistanceMode;
+import org.vu.advselforg.common.EDistanceMode;
+import org.vu.advselforg.common.EMotorPort;
+import org.vu.advselforg.common.ESensorType;
 import org.vu.advselforg.robotcontroller.NxtController;
 import org.vu.advselforg.robotcontroller.RobotController;
-import org.vu.advselforg.robotcontroller.SensorType;
-import org.vu.advselforg.robotcontroller.OutputPort;
 
 public class TestApplication {
 
@@ -66,14 +66,14 @@ public class TestApplication {
 	}
 
 	private void connectBots() {
-		OutputPort leftMotorPort = OutputPort.A;
-		OutputPort rightMotorPort = OutputPort.C;
+		EMotorPort leftMotorPort = EMotorPort.A;
+		EMotorPort rightMotorPort = EMotorPort.C;
 		boolean motorReverse = false;
 		
-		SensorType port1 = SensorType.LIGHT; //onderste
-		SensorType port2 = SensorType.NONE; //bovenste
-		SensorType port3 = SensorType.NONE;
-		SensorType port4 = SensorType.NONE;
+		ESensorType port1 = ESensorType.LIGHT; //onderste
+		ESensorType port2 = ESensorType.NONE; //bovenste
+		ESensorType port3 = ESensorType.NONE;
+		ESensorType port4 = ESensorType.NONE;
 
 		String[] names = {"ROSS"};
 

@@ -12,9 +12,9 @@ import java.text.SimpleDateFormat;
 import javax.management.timer.TimerNotification;
 
 
-import org.vu.advselforg.robotcontroller.Motorport;
+import org.vu.advselforg.common.EMotorPort;
+import org.vu.advselforg.common.ESensorType;
 import org.vu.advselforg.robotcontroller.NxtBridge;
-import org.vu.advselforg.robotcontroller.SensorType;
 
 public class KKP {
 
@@ -25,8 +25,8 @@ public class KKP {
 	 */
 	public static void main(String[] args) throws InterruptedException, IOException {
 		
-		NxtBridge bridge = new NxtBridge("JOEY", SensorType.ULTRASONIC, SensorType.ULTRASONIC, SensorType.LIGHT, 
-				SensorType.TOUCH, Motorport.A, Motorport.C, false, 5.4f, 15.1f);
+		NxtBridge bridge = new NxtBridge("JOEY", ESensorType.ULTRASONIC, ESensorType.ULTRASONIC, ESensorType.LIGHT, 
+				ESensorType.TOUCH, EMotorPort.A, EMotorPort.C, false, 5.4f, 15.1f);
 		
 		Date dat = new Date(); 
 		 
