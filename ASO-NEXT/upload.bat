@@ -1,5 +1,5 @@
 @echo off
-call nxjc src\org\vu\advselforg\nxt\*.java
+call nxjc -cp src src\org\vu\advselforg\nxt\MindstormsBrains.java
 echo Compiled...
 call nxjlink org.vu.advselforg.nxt.MindstormsBrains -cp src -o MindstormsBrains.nxj
 echo Linked...
