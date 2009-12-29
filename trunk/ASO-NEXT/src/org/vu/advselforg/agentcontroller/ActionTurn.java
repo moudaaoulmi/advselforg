@@ -3,8 +3,8 @@ package org.vu.advselforg.agentcontroller;
 import java.io.IOException;
 import java.util.Random;
 
+import org.vu.advselforg.oud.RobotController;
 import org.vu.advselforg.robotcontroller.NxtBridge;
-import org.vu.advselforg.robotcontroller.RobotController;
 
 import jadex.runtime.Plan;
 

@@ -3,6 +3,7 @@ package org.vu.advselforg.common;
 public class SensorData {
 
 	public String[] sensorValues;
+	public ESensorType[] sensorTypes;
 	public String[] tachoCounts;
 	public String travelDistance;
 	public String isMoving, isScanning;

@@ -5,9 +5,9 @@ import java.io.IOException;
 
 import org.vu.advselforg.common.EMovingMode;
 import org.vu.advselforg.common.EMotorPort;
+import org.vu.advselforg.oud.NxtController;
+import org.vu.advselforg.oud.RobotController;
 import org.vu.advselforg.robotcontroller.NxtBridge;
-import org.vu.advselforg.robotcontroller.NxtController;
-import org.vu.advselforg.robotcontroller.RobotController;
 
 import jadex.runtime.IFilter;
 import jadex.runtime.Plan;
