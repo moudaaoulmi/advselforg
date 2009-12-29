@@ -1,5 +1,7 @@
 package test;
 
+import org.vu.advselforg.common.EMotorPort;
+import org.vu.advselforg.common.ESensorType;
 import org.vu.advselforg.robotcontroller.*;
 
 import sun.awt.EmbeddedFrame;
@@ -23,13 +25,13 @@ public class InitPlan extends Plan implements Runnable{
 	@Override
 	public void body() {
 			
-		OutputPort leftMotorPort = OutputPort.A;
-		OutputPort rightMotorPort = OutputPort.C;
+		EMotorPort leftMotorPort = EMotorPort.A;
+		EMotorPort rightMotorPort = EMotorPort.C;
 		boolean motorReverse = false;
-		SensorType port1 = SensorType.TOUCH;
-		SensorType port2 = SensorType.TOUCH;
-		SensorType port3 = SensorType.NONE;
-		SensorType port4 = SensorType.NONE;
+		ESensorType port1 = ESensorType.TOUCH;
+		ESensorType port2 = ESensorType.TOUCH;
+		ESensorType port3 = ESensorType.NONE;
+		ESensorType port4 = ESensorType.NONE;
 		try {
 			robot = new NxtController("Patrick", leftMotorPort, rightMotorPort,
 					motorReverse, port1, port2, port3, port4);	
