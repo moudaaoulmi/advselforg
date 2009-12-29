@@ -1,5 +1,9 @@
 package org.vu.advselforg.robotcontroller;
 
+import org.vu.advselforg.common.EMotorPort;
+import org.vu.advselforg.common.ESensorType;
+import org.vu.advselforg.common.NxtProtocol;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,8 +20,8 @@ public class NxtBridge {
 
 	private String[] receiveData;
 	
-	public NxtBridge(String nxtName, SensorType port1, SensorType port2, SensorType port3, SensorType port4, 
-			Motorport pilotPortLeft, Motorport pilotPortRight , Boolean MotorReverse, float wheelDiameter, float trackWidth) throws InterruptedException, IOException
+	public NxtBridge(String nxtName, ESensorType port1, ESensorType port2, ESensorType port3, ESensorType port4, 
+			EMotorPort pilotPortLeft, EMotorPort pilotPortRight , Boolean MotorReverse, float wheelDiameter, float trackWidth) throws InterruptedException, IOException
 	{
 		
 		conn = new NXTConnector();
