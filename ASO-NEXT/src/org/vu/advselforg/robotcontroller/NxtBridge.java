@@ -1,6 +1,7 @@
 package org.vu.advselforg.robotcontroller;
 
 import org.vu.advselforg.common.EMotorPort;
+import org.vu.advselforg.common.EMovingMode;
 import org.vu.advselforg.common.ESensorType;
 import org.vu.advselforg.common.NxtProtocol;
 
@@ -17,6 +18,7 @@ public class NxtBridge {
 	NXTConnector conn; 
 	InputStream in;
 	OutputStream out;
+	SensorData sensorData = new SensorData();
 
 	private String[] receiveData;
 	
@@ -29,7 +31,7 @@ public class NxtBridge {
 		
 		in = conn.getInputStream();
 		out = conn.getOutputStream();
-		Thread.sleep(500);
+		Thread.sleep(1000);
 		
 		int reverse = MotorReverse ? 1 : 0;
 		
@@ -42,28 +44,32 @@ public class NxtBridge {
 	
 	public void MoveForward(int distance) throws IOException{
 		String message = buildMessage(NxtProtocol.FORWARD, distance);
+		sensorData.setLastCommand(EMovingMode.FORWARD);
 		communicateToNxt(message);
 	}
 	
 	public SensorData RequestSensorData() throws IOException{
 		String message = buildMessage(NxtProtocol.SENSOR_DATA);
-		String[] sensorData = communicateToNxt(message);
+		sensorData.processMessage(communicateToNxt(message));
 		//TODO
-		return new SensorData();//processResponse(sensorData);
+		return sensorData;//processResponse(sensorData);
 	}	
 	
 	public void MoveBackward(int distance) throws IOException{
 		String message = buildMessage(NxtProtocol.BACKWARD, distance);
+		sensorData.setLastCommand(EMovingMode.BACKWARD);
 		communicateToNxt(message);
 	}
 	
 	public void TurnLeft(int angle) throws IOException{
 		String message = buildMessage(NxtProtocol.TURN_LEFT, angle);
+		sensorData.setLastCommand(EMovingMode.TURNING);
 		communicateToNxt(message);
 	}	
 	
 	public void TurnRight(int angle) throws IOException{
 		String message = buildMessage(NxtProtocol.TURN_RIGHT, angle);
+		sensorData.setLastCommand(EMovingMode.TURNING);
 		communicateToNxt(message);
 	}	
 	
@@ -71,6 +77,7 @@ public class NxtBridge {
 		String message = buildMessage(NxtProtocol.RESET_TRAVEL_DISTANCE);
 		communicateToNxt(message);
 	}	
+	
 	public void PerformScan(int port, int fromAngle, int toAngle, int speed) throws IOException{
 		String message = buildMessage(NxtProtocol.PERFORM_SCAN, fromAngle, toAngle, speed);
 		communicateToNxt(message);
@@ -131,20 +138,6 @@ public class NxtBridge {
 			sb.append((char) b);
 		}
 		return sb.toString().split(";");
-	}
-
-
-	private String[] processResponse(String[] incMessage) throws IOException {
-		
-
-		//
-		
-		//if(st[0].equals("2")){
-		//	processResponse(st);
-		//}
-		return incMessage;
-		
-	}
-	
+	}	
 
 }

@@ -12,13 +12,19 @@ public class SensorData {
 	private int _motorBTachoCount;
 	private int _motorCTachoCount;
 	private boolean _atDesiredMotorSpeed;
+	private boolean _isMoving;
 	private boolean _motorAIsScanning;
 	private boolean _motorBIsScanning;
 	private boolean _motorCIsScanning;
-	private boolean _isTurningOrDrivingBack;
 	private EMovingMode _lastCommand;
 	private int _travelDistance;
 
+	
+	public SensorData(){
+		_lastCommand = EMovingMode.FORWARD;
+		
+	}
+	
 	public void setLastCommand(EMovingMode mm){
 		
 		_lastCommand = mm;
@@ -65,8 +71,19 @@ public class SensorData {
 		}
 	}
 	
-	public boolean isTurningOrDrivingBack(){
-		return _isTurningOrDrivingBack;
+	public boolean isTurningOrMovingBackward(){
+		
+		if(_isMoving && _lastCommand != EMovingMode.FORWARD){
+			return true;
+		}else{
+			return false;
+		}
+		
+		//if(_lastCommand == EMovingMode.BACKWARD || _lastCommand == EMovingMode.TURNING){
+		//	return true;
+		//}else{
+		//	return false;
+		//}
 		
 	}
 	
@@ -82,25 +99,31 @@ public class SensorData {
 	//I think this one need some refactoring after I wrote it :)
 	public void processMessage(String[] message){
 		
-		_distanceLowerSonar = Integer.parseInt(message[0]);
-		_distanceUpperSonar = Integer.parseInt(message[1]);
+
+		_distanceLowerSonar = Integer.parseInt(message[1]);
+		_distanceUpperSonar = Integer.parseInt(message[2]);
 		
 		//Something for the light sensor.
 		//message[2]
-		_touchSensorPressed = message[3].equals("1") ? true : false; 
+		if(message[4].equals("1")){
+			_touchSensorPressed = true;
+			System.out.println("TOUCHED!!!!!!!!");
+		}else{
+			_touchSensorPressed = false;
+		}
+			
 		
-		_motorATachoCount = Integer.parseInt(message[4]);
-		_motorBTachoCount = Integer.parseInt(message[5]);
-		_motorCTachoCount = Integer.parseInt(message[6]);
+		_motorATachoCount = Integer.parseInt(message[5]);
+		_motorBTachoCount = Integer.parseInt(message[6]);
+		_motorCTachoCount = Integer.parseInt(message[7]);
 
-		_travelDistance = Integer.parseInt(message[7]);
+		_travelDistance = Integer.parseInt(message[8]);
 		
-		_isTurningOrDrivingBack = message[8].equals("1") ? true : false;
+		_isMoving = message[9].equals("1") ? true : false;
 		
-		
-		_motorAIsScanning = message[9].equals("1") ? true : false;
-		_motorBIsScanning = message[9].equals("1") ? true : false;;
-		_motorCIsScanning = message[9].equals("1") ? true : false;;
+		_motorAIsScanning = message[10].equals("1") ? true : false;
+		_motorBIsScanning = message[10].equals("1") ? true : false;
+		_motorCIsScanning = message[10].equals("1") ? true : false;
 		
 	}
 }
