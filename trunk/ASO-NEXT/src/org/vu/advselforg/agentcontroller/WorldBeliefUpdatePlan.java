@@ -36,8 +36,6 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		new Thread(this).start();
 		waitFor(IFilter.NEVER);
 	}
-	boolean wasTurningOrDrivingBack = false;
-	boolean performExtraProcessStep = false;
 
 	public void run() {
 
@@ -45,34 +43,18 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 			try {
 				sensorData = robot.RequestSensorData();
 			
-			boolean isTurningOrDrivingBack = sensorData.isTurningOrDrivingBack();
+			boolean isTurningOrMovingBackward = sensorData.isTurningOrMovingBackward();
 			EMovingMode lastCommand = sensorData.lastCommand();
-			if(step != 0){
-				if(!isTurningOrDrivingBack && wasTurningOrDrivingBack){
-					performExtraProcessStep = true;
-				}
-			}
-			
-			if(isTurningOrDrivingBack || performExtraProcessStep){
-				if(!performExtraProcessStep){
-					wasTurningOrDrivingBack = true;
-				}else{
-					wasTurningOrDrivingBack = false;
-				}
-				processTurningUpdate(isTurningOrDrivingBack, lastCommand);
-				processDriveBackwardUpdate(isTurningOrDrivingBack, lastCommand);
-				System.out.println("AAAAAAAAAA");
-				performExtraProcessStep = false;
+		
+
+			processTurningUpdate(isTurningOrMovingBackward, lastCommand);
+			processDriveBackwardUpdate(isTurningOrMovingBackward, lastCommand);
+			processTouchSensor();
+			processSonarSensor();
+			processTravelDistance();
+			processMotorRotation();
+
 				
-			}else{
-				processTouchSensor();
-				processSonarSensor();
-				processTravelDistance();
-				processMotorRotation();
-				System.out.println("BBBBBBBBB");
-				wasTurningOrDrivingBack = false;
-				
-			}
 			stepProcessing();			
 			//processTachoMeterReding();
 			} catch (IOException e) {
@@ -106,6 +88,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		}
 		if (isTurningOrDrivingBack && lastCommand == EMovingMode.BACKWARD && !wasDrivingBackward) {
 			wasDrivingBackward = true;
+			System.out.println("Still driving backward.");
 		}
 	}
 
@@ -177,8 +160,15 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 	}
 
 	private void setBelief(String BeliefName, Object beliefValue) {
+		try{
 		getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
 		getExternalAccess().getBeliefbase().getBelief(BeliefName).modified();
+		}catch(Exception e){
+			//sometimes I get an concurrent update error.. Jadex still works, but then I need to make sure that 
+			//This belief still is updated.
+			setBelief(BeliefName,beliefValue);
+		}
+		
 	}
 
 	private void stepProcessing() {

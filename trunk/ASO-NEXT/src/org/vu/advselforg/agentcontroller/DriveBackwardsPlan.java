@@ -13,10 +13,8 @@ public class DriveBackwardsPlan extends Plan{
 	public void body() {
 		NxtBridge robot = (NxtBridge) getBeliefbase().getBelief("robot").getFact();
 		setBelief("drivingBackwards", true);
-		System.out.println("Driving Backwards");
 		try {
 			robot.MoveBackward(60);
-			setBelief("drivingBackwards", false);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
