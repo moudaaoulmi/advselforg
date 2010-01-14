@@ -20,7 +20,6 @@ public class NxtBridge {
 	OutputStream out;
 	SensorData sensorData = new SensorData();
 
-	private String[] receiveData;
 	
 	public NxtBridge(String nxtName, ESensorType port1, ESensorType port2, ESensorType port3, ESensorType port4, 
 			EMotorPort pilotPortLeft, EMotorPort pilotPortRight , Boolean MotorReverse, float wheelDiameter, float trackWidth) throws InterruptedException, IOException
