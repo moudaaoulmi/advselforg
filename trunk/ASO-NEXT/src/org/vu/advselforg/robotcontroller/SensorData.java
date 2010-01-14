@@ -96,7 +96,6 @@ public class SensorData {
 		
 	}
 	//At this moment I expect fixed sensortypes. Port 1 and 2 ultra sonic, port 3 licht, port 4 touch.
-	//I think this one need some refactoring after I wrote it :)
 	public void processMessage(String[] message){
 		
 
@@ -107,7 +106,6 @@ public class SensorData {
 		//message[2]
 		if(message[4].equals("1")){
 			_touchSensorPressed = true;
-			System.out.println("TOUCHED!!!!!!!!");
 		}else{
 			_touchSensorPressed = false;
 		}
