@@ -1,6 +1,5 @@
 package test;
 
-
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
 
