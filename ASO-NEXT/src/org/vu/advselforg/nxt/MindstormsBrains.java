@@ -10,6 +10,7 @@ import org.vu.advselforg.nxt.sensors.NxtUltrasonicSensor;
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
 import lejos.robotics.navigation.TachoPilot;
+import lejos.nxt.Sound;
 
 import java.io.*;
 import java.util.StringTokenizer;
@@ -70,6 +71,7 @@ public class MindstormsBrains {
 					break;
 				case NxtProtocol.INIT:
 					init(message);
+					Thread.sleep(500); // Ensure there are sensor readings
 					sendMessage(NxtProtocol.INIT + ";");
 					break;
 				case NxtProtocol.SENSOR_DATA:
@@ -238,6 +240,10 @@ public class MindstormsBrains {
 	
 	private void performScan() {
 		// Todo
+	}
+	
+	protected void beep() {
+		Sound.playTone(1000, 10);
 	}
 	
 	// Message-related stuff
