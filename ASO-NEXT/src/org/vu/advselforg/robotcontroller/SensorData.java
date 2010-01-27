@@ -7,6 +7,7 @@ public class SensorData {
 
 	private int _distanceUpperSonar;
 	private int _distanceLowerSonar;
+	private int _lightSensorValue;
 	private boolean _touchSensorPressed;
 	private int _motorATachoCount;
 	private int _motorBTachoCount;
@@ -33,6 +34,10 @@ public class SensorData {
 
 	public int getDistanceLowerSonar() {
 		return _distanceLowerSonar;
+	}
+	
+	public int getLightSensorValue() {
+		return _lightSensorValue;
 	}
 
 	public boolean getTouchSensorPressed() {
@@ -92,7 +97,7 @@ public class SensorData {
 		_distanceLowerSonar = Integer.parseInt(message[1]);
 		_distanceUpperSonar = Integer.parseInt(message[2]);
 
-		// Something for the light sensor.
+		_lightSensorValue = Integer.parseInt(message[3]);
 		// message[2]
 		if (message[4].equals("1")) {
 			_touchSensorPressed = true;

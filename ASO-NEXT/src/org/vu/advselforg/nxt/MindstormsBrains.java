@@ -250,13 +250,13 @@ public class MindstormsBrains {
 	
 	private void sendMessage(String message) throws IOException {
 		out.write(message.getBytes(""));
-		out.write(-1);
+		out.write(NxtProtocol.TERMINATION_BYTE);
 		out.flush();
 	}
 
 	private String[] getMessage() throws Exception {
-		String[] message = new String[20];
-		byte[] buffer = new byte[50];
+		String[] message = new String[NxtProtocol.MESSAGE_SIZE];
+		byte[] buffer = new byte[NxtProtocol.MESSAGE_SIZE];
 
 		in.read(buffer, 0, buffer.length);
 		String s = new String(buffer);

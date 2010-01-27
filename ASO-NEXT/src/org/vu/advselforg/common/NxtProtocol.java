@@ -22,4 +22,8 @@ public class NxtProtocol {
 	public final static int TOUCH_SENSOR = 4;
 	public final static int RFID_SENSOR = 5;
 	
+	// OTHER
+	public final static int TERMINATION_BYTE = -1;
+	public final static int MESSAGE_SIZE = 50;
+	
 }
