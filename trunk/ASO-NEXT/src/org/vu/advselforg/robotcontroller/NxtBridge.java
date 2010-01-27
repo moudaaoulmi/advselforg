@@ -132,7 +132,7 @@ public class NxtBridge {
 		StringBuffer sb = new StringBuffer();
 		byte b;
 
-		while ((b = (byte) in.read()) != -1) {
+		while ((b = (byte) in.read()) != NxtProtocol.TERMINATION_BYTE) {
 			sb.append((char) b);
 		}
 		return sb.toString().split(";");
