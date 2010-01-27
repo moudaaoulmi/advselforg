@@ -20,6 +20,8 @@ public class SensorData {
 	private boolean _isScanning;
 	private EMovingMode _lastCommand;
 	private int _travelDistance;
+	private int _closestblockAngle;
+	private int _closestBlockDistance;
 
 	public SensorData() {
 		_lastCommand = EMovingMode.FORWARD;
@@ -92,6 +94,15 @@ public class SensorData {
 	public EMovingMode lastCommand() {
 		return _lastCommand;
 	}
+	
+	public int getClosestblockAngle(){
+		return _closestblockAngle;
+	}
+	
+	public int getClosestblockDistance(){
+		return _closestBlockDistance;
+	}
+	
 
 	public int getTravelDistance() {
 		return _travelDistance;
@@ -120,5 +131,8 @@ public class SensorData {
 		_isMoving = message[9].equals("1") ? true : false;
 
 		_isScanning = message[10].equals("1") ? true : false;
+		
+		_closestblockAngle = Integer.parseInt(message[11]);
+		_closestBlockDistance = Integer.parseInt(message[12]);
 	}
 }
