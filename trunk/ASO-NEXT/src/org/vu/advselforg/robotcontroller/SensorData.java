@@ -17,9 +17,7 @@ public class SensorData {
 	private int _motorCTachoCount;
 	private boolean _atDesiredMotorSpeed;
 	private boolean _isMoving;
-	private boolean _motorAIsScanning;
-	private boolean _motorBIsScanning;
-	private boolean _motorCIsScanning;
+	private boolean _isScanning;
 	private EMovingMode _lastCommand;
 	private int _travelDistance;
 
@@ -71,14 +69,9 @@ public class SensorData {
 		return true; // _atDesiredMotorSpeed;
 	}
 
-	public boolean isScanning(EMotorPort port) {
-		if (port == EMotorPort.A) {
-			return _motorAIsScanning;
-		} else if (port == EMotorPort.B) {
-			return _motorBIsScanning;
-		} else {
-			return _motorCIsScanning;
-		}
+	public boolean isScanning() {
+		
+		return _isScanning;
 	}
 
 	public boolean isTurningOrMovingBackward() {
@@ -126,8 +119,6 @@ public class SensorData {
 
 		_isMoving = message[9].equals("1") ? true : false;
 
-		_motorAIsScanning = message[10].equals("1") ? true : false;
-		_motorBIsScanning = message[10].equals("1") ? true : false;
-		_motorCIsScanning = message[10].equals("1") ? true : false;
+		_isScanning = message[10].equals("1") ? true : false;
 	}
 }
