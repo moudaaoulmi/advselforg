@@ -15,9 +15,9 @@ public class LightSensorTest {
 				ESensorType.TOUCH, EMotorPort.A, EMotorPort.C, false, 5.4f, 15.1f);
 		
 		SensorData data;
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 1000; i++) {
 			data = bridge.RequestSensorData();
-			System.out.println(data.getLightSensorValue());
+			System.out.println(data.getLightSensorValue() + " " + data.getObjectType());
 		}
 		
 		bridge.close();
