@@ -5,6 +5,9 @@ import org.vu.advselforg.common.EMovingMode;
 
 public class SensorData {
 
+	private final static int LIGHT_OBJECT_THRESHOLD = 45;
+	private final static int DARK_OBJECT_THRESHOLD = 35;
+	
 	private int _distanceUpperSonar;
 	private int _distanceLowerSonar;
 	private int _lightSensorValue;
@@ -36,15 +39,18 @@ public class SensorData {
 		return _distanceLowerSonar;
 	}
 	
-	public ELightSensorValue getLightSensorValue() {
-		if(_lightSensorValue > 45){
+	public int getLightSensorValue() {
+		return _lightSensorValue;
+	}
+	
+	public ELightSensorValue getObjectType() {
+		if(_lightSensorValue > LIGHT_OBJECT_THRESHOLD){
 			return ELightSensorValue.LIGHT_OBJECT;
-		}else if(_lightSensorValue < 35){
+		}else if(_lightSensorValue < DARK_OBJECT_THRESHOLD){
 			return ELightSensorValue.DARK_OBJECT;
 		}else{
 			return ELightSensorValue.NO_OBJECT;
 		}
-
 	}
 
 	public boolean getTouchSensorPressed() {
