@@ -36,8 +36,15 @@ public class SensorData {
 		return _distanceLowerSonar;
 	}
 	
-	public int getLightSensorValue() {
-		return _lightSensorValue;
+	public ELightSensorValue getLightSensorValue() {
+		if(_lightSensorValue > 45){
+			return ELightSensorValue.LIGHT_OBJECT;
+		}else if(_lightSensorValue < 35){
+			return ELightSensorValue.DARK_OBJECT;
+		}else{
+			return ELightSensorValue.NO_OBJECT;
+		}
+
 	}
 
 	public boolean getTouchSensorPressed() {
