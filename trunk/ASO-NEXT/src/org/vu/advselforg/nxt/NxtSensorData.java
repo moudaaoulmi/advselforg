@@ -9,6 +9,7 @@ public class NxtSensorData {
 	protected String[] tachoCounts;
 	protected String travelDistance;
 	protected String isMoving, isScanning;
+	protected String closestBlockAngle, closestBlockDistance;
 
 	protected NxtSensorData() {
 		sensorValues = new String[4];
@@ -25,5 +26,6 @@ public class NxtSensorData {
 		}
 		travelDistance = "0";
 		isMoving = isScanning = "0";
+		closestBlockAngle = closestBlockDistance = "-1";
 	}
 }

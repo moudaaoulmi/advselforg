@@ -77,8 +77,8 @@ public class NxtBridge {
 		communicateToNxt(message);
 	}
 
-	public void PerformScan(int port, int fromAngle, int toAngle, int speed) throws IOException {
-		String message = buildMessage(NxtProtocol.PERFORM_SCAN, fromAngle, toAngle, speed);
+	public void PerformScan(int port, int fromAngle, int toAngle) throws IOException {
+		String message = buildMessage(NxtProtocol.PERFORM_SCAN, fromAngle, toAngle);
 		communicateToNxt(message);
 	}
 

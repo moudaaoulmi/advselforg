@@ -28,6 +28,8 @@ public class MindstormsBrains {
 	private InputStream in;
 
 	private boolean scanScheduled = false;
+	protected int scanFrom;
+	protected int scanTo;
 
 	// Constructor and startup
 
@@ -104,7 +106,7 @@ public class MindstormsBrains {
 				sendMessage(NxtProtocol.RESET_TRAVEL_DISTANCE + ";");
 				break;
 			case NxtProtocol.PERFORM_SCAN:
-				scheduleScan();
+				scheduleScan(message);
 				sendMessage(NxtProtocol.PERFORM_SCAN + ";");
 				break;
 			default:
@@ -129,6 +131,10 @@ public class MindstormsBrains {
 		motors[0] = new Motor(MotorPort.A);
 		motors[1] = new Motor(MotorPort.B);
 		motors[2] = new Motor(MotorPort.C);
+		
+		for (Motor motor : motors) {
+			motor.resetTachoCount();
+		}
 	}
 
 	private void initSensors(String[] config) {
@@ -202,6 +208,10 @@ public class MindstormsBrains {
 		result.append(';');
 		result.append(data.isScanning);
 		result.append(';');
+		result.append(data.closestBlockAngle);
+		result.append(';');
+		result.append(data.closestBlockDistance);
+		result.append(';');
 
 		sendMessage(result.toString());
 	}
@@ -242,8 +252,10 @@ public class MindstormsBrains {
 		pilot.reset();
 	}
 
-	private void scheduleScan() {
+	private void scheduleScan(String[] message) {
 		scanScheduled = true;
+		this.scanFrom = Integer.parseInt(message[1]);
+		this.scanTo = Integer.parseInt(message[2]);
 	}
 
 	protected void descheduleScan() {
