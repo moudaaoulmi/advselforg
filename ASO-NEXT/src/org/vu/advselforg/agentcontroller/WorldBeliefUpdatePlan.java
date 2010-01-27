@@ -21,9 +21,10 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 	int oldTraveledDistance = 0;
 	int oldTopSonarDistance = -1;
 	int oldBottomSonarDistance = -1;
-
+	
 	boolean wasTurning = false;
 	boolean wasScanning = false;
+	boolean hasScanned = false;
 	boolean wasDrivingBackward = false;
 	SensorData sensorData; 
 	public void body() {
@@ -42,21 +43,32 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		while (true) {
 			try {
 				sensorData = robot.RequestSensorData();
+				if(sensorData.isScanning() == false){
+					if(hasScanned == true){
+						//Process scanresult.
+						processMotorRotation();
+					}
+					
+					
+					boolean isTurningOrMovingBackward = sensorData.isTurningOrMovingBackward();
+					EMovingMode lastCommand = sensorData.lastCommand();
 			
-			boolean isTurningOrMovingBackward = sensorData.isTurningOrMovingBackward();
-			EMovingMode lastCommand = sensorData.lastCommand();
-		
-
-			processTurningUpdate(isTurningOrMovingBackward, lastCommand);
-			processDriveBackwardUpdate(isTurningOrMovingBackward, lastCommand);
-			processTouchSensor();
-			processSonarSensor();
-			processTravelDistance();
-			processMotorRotation();
-
-				
-			stepProcessing();			
-			//processTachoMeterReding();
+	
+					processTurningUpdate(isTurningOrMovingBackward, lastCommand);
+					processDriveBackwardUpdate(isTurningOrMovingBackward, lastCommand);
+					processTouchSensor();
+					processSonarSensor();
+					processTravelDistance();
+					
+	
+					
+					stepProcessing();			
+					//processTachoMeterReding();
+				}else
+				{
+					hasScanned = true;
+					
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -109,17 +121,17 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 	}
 
 	private void processMotorRotation() throws IOException {
-		boolean isScanning = sensorData.isScanning(EMotorPort.B);
-		if (wasScanning && !isScanning) {
-			setBelief("scanningArea", false);
-			System.out.println("Motor rotation completed.");
-			robot.ResetTrafeldistance();
-			oldTraveledDistance = 0;
-			wasTurning = false;
-		}
-		if (!wasTurning && isScanning) {
-			wasTurning = true;
-		}
+	//	boolean isScanning = sensorData.isScanning();
+	//	if (wasScanning && !isScanning) {
+	//		setBelief("scanningArea", false);
+	//		System.out.println("Motor rotation completed.");
+	//		robot.ResetTrafeldistance();
+	//		oldTraveledDistance = 0;
+	//		wasTurning = false;
+	//	}
+	//	if (!wasTurning && isScanning) {
+	//		wasTurning = true;
+	//	}
 	}
 
 	private void processSonarSensor() {
