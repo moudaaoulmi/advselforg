@@ -1,10 +1,10 @@
 package org.vu.advselforg.agentcontroller;
 
-import java.io.Console;
+
 import java.io.IOException;
 
 import org.vu.advselforg.common.EMovingMode;
-import org.vu.advselforg.common.EMotorPort;
+
 import org.vu.advselforg.robotcontroller.NxtBridge;
 import org.vu.advselforg.robotcontroller.SensorData;
 
@@ -33,8 +33,8 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 
 	private void initialize() {
 		robot = (NxtBridge) getBeliefbase().getBelief("robot").getFact();
-		getBeliefbase().getBelief("WIMRunning").setFact(true);
 		new Thread(this).start();
+		getBeliefbase().getBelief("WIMRunning").setFact(true);
 		waitFor(IFilter.NEVER);
 	}
 
