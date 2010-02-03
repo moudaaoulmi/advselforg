@@ -36,7 +36,7 @@ public class InitPlan extends Plan{
 		ESensorType port3 = ESensorType.LIGHT;
 		ESensorType port4 = ESensorType.TOUCH;
 		try {
-			robot = new NxtBridge("JOEY", port1, port2, port3, 
+			robot = new NxtBridge(agentName, port1, port2, port3, 
 					port4, leftMotorPort, rightMotorPort, motorReverse, 5.4f, 15.1f);
 		
 			

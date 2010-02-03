@@ -7,7 +7,7 @@ import org.vu.advselforg.robotcontroller.NxtBridge;
 
 import jadex.runtime.Plan;
 
-public class ActionDriveForward extends Plan {
+public class DriveForwardPlan extends Plan {
 
 	@Override
 	public void body() {

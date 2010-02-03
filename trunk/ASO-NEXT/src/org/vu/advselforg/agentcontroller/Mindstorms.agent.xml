@@ -57,7 +57,7 @@
 	
 	<plans>
 		<plan name="start_robot">
-			<body>new InitPlan("Mindstorms")</body>
+			<body>new InitPlan("JOEY")</body>
 			<trigger>
 				<condition>!$beliefbase.Initialized </condition>
 			</trigger>
@@ -69,13 +69,13 @@
 			</trigger>		
 		</plan>
 		<plan name="actionDrive">
-			<body> new ActionDriveForward()</body>
+			<body> new DriveForwardPlan()</body>
 			<trigger>
 				<condition>!$beliefbase.drivingBackwards &amp;&amp; $beliefbase.WIMRunning </condition>
 			</trigger>		
 		</plan>
 		<plan name="actionDriveBackwards">
-			<body>new DriveBackwardsPlan()</body>
+			<body>new DriveBackwardsPlan(60)</body>
 			<trigger>
 				<condition>$beliefbase.clusterDetected</condition>
 			</trigger>
