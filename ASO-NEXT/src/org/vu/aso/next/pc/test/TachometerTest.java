@@ -1,11 +1,11 @@
-package test;
+package org.vu.aso.next.pc.test;
 
 import java.io.IOException;
 
-import org.vu.advselforg.common.EMotorPort;
-import org.vu.advselforg.common.ESensorType;
-import org.vu.advselforg.robotcontroller.NxtBridge;
-import org.vu.advselforg.robotcontroller.SensorData;
+import org.vu.aso.next.common.EMotorPort;
+import org.vu.aso.next.common.ESensorType;
+import org.vu.aso.next.pc.NxtBridge;
+import org.vu.aso.next.pc.SensorData;
 
 public class TachometerTest {
 
@@ -16,9 +16,9 @@ public class TachometerTest {
 		
 		SensorData data;
 		
-		bridge.PerformScan(1, 90, -90);
+		bridge.performScan(1, 90, -90);
 		do {
-			data = bridge.RequestSensorData();
+			data = bridge.requestSensorData();
 		} while (data.isScanning());
 		System.out.println("Angle: " + data.getClosestblockAngle());
 		System.out.println("Distance: " + data.getClosestblockDistance());
