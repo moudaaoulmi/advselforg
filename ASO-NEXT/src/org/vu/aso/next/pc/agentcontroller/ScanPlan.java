@@ -6,23 +6,18 @@ import org.vu.advselforg.robotcontroller.NxtBridge;
 
 import jadex.runtime.Plan;
 
-public class DriveForwardPlan extends Plan {
+public class ScanPlan extends Plan {
 
-	private static final long serialVersionUID = 6054116585490038881L;
-
-	private int distance;
-
-	public DriveForwardPlan(int distance) {
-		this.distance = distance;
-	}
+	private static final long serialVersionUID = -4810536547608546819L;
 
 	@Override
 	public void body() {
 		NxtBridge robot = (NxtBridge) getBeliefbase().getBelief("robot").getFact();
 		try {
-			robot.moveForward(distance);
+			robot.performScan(2, -85, 85);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
 }
