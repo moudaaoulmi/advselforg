@@ -23,7 +23,7 @@
 		<belief name="WIMRunning" class="boolean">
 			<fact>false</fact>
 		</belief>
-		<belief name="drivingBackwards" class="boolean">
+		<belief name="drivingBackward" class="boolean">
 			<fact>false</fact>
 		</belief>
 		<belief name="objectInGripper" class="String">

@@ -1,8 +1,8 @@
-package org.vu.advselforg.agentcontroller;
+package org.vu.aso.next.pc.agentcontroller;
 
-import org.vu.advselforg.common.EMotorPort;
-import org.vu.advselforg.common.ESensorType;
-import org.vu.advselforg.robotcontroller.*;
+import org.vu.aso.next.common.EMotorPort;
+import org.vu.aso.next.common.ESensorType;
+import org.vu.aso.next.pc.NxtBridge;
 
 import jadex.runtime.Plan;
 
