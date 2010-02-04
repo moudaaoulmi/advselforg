@@ -15,7 +15,7 @@ public class SensorData {
 	private int _motorATachoCount;
 	private int _motorBTachoCount;
 	private int _motorCTachoCount;
-	private boolean _atDesiredMotorSpeed;
+	private boolean _atDesiredMotorSpeed = true;
 	private boolean _isMoving;
 	private boolean _isScanning;
 	private EMovingMode _lastCommand;
@@ -68,7 +68,7 @@ public class SensorData {
 	}
 
 	public boolean atDesiredMotorSpeed() {
-		return true; // _atDesiredMotorSpeed;
+		return _atDesiredMotorSpeed;
 	}
 
 	public boolean isScanning() {
@@ -115,7 +115,6 @@ public class SensorData {
 		_distanceUpperSonar = Integer.parseInt(message[2]);
 
 		_lightSensorValue = Integer.parseInt(message[3]);
-		// message[2]
 		if (message[4].equals("1")) {
 			_touchSensorPressed = true;
 		} else {
