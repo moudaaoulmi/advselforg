@@ -1,8 +1,8 @@
-package org.vu.advselforg.agentcontroller;
+package org.vu.aso.next.pc.agentcontroller;
 
 import java.io.IOException;
 
-import org.vu.advselforg.robotcontroller.NxtBridge;
+import org.vu.aso.next.pc.NxtBridge;
 
 import jadex.runtime.Plan;
 
@@ -23,7 +23,7 @@ public class DriveBackwardPlan extends Plan {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		setBelief("drivingBackwards", true);
+		setBelief("drivingBackward", true);
 	}
 
 	private void setBelief(String BeliefName, Object beliefValue) {

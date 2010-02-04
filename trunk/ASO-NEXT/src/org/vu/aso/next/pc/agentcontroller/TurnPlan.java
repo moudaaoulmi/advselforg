@@ -1,9 +1,9 @@
-package org.vu.advselforg.agentcontroller;
+package org.vu.aso.next.pc.agentcontroller;
 
 import java.io.IOException;
 import java.util.Random;
 
-import org.vu.advselforg.robotcontroller.NxtBridge;
+import org.vu.aso.next.pc.NxtBridge;
 
 import jadex.runtime.Plan;
 

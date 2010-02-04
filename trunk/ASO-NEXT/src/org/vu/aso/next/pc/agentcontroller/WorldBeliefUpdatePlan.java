@@ -1,11 +1,11 @@
-package org.vu.advselforg.agentcontroller;
+package org.vu.aso.next.pc.agentcontroller;
 
 import java.io.IOException;
 
-import org.vu.advselforg.common.EMovingMode;
+import org.vu.aso.next.common.EMovingMode;
 
-import org.vu.advselforg.robotcontroller.NxtBridge;
-import org.vu.advselforg.robotcontroller.SensorData;
+import org.vu.aso.next.pc.NxtBridge;
+import org.vu.aso.next.pc.SensorData;
 
 import jadex.runtime.IFilter;
 import jadex.runtime.Plan;
