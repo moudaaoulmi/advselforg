@@ -8,94 +8,91 @@ import org.vu.advselforg.common.NxtProtocol;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.StringTokenizer;
 
-import lejos.nxt.remote.NXTProtocol;
 import lejos.pc.comm.NXTConnector;
 
 public class NxtBridge {
 
-	NXTConnector conn;
+	NXTConnector connection;
 	InputStream in;
 	OutputStream out;
 	SensorData sensorData = new SensorData();
 
-	public NxtBridge(String nxtName, ESensorType port1, ESensorType port2, ESensorType port3,
-			ESensorType port4, EMotorPort pilotPortLeft, EMotorPort pilotPortRight,
-			Boolean MotorReverse, float wheelDiameter, float trackWidth)
-			throws InterruptedException, IOException {
+	public NxtBridge(String nxtName, ESensorType port1, ESensorType port2, ESensorType port3, ESensorType port4,
+			EMotorPort pilotPortLeft, EMotorPort pilotPortRight, Boolean MotorReverse, float wheelDiameter,
+			float trackWidth) throws InterruptedException, IOException {
 
-		conn = new NXTConnector();
-		conn.connectTo("btspp://" + nxtName);
+		connection = new NXTConnector();
+		connection.connectTo("btspp://" + nxtName);
 
-		in = conn.getInputStream();
-		out = conn.getOutputStream();
+		in = connection.getInputStream();
+		out = connection.getOutputStream();
 		Thread.sleep(1000);
 
 		int reverse = MotorReverse ? 1 : 0;
 
-		String initMessage = buildMessage(wheelDiameter, trackWidth, NxtProtocol.INIT, port1
-				.ordinal(), port2.ordinal(), port3.ordinal(), port4.ordinal(), pilotPortLeft
-				.ordinal(), pilotPortRight.ordinal(), reverse);
+		String initMessage = buildMessage(wheelDiameter, trackWidth, NxtProtocol.INIT, port1.ordinal(),
+				port2.ordinal(), port3.ordinal(), port4.ordinal(), pilotPortLeft.ordinal(), pilotPortRight.ordinal(),
+				reverse);
 
 		communicateToNxt(initMessage);
 	}
 
-	public void MoveForward(int distance) throws IOException {
+	public void moveForward(int distance) throws IOException {
 		String message = buildMessage(NxtProtocol.FORWARD, distance);
 		sensorData.setLastCommand(EMovingMode.FORWARD);
 		communicateToNxt(message);
 	}
 
-	public SensorData RequestSensorData() throws IOException {
+	public SensorData requestSensorData() throws IOException {
 		String message = buildMessage(NxtProtocol.SENSOR_DATA);
 		sensorData.processMessage(communicateToNxt(message));
 		// TODO
 		return sensorData;// processResponse(sensorData);
 	}
 
-	public void MoveBackward(int distance) throws IOException {
+	public void moveBackward(int distance) throws IOException {
 		String message = buildMessage(NxtProtocol.BACKWARD, distance);
 		sensorData.setLastCommand(EMovingMode.BACKWARD);
 		communicateToNxt(message);
 	}
 
-	public void TurnLeft(int angle) throws IOException {
+	public void turnLeft(int angle) throws IOException {
 		String message = buildMessage(NxtProtocol.TURN_LEFT, angle);
 		sensorData.setLastCommand(EMovingMode.TURNING);
 		communicateToNxt(message);
 	}
 
-	public void TurnRight(int angle) throws IOException {
+	public void turnRight(int angle) throws IOException {
 		String message = buildMessage(NxtProtocol.TURN_RIGHT, angle);
 		sensorData.setLastCommand(EMovingMode.TURNING);
 		communicateToNxt(message);
 	}
 
-	public void ResetTrafeldistance() throws IOException {
+	public void resetTravelDistance() throws IOException {
 		String message = buildMessage(NxtProtocol.RESET_TRAVEL_DISTANCE);
 		communicateToNxt(message);
 	}
 
-	public void PerformScan(int port, int fromAngle, int toAngle) throws IOException {
+	public void performScan(int port, int fromAngle, int toAngle) throws IOException {
 		String message = buildMessage(NxtProtocol.PERFORM_SCAN, fromAngle, toAngle);
 		communicateToNxt(message);
 	}
 
-	public void Stop() throws IOException {
+	public void stop() throws IOException {
 		String message = buildMessage(NxtProtocol.STOP);
 		communicateToNxt(message);
 	}
 
-	public void Exit() throws IOException {
+	public void exit() throws IOException {
 		String message = buildMessage(NxtProtocol.EXIT);
 		communicateToNxt(message);
 	}
 
 	public void close() throws IOException {
-		this.Stop();
-		this.Exit();
-		conn.close();
+		this.stop();
+		this.exit();
+		connection.close();
 	}
 
 	// Build a normal message

@@ -1,6 +1,5 @@
 package org.vu.advselforg.agentcontroller;
 
-
 import java.io.IOException;
 
 import org.vu.advselforg.common.EMovingMode;
@@ -13,6 +12,7 @@ import jadex.runtime.Plan;
 
 public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 
+	private static final long serialVersionUID = 1L;
 	NxtBridge robot;
 	int step = 0;
 
@@ -21,12 +21,13 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 	int oldTraveledDistance = 0;
 	int oldTopSonarDistance = -1;
 	int oldBottomSonarDistance = -1;
-	
+
 	boolean wasTurning = false;
 	boolean wasScanning = false;
 	boolean hasScanned = false;
 	boolean wasDrivingBackward = false;
-	SensorData sensorData; 
+	SensorData sensorData;
+
 	public void body() {
 		initialize();
 	}
@@ -42,32 +43,26 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 
 		while (true) {
 			try {
-				sensorData = robot.RequestSensorData();
-				if(sensorData.isScanning() == false){
-					if(hasScanned == true){
-						//Process scanresult.
+				sensorData = robot.requestSensorData();
+				if (sensorData.isScanning() == false) {
+					if (hasScanned == true) {
+						// Process scanresult.
 						processMotorRotation();
 					}
-					
-					
+
 					boolean isTurningOrMovingBackward = sensorData.isTurningOrMovingBackward();
 					EMovingMode lastCommand = sensorData.lastCommand();
-			
-	
+
 					processTurningUpdate(isTurningOrMovingBackward, lastCommand);
 					processDriveBackwardUpdate(isTurningOrMovingBackward, lastCommand);
 					processTouchSensor();
 					processSonarSensor();
 					processTravelDistance();
-					
-	
-					
-					stepProcessing();			
-					//processTachoMeterReding();
-				}else
-				{
+
+					stepProcessing();
+					// processTachoMeterReading();
+				} else {
 					hasScanned = true;
-					
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -80,10 +75,10 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 			setBelief("turning", false);
 			System.out.println("Turn completed.");
 			wasTurning = false;
-			robot.ResetTrafeldistance();
+			robot.resetTravelDistance();
 			oldTraveledDistance = 0;
-			//TODO CALIBRATE
-			//robot.calibrateTurret(EMotorPort.B);
+			// TODO CALIBRATE
+			// robot.calibrateTurret(EMotorPort.B);
 		}
 		if (isTurningOrDrivingBack && lastCommand == EMovingMode.TURNING && !wasTurning) {
 			wasTurning = true;
@@ -95,7 +90,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 			setBelief("drivingBackwards", false);
 			System.out.println("Driving backwards completed.");
 			wasDrivingBackward = false;
-			robot.ResetTrafeldistance();
+			robot.resetTravelDistance();
 			oldTraveledDistance = 0;
 		}
 		if (isTurningOrDrivingBack && lastCommand == EMovingMode.BACKWARD && !wasDrivingBackward) {
@@ -104,7 +99,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		}
 	}
 
-	private void processTachoMeterReding() {
+	private void processTachoMeterReading() {
 		if (!sensorData.atDesiredMotorSpeed()) {
 			setBelief("tachometerProblem", true);
 			System.out.println("Tachometer problem encountered.");
@@ -113,25 +108,25 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 
 	private void processTravelDistance() {
 		int traveledDistance = sensorData.getTravelDistance();
-		//if ((traveledDistance - oldTraveledDistance) >= 1) {
-			setBelief("distanceTraveled", traveledDistance);
-			oldTraveledDistance = traveledDistance;
-			System.out.println("Traveled " + traveledDistance + " cm.");
-		//}
+		// if ((traveledDistance - oldTraveledDistance) >= 1) {
+		setBelief("distanceTraveled", traveledDistance);
+		oldTraveledDistance = traveledDistance;
+		System.out.println("Traveled " + traveledDistance + " cm.");
+		// }
 	}
 
 	private void processMotorRotation() throws IOException {
-	//	boolean isScanning = sensorData.isScanning();
-	//	if (wasScanning && !isScanning) {
-	//		setBelief("scanningArea", false);
-	//		System.out.println("Motor rotation completed.");
-	//		robot.ResetTrafeldistance();
-	//		oldTraveledDistance = 0;
-	//		wasTurning = false;
-	//	}
-	//	if (!wasTurning && isScanning) {
-	//		wasTurning = true;
-	//	}
+		// boolean isScanning = sensorData.isScanning();
+		// if (wasScanning && !isScanning) {
+		// setBelief("scanningArea", false);
+		// System.out.println("Motor rotation completed.");
+		// robot.ResetTrafeldistance();
+		// oldTraveledDistance = 0;
+		// wasTurning = false;
+		// }
+		// if (!wasTurning && isScanning) {
+		// wasTurning = true;
+		// }
 	}
 
 	private void processSonarSensor() {
@@ -172,15 +167,15 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 	}
 
 	private void setBelief(String BeliefName, Object beliefValue) {
-		try{
-		getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
-		getExternalAccess().getBeliefbase().getBelief(BeliefName).modified();
-		}catch(Exception e){
-			//sometimes I get an concurrent update error.. Jadex still works, but then I need to make sure that 
-			//This belief still is updated.
-			setBelief(BeliefName,beliefValue);
+		try {
+			getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
+			getExternalAccess().getBeliefbase().getBelief(BeliefName).modified();
+		} catch (Exception e) {
+			// sometimes I get an concurrent update error.. Jadex still works,
+			// but then I need to make sure that
+			// This belief still is updated.
+			setBelief(BeliefName, beliefValue);
 		}
-		
 	}
 
 	private void stepProcessing() {
@@ -191,7 +186,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		}
 		// Calibrate turret each 100 steps.
 		if (step % 100 == 0) {
-			//robot.calibrateTurret(EMotorPort.B);
+			// robot.calibrateTurret(EMotorPort.B);
 		}
 	}
 }

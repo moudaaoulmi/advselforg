@@ -16,9 +16,9 @@ public class TachometerTest {
 		
 		SensorData data;
 		
-		bridge.PerformScan(1, 90, -90);
+		bridge.performScan(1, 90, -90);
 		do {
-			data = bridge.RequestSensorData();
+			data = bridge.requestSensorData();
 		} while (data.isScanning());
 		System.out.println("Angle: " + data.getClosestblockAngle());
 		System.out.println("Distance: " + data.getClosestblockDistance());
