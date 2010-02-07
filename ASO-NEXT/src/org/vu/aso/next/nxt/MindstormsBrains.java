@@ -67,7 +67,7 @@ public class MindstormsBrains {
 
 	private void parseMessage(String[] message) throws Exception {
 		if (message[0].charAt(0) != '\u0000') {
-			int command = new Integer(message[0]);
+			int command = Integer.parseInt(message[0]);
 			switch (command) {
 			case NxtProtocol.EXIT:
 				sendMessage(NxtProtocol.EXIT + ";");
@@ -139,45 +139,45 @@ public class MindstormsBrains {
 
 	private void initSensors(String[] config) {
 		sensors = new INxtSensor[4];
-		initSensor(SensorPort.S1, 0, new Integer(config[1]));
-		initSensor(SensorPort.S2, 1, new Integer(config[2]));
-		initSensor(SensorPort.S3, 2, new Integer(config[3]));
-		initSensor(SensorPort.S4, 3, new Integer(config[4]));
+		initSensor(SensorPort.S1, 0, Integer.parseInt(config[1]), true);
+		initSensor(SensorPort.S2, 1, Integer.parseInt(config[2]), true);
+		initSensor(SensorPort.S3, 2, Integer.parseInt(config[3]), true);
+		initSensor(SensorPort.S4, 3, Integer.parseInt(config[4]), true);
 	}
 
-	private void initSensor(SensorPort port, int portNumber, int type) {
+	private void initSensor(SensorPort port, int portNumber, int type, boolean toBeMonitored) {
 		switch (type) {
 		case NxtProtocol.NO_SENSOR:
 			sensors[portNumber] = null;
 			data.sensorTypes[portNumber] = ESensorType.NONE;
 			break;
 		case NxtProtocol.ULTRASONIC_SENSOR:
-			sensors[portNumber] = new NxtUltrasonicSensor(port);
+			sensors[portNumber] = new NxtUltrasonicSensor(port, toBeMonitored);
 			data.sensorTypes[portNumber] = ESensorType.ULTRASONIC;
 			break;
 		case NxtProtocol.LIGHT_SENSOR:
-			sensors[portNumber] = new NxtLightSensor(port);
+			sensors[portNumber] = new NxtLightSensor(port, toBeMonitored);
 			data.sensorTypes[portNumber] = ESensorType.LIGHT;
 			break;
 		case NxtProtocol.SOUND_SENSOR:
-			sensors[portNumber] = new NxtSoundSensor(port);
+			sensors[portNumber] = new NxtSoundSensor(port, toBeMonitored);
 			data.sensorTypes[portNumber] = ESensorType.SOUND;
 			break;
 		case NxtProtocol.TOUCH_SENSOR:
-			sensors[portNumber] = new NxtTouchSensor(port);
+			sensors[portNumber] = new NxtTouchSensor(port, toBeMonitored);
 			data.sensorTypes[portNumber] = ESensorType.TOUCH;
 			break;
 		case NxtProtocol.RFID_SENSOR:
-			sensors[portNumber] = new NxtRFIDSensor(port);
+			sensors[portNumber] = new NxtRFIDSensor(port, toBeMonitored);
 			data.sensorTypes[portNumber] = ESensorType.RFID;
 			break;
 		}
 	}
 
 	private void initPilot(String[] config) {
-		boolean motorReverse = new Integer(config[7]) == 1 ? true : false;
-		pilot = new TachoPilot(new Float(config[8]), new Float(config[9]), motors[new Integer(
-				config[5]) - 1], motors[new Integer(config[6]) - 1], motorReverse);
+		boolean motorReverse = Integer.parseInt(config[7]) == 1 ? true : false;
+		pilot = new TachoPilot(Float.parseFloat(config[8]), Float.parseFloat(config[9]), motors[Integer.parseInt(
+				config[5]) - 1], motors[Integer.parseInt(config[6]) - 1], motorReverse);
 		pilot.setMoveSpeed(15);
 		pilot.regulateSpeed(true);
 	}
@@ -221,28 +221,28 @@ public class MindstormsBrains {
 	}
 
 	private void forward(String[] message) {
-		float distance = new Float(message[1]);
+		float distance = Float.parseFloat(message[1]);
 		if (distance > 0) {
 			pilot.travel(distance, true); // Non-blocking call
 		}
 	}
 
 	private void backward(String[] message) {
-		float distance = new Float(message[1]);
+		float distance = Float.parseFloat(message[1]);
 		if (distance > 0) {
 			pilot.travel(distance * -1, true);
 		}
 	}
 
 	private void turnLeft(String[] message) {
-		float angle = new Float(message[1]);
+		float angle = Float.parseFloat(message[1]);
 		if (angle > 0) {
 			pilot.rotate(angle);
 		}
 	}
 
 	private void turnRight(String[] message) {
-		float angle = new Float(message[1]);
+		float angle = Float.parseFloat(message[1]);
 		if (angle > 0) {
 			pilot.rotate(angle * -1);
 		}

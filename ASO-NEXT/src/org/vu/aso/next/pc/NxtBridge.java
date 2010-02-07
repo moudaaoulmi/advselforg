@@ -18,9 +18,10 @@ public class NxtBridge {
 	OutputStream out;
 	SensorData sensorData = new SensorData();
 
-	public NxtBridge(String nxtName, ESensorType port1, ESensorType port2, ESensorType port3, ESensorType port4,
-			EMotorPort pilotPortLeft, EMotorPort pilotPortRight, Boolean MotorReverse, float wheelDiameter,
-			float trackWidth) throws InterruptedException, IOException {
+	public NxtBridge(String nxtName, ESensorType port1, boolean monitorPort1, ESensorType port2, boolean monitorPort2,
+			ESensorType port3, boolean monitorPort3, ESensorType port4, boolean monitorPort4, EMotorPort pilotPortLeft,
+			EMotorPort pilotPortRight, Boolean MotorReverse, float wheelDiameter, float trackWidth)
+			throws InterruptedException, IOException {
 
 		connection = new NXTConnector();
 		connection.connectTo("btspp://" + nxtName);
@@ -29,11 +30,15 @@ public class NxtBridge {
 		out = connection.getOutputStream();
 		Thread.sleep(1000);
 
-		int reverse = MotorReverse ? 1 : 0;
+		int reverse = MotorReverse ? NxtProtocol.TRUE : NxtProtocol.FALSE;
+		int monitorPort1_int = monitorPort1 ? NxtProtocol.TRUE : NxtProtocol.FALSE;
+		int monitorPort2_int = monitorPort2 ? NxtProtocol.TRUE : NxtProtocol.FALSE;
+		int monitorPort3_int = monitorPort3 ? NxtProtocol.TRUE : NxtProtocol.FALSE;
+		int monitorPort4_int = monitorPort4 ? NxtProtocol.TRUE : NxtProtocol.FALSE;
 
 		String initMessage = buildMessage(wheelDiameter, trackWidth, NxtProtocol.INIT, port1.ordinal(),
-				port2.ordinal(), port3.ordinal(), port4.ordinal(), pilotPortLeft.ordinal(), pilotPortRight.ordinal(),
-				reverse);
+				monitorPort1_int, port2.ordinal(), monitorPort2_int, port3.ordinal(), monitorPort3_int,
+				port4.ordinal(), monitorPort4_int, pilotPortLeft.ordinal(), pilotPortRight.ordinal(), reverse);
 
 		communicateToNxt(initMessage);
 	}
@@ -47,8 +52,7 @@ public class NxtBridge {
 	public SensorData requestSensorData() throws IOException {
 		String message = buildMessage(NxtProtocol.SENSOR_DATA);
 		sensorData.processMessage(communicateToNxt(message));
-		// TODO
-		return sensorData;// processResponse(sensorData);
+		return sensorData;
 	}
 
 	public void moveBackward(int distance) throws IOException {
