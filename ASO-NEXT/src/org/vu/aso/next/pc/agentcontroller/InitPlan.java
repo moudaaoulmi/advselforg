@@ -17,7 +17,7 @@ public class InitPlan extends BeliefUpdatingPlan {
 	@Override
 	public void body() {
 		NxtBridge robot;
-
+	
 		EMotorPort leftMotorPort = EMotorPort.A;
 		EMotorPort rightMotorPort = EMotorPort.C;
 		boolean motorReverse = false;
