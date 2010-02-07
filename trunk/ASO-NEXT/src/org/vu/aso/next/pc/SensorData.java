@@ -1,5 +1,6 @@
 package org.vu.aso.next.pc;
 
+import org.vu.aso.next.common.ELightSensorValue;
 import org.vu.aso.next.common.EMotorPort;
 import org.vu.aso.next.common.EMovingMode;
 
@@ -82,13 +83,6 @@ public class SensorData {
 		} else {
 			return false;
 		}
-
-		// if(_lastCommand == EMovingMode.BACKWARD || _lastCommand ==
-		// EMovingMode.TURNING){
-		// return true;
-		// }else{
-		// return false;
-		// }
 	}
 
 	public EMovingMode lastCommand() {
