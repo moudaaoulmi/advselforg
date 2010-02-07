@@ -1,6 +1,7 @@
 package org.vu.aso.next.pc.agentcontroller;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.vu.aso.next.pc.NxtBridge;
 
@@ -27,7 +28,12 @@ public class DriveBackwardPlan extends Plan {
 	}
 
 	private void setBelief(String BeliefName, Object beliefValue) {
-		getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
-		getExternalAccess().getBeliefbase().getBelief(BeliefName).modified();
+		try{
+		    Thread.sleep(new Random().nextInt(20));
+			getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
+			getExternalAccess().getBeliefbase().getBelief(BeliefName).modified();
+		}catch(Exception e){
+			setBelief(BeliefName, beliefValue);
+		}
 	}
 }

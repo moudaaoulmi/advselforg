@@ -74,12 +74,6 @@
 				<condition>!$beliefbase.drivingBackward &amp;&amp;	$beliefbase.WIMRunning </condition>
 			</trigger>
 		</plan>
-		<plan name="objectInGripper">
-			<body> new ProcessObjectChangedPlan()</body>
-			<trigger>
-			 	<beliefchange ref="objectInGripper"/>
-			</trigger>
-		</plan>
 		<plan name="actionDriveBackwards">
 			<body>new DriveBackwardPlan(60)</body>
 			<trigger>

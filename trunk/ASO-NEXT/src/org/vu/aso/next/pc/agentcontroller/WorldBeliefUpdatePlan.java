@@ -1,6 +1,7 @@
 package org.vu.aso.next.pc.agentcontroller;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.vu.aso.next.common.ELightSensorValue;
 import org.vu.aso.next.common.EMovingMode;
@@ -88,7 +89,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 
 	private void processDriveBackwardUpdate(boolean isTurningOrDrivingBack, EMovingMode lastCommand) throws IOException {
 		if (!isTurningOrDrivingBack && lastCommand == EMovingMode.BACKWARD && wasDrivingBackward) {
-			setBelief("drivingBackwards", false);
+			setBelief("drivingBackward", false);
 			System.out.println("Driving backwards completed.");
 			wasDrivingBackward = false;
 			robot.resetTravelDistance();
@@ -160,12 +161,20 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 
 	private void setBelief(String BeliefName, Object beliefValue) {
 		try {
+			Thread.sleep(new Random().nextInt(20));
 			getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
 			getExternalAccess().getBeliefbase().getBelief(BeliefName).modified();
 		} catch (Exception e) {
+			e.printStackTrace();
 			// sometimes I get an concurrent update error.. Jadex still works,
 			// but then I need to make sure that
 			// this belief still is updated.
+			try {
+				Thread.sleep(new Random().nextInt(20));
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			setBelief(BeliefName, beliefValue);
 		}
 	}
