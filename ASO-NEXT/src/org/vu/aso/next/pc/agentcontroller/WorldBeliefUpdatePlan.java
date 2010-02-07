@@ -9,8 +9,9 @@ import org.vu.aso.next.pc.NxtBridge;
 import org.vu.aso.next.pc.SensorData;
 
 import jadex.runtime.IFilter;
+import jadex.runtime.Plan;
 
-public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnable {
+public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 	NxtBridge robot;
@@ -27,10 +28,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	boolean wasScanning = false;
 	boolean wasDrivingBackward = false;
 	SensorData sensorData;
-
-	public WorldBeliefUpdatePlan() {
-		System.out.println("Thread STARTED!!!!!------------------------------------------------------" + Thread.currentThread().getId());
-	}
 	
 	public void body() {
 		
@@ -39,15 +36,12 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	private void initialize() {
 		robot = (NxtBridge) getBeliefbase().getBelief("robot").getFact();
-		
 		new Thread(this).start();
 		getBeliefbase().getBelief("WIMRunning").setFact(true);
 		waitFor(IFilter.NEVER);
 	}
 
 	public void run() {
-		
-		
 		while (true) {
 			try {
 				sensorData = robot.requestSensorData();
@@ -162,6 +156,10 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			System.out.println("Cluster released.");
 			touchPressed = false;
 		}
+	}
+	
+	private void setBelief(String BeliefName, Object beliefValue) {
+		getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
 	}
 
 	private void stepProcessing() {
