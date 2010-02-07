@@ -37,7 +37,21 @@ public class MindstormsBrains {
 		data = new NxtSensorData();
 		monitor = new NxtSensorMonitor(this, data);
 
+		addButtonListener();
 		waitForConnection();
+	}
+
+	private void addButtonListener() {
+		Button.ENTER.addButtonListener(new ButtonListener() {
+			@Override
+			public void buttonPressed(Button arg0) {
+				exit();
+			}
+
+			@Override
+			public void buttonReleased(Button arg0) {
+			}
+		});
 	}
 
 	private void waitForConnection() {
@@ -52,15 +66,10 @@ public class MindstormsBrains {
 	}
 
 	private void run() throws Exception {
-		/*
-		 * while (true) { String[] message = getMessage();
-		 * parseMessage(message); }
-		 */
-		for (int step = 0; step < 1000; step++) {
+		while (true) {
 			String[] message = getMessage();
 			parseMessage(message);
 		}
-		exit();
 	}
 
 	// Parsing stuff
@@ -131,7 +140,7 @@ public class MindstormsBrains {
 		motors[0] = new Motor(MotorPort.A);
 		motors[1] = new Motor(MotorPort.B);
 		motors[2] = new Motor(MotorPort.C);
-		
+
 		for (Motor motor : motors) {
 			motor.resetTachoCount();
 		}
@@ -176,8 +185,8 @@ public class MindstormsBrains {
 
 	private void initPilot(String[] config) {
 		boolean motorReverse = Integer.parseInt(config[7]) == 1 ? true : false;
-		pilot = new TachoPilot(Float.parseFloat(config[8]), Float.parseFloat(config[9]), motors[Integer.parseInt(
-				config[5]) - 1], motors[Integer.parseInt(config[6]) - 1], motorReverse);
+		pilot = new TachoPilot(Float.parseFloat(config[8]), Float.parseFloat(config[9]), motors[Integer
+				.parseInt(config[5]) - 1], motors[Integer.parseInt(config[6]) - 1], motorReverse);
 		pilot.setMoveSpeed(15);
 		pilot.regulateSpeed(true);
 	}
