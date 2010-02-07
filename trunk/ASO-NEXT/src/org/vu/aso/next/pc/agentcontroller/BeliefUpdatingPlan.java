@@ -8,9 +8,9 @@ public abstract class BeliefUpdatingPlan extends Plan {
 
 	private static final long serialVersionUID = -809120734331923007L;
 
-	protected synchronized void setBelief(String BeliefName, Object beliefValue) {
+	protected void setBelief(String BeliefName, Object beliefValue) {
 		/*try {
-			Thread.sleep(new Random().nextInt(20));
+		//	Thread.sleep(new Random().nextInt(20));
 			getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
 			getExternalAccess().getBeliefbase().getBelief(BeliefName).modified();
 		} catch (Exception e) {
@@ -26,8 +26,11 @@ public abstract class BeliefUpdatingPlan extends Plan {
 			}
 			setBelief(BeliefName, beliefValue);
 		}*/
+		
+		//getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
+		
 		getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
-		getExternalAccess().getBeliefbase().getBelief(BeliefName).modified();
+		//getExternalAccess().getBeliefbase().getBelief(BeliefName).modified();
 	}
 
 }

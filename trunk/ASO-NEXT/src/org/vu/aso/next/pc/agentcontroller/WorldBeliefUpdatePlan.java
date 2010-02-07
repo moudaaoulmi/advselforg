@@ -28,19 +28,26 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	boolean wasDrivingBackward = false;
 	SensorData sensorData;
 
+	public WorldBeliefUpdatePlan() {
+		System.out.println("Thread STARTED!!!!!------------------------------------------------------" + Thread.currentThread().getId());
+	}
+	
 	public void body() {
+		
 		initialize();
 	}
 
 	private void initialize() {
 		robot = (NxtBridge) getBeliefbase().getBelief("robot").getFact();
+		
 		new Thread(this).start();
 		getBeliefbase().getBelief("WIMRunning").setFact(true);
 		waitFor(IFilter.NEVER);
 	}
 
 	public void run() {
-
+		
+		
 		while (true) {
 			try {
 				sensorData = robot.requestSensorData();
