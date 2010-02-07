@@ -79,6 +79,12 @@
 				<condition>$beliefbase.clusterDetected</condition>
 			</trigger>
 		</plan>
+		<plan name="ProcessObjectChangedPlan">
+			<body>new ProcessObjectChangedPlan()</body>
+			<trigger>
+				<beliefchange ref="objectInGripper"/>
+			</trigger>
+		</plan>
 	</plans>
 
 

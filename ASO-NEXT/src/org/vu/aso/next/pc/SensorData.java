@@ -7,7 +7,7 @@ import org.vu.aso.next.common.EMovingMode;
 public class SensorData {
 
 	private final static int LIGHT_OBJECT_THRESHOLD = 45;
-	private final static int DARK_OBJECT_THRESHOLD = 35;
+	private final static int DARK_OBJECT_THRESHOLD = 38;
 	
 	private int _distanceUpperSonar;
 	private int _distanceLowerSonar;
