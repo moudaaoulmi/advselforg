@@ -50,6 +50,13 @@
 		<belief name="distanceTraveled" class="int">
 			<fact>0</fact>
 		</belief>
+		<belief name="closestBlockDistance" class="int">
+			<fact>0</fact>
+		</belief>
+		<belief name="distanceBlockAngle" class="int">
+			<fact>0</fact>
+		</belief>
+		
 		<belief name="turning" class="boolean">
 			<fact>false</fact>
 		</belief>
