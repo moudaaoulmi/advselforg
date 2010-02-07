@@ -1,7 +1,7 @@
 <agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://jadex.sourceforge.net/jadex
 						http://jadex.sourceforge.net/jadex-0.96.xsd"
-	name="Mindstorms" package="org.vu.advselforg.agentcontroller">
+	name="Mindstorms" package="org.vu.aso.next.pc.agentcontroller">
 
 	<imports>
 		<import>java.util.logging.*</import>
@@ -40,13 +40,6 @@
 		<belief name="bottomSonarDistance" class="int">
 			<fact>0</fact>
 		</belief>
-		<belief name="sonarAngle" class="int">
-			<fact>0</fact>
-		</belief>
-
-		<belief name="tachometerProblem" class="boolean">
-			<fact>false</fact>
-		</belief>
 		<belief name="distanceTraveled" class="int">
 			<fact>0</fact>
 		</belief>
@@ -69,17 +62,22 @@
 				<condition>!$beliefbase.Initialized </condition>
 			</trigger>
 		</plan>
-		<plan name="StartWorldUpdatePlan">
+		<plan name="startWorldUpdatePlan">
 			<body> new WorldBeliefUpdatePlan()</body>
 			<trigger>
 				<condition>$beliefbase.Initialized</condition>
 			</trigger>
 		</plan>
 		<plan name="actionDrive">
-			<body> new DriveForwardPlan()</body>
+			<body> new DriveForwardPlan(10000)</body>
 			<trigger>
-				<condition>!$beliefbase.drivingBackwards &amp;&amp;
-					$beliefbase.WIMRunning </condition>
+				<condition>!$beliefbase.drivingBackward &amp;&amp;	$beliefbase.WIMRunning </condition>
+			</trigger>
+		</plan>
+		<plan name="objectInGripper">
+			<body> new ProcessObjectChangedPlan()</body>
+			<trigger>
+			 	<beliefchange ref="objectInGripper"/>
 			</trigger>
 		</plan>
 		<plan name="actionDriveBackwards">

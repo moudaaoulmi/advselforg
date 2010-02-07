@@ -25,7 +25,7 @@ public class NxtBridge {
 
 		connection = new NXTConnector();
 		connection.connectTo("btspp://" + nxtName);
-
+        
 		in = connection.getInputStream();
 		out = connection.getOutputStream();
 		Thread.sleep(1000);
