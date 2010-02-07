@@ -1,12 +1,10 @@
 package org.vu.aso.next.pc.agentcontroller;
 
-import jadex.runtime.Plan;
-
 import java.io.IOException;
 
 import org.vu.aso.next.pc.NxtBridge;
 
-public class DriveBackwardPlan extends Plan {
+public class DriveBackwardPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = -8758789822720288236L;
 	int distance;
@@ -23,12 +21,6 @@ public class DriveBackwardPlan extends Plan {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		getBeliefbase().getBelief("drivingBackward").setFact(true);
-		getBeliefbase().getBelief("drivingBackward").modified();
-		
-		//setBelief("drivingBackward", true);
+		setBelief("drivingBackward", true);
 	}
-	
-	
-
 }
