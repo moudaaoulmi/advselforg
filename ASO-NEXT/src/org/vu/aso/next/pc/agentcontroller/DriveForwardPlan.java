@@ -4,9 +4,7 @@ import java.io.IOException;
 
 import org.vu.aso.next.pc.NxtBridge;
 
-import jadex.runtime.Plan;
-
-public class DriveForwardPlan extends Plan {
+public class DriveForwardPlan extends UpdatingPlan {
 
 	private static final long serialVersionUID = 6054116585490038881L;
 

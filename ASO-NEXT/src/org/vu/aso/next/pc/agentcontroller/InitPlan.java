@@ -4,9 +4,7 @@ import org.vu.aso.next.common.EMotorPort;
 import org.vu.aso.next.common.ESensorType;
 import org.vu.aso.next.pc.NxtBridge;
 
-import jadex.runtime.Plan;
-
-public class InitPlan extends Plan {
+public class InitPlan extends UpdatingPlan {
 
 	private static final long serialVersionUID = 2961883448970106007L;
 
@@ -33,12 +31,10 @@ public class InitPlan extends Plan {
 			robot = new NxtBridge(agentName, port1, false, port2, true, port3, true, port4, true, leftMotorPort,
 					rightMotorPort, motorReverse, wheelDiameter, trackWidth);
 
-			getBeliefbase().getBelief("robot").setFact(robot);
-			getBeliefbase().getBelief("robot").modified();
+			setBelief("robot", robot);
 			System.out.println("Connected");
 
-			getBeliefbase().getBelief("Initialized").setFact(true);
-			getBeliefbase().getBelief("Initialized").modified();
+			setBelief("Initialized", true);
 
 		} catch (Exception e) {
 			System.out.println("Whoops, does not compute. Cannot connect to robot.");

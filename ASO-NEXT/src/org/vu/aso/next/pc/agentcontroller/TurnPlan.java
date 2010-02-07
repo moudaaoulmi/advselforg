@@ -5,9 +5,7 @@ import java.util.Random;
 
 import org.vu.aso.next.pc.NxtBridge;
 
-import jadex.runtime.Plan;
-
-public class TurnPlan extends Plan {
+public class TurnPlan extends UpdatingPlan {
 
 	private static final long serialVersionUID = -6357593709536921293L;
 

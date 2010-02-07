@@ -1,8 +1,8 @@
 package org.vu.aso.next.pc.agentcontroller;
 
-import jadex.runtime.Plan;
+public class ProcessScanResultPlan extends UpdatingPlan {
 
-public class ProcessScanResultPlan extends Plan {
+	private static final long serialVersionUID = -2794600599638789494L;
 
 	@Override
 	public void body() {
