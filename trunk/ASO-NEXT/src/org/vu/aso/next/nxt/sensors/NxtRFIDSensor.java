@@ -7,13 +7,19 @@ import lejos.nxt.addon.RFIDSensor;
 
 public class NxtRFIDSensor implements INxtSensor {
 	RFIDSensor sensor;
+	boolean toBeMonitored;
 	
-	public NxtRFIDSensor(SensorPort port) {
+	public NxtRFIDSensor(SensorPort port, boolean toBeMonitored) {
 		sensor = new RFIDSensor(port);
+		this.toBeMonitored = toBeMonitored;
 	}
 	
 	public String getValue() {
 		return new Long(sensor.readTransponderAsLong(false)).toString();
+	}
+	
+	public boolean toBeMonitored() {
+		return toBeMonitored;
 	}
 	
 }

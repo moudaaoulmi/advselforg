@@ -28,7 +28,9 @@ public class NxtSensorMonitor extends Thread {
 			}
 
 			for (int i = 0; i < data.sensorValues.length; i++) {
-				data.sensorValues[i] = parent.sensors[i].getValue();
+				if (parent.sensors[i].toBeMonitored()) {
+					data.sensorValues[i] = parent.sensors[i].getValue();
+				}
 			}
 			for (int i = 0; i < data.tachoCounts.length; i++) {
 				data.tachoCounts[i] = new Integer(parent.motors[i].getTachoCount()).toString();
