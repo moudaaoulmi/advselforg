@@ -1,6 +1,6 @@
 @echo off
-call nxjc -cp src src\org\vu\aso\next\nxt\MindstormsBrains.java
+call nxjc -cp src -d bin src\org\vu\aso\next\nxt\MindstormsBrains.java
 echo Compiled...
-call nxjlink org.vu.aso.next.nxt.MindstormsBrains -cp src -o bin\MindstormsBrains.nxj
+call nxjlink org.vu.aso.next.nxt.MindstormsBrains -cp bin -o bin\MindstormsBrains.nxj
 echo Linked...
 call nxjupload -b -n JOEY bin\MindstormsBrains.nxj
