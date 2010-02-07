@@ -1,7 +1,6 @@
 package org.vu.aso.next.pc.agentcontroller;
 
 import java.io.IOException;
-import java.util.Random;
 
 import org.vu.aso.next.common.ELightSensorValue;
 import org.vu.aso.next.common.EMovingMode;
@@ -10,9 +9,8 @@ import org.vu.aso.next.pc.NxtBridge;
 import org.vu.aso.next.pc.SensorData;
 
 import jadex.runtime.IFilter;
-import jadex.runtime.Plan;
 
-public class WorldBeliefUpdatePlan extends Plan implements Runnable {
+public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 	NxtBridge robot;
@@ -58,11 +56,11 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 					processTurningUpdate(isTurningOrMovingBackward, lastCommand);
 					processDriveBackwardUpdate(isTurningOrMovingBackward, lastCommand);
 					processTouchSensor();
-					processSonarSensor();
+					//processSonarSensor();
 					processLightSensor();
-					processTravelDistance();
+					//processTravelDistance();
 
-					stepProcessing();
+					//stepProcessing();
 				} else {
 					wasScanning = true;
 				}
@@ -156,26 +154,6 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 			setBelief("clusterDetected", false);
 			System.out.println("Cluster released.");
 			touchPressed = false;
-		}
-	}
-
-	private void setBelief(String BeliefName, Object beliefValue) {
-		try {
-			Thread.sleep(new Random().nextInt(20));
-			getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
-			getExternalAccess().getBeliefbase().getBelief(BeliefName).modified();
-		} catch (Exception e) {
-			e.printStackTrace();
-			// sometimes I get an concurrent update error.. Jadex still works,
-			// but then I need to make sure that
-			// this belief still is updated.
-			try {
-				Thread.sleep(new Random().nextInt(20));
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			setBelief(BeliefName, beliefValue);
 		}
 	}
 
