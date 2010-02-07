@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.vu.aso.next.pc.NxtBridge;
 
-public class ScanPlan extends UpdatingPlan {
+public class ScanPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = -4810536547608546819L;
 

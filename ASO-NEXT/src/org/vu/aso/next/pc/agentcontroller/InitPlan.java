@@ -4,7 +4,7 @@ import org.vu.aso.next.common.EMotorPort;
 import org.vu.aso.next.common.ESensorType;
 import org.vu.aso.next.pc.NxtBridge;
 
-public class InitPlan extends UpdatingPlan {
+public class InitPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = 2961883448970106007L;
 

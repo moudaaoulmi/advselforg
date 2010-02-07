@@ -49,7 +49,6 @@
 		<belief name="distanceBlockAngle" class="int">
 			<fact>0</fact>
 		</belief>
-		
 		<belief name="turning" class="boolean">
 			<fact>false</fact>
 		</belief>

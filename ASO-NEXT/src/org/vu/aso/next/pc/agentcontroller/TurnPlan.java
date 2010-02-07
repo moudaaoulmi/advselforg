@@ -5,7 +5,7 @@ import java.util.Random;
 
 import org.vu.aso.next.pc.NxtBridge;
 
-public class TurnPlan extends UpdatingPlan {
+public class TurnPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = -6357593709536921293L;
 
