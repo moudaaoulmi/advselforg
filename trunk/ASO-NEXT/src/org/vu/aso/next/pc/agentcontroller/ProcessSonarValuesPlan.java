@@ -1,8 +1,8 @@
 package org.vu.aso.next.pc.agentcontroller;
 
-import jadex.runtime.Plan;
+public class ProcessSonarValuesPlan extends UpdatingPlan{
 
-public class ProcessSonarValuesPlan extends Plan{
+	private static final long serialVersionUID = 3028644234210806163L;
 
 	@Override
 	public void body() {

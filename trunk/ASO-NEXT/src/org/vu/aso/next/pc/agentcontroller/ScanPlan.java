@@ -4,9 +4,7 @@ import java.io.IOException;
 
 import org.vu.aso.next.pc.NxtBridge;
 
-import jadex.runtime.Plan;
-
-public class ScanPlan extends Plan {
+public class ScanPlan extends UpdatingPlan {
 
 	private static final long serialVersionUID = -4810536547608546819L;
 

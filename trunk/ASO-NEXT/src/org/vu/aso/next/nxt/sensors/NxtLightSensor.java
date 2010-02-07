@@ -10,7 +10,7 @@ public class NxtLightSensor implements INxtSensor {
 	boolean toBeMonitored;
 	
 	public NxtLightSensor(SensorPort port, boolean toBeMonitored) {
-		sensor = new LightSensor(port, true);
+		sensor = new LightSensor(port);
 		this.toBeMonitored = toBeMonitored;
 	}
 	

@@ -1,12 +1,10 @@
 package org.vu.aso.next.pc.agentcontroller;
 
-import java.io.Console;
-
 import org.vu.aso.next.common.ELightSensorValue;
 
-import jadex.runtime.Plan;
+public class ProcessObjectChangedPlan extends UpdatingPlan{
 
-public class ProcessObjectChangedPlan extends Plan{
+	private static final long serialVersionUID = -7333884474349273251L;
 
 	@Override
 	public void body() {
