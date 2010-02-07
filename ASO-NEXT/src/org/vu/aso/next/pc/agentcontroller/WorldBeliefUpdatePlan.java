@@ -26,7 +26,6 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 	boolean wasTurning = false;
 	ELightSensorValue oldLightValue = ELightSensorValue.NO_OBJECT;
 	boolean wasScanning = false;
-	boolean hasScanned = false;
 	boolean wasDrivingBackward = false;
 	SensorData sensorData;
 
@@ -47,9 +46,9 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 			try {
 				sensorData = robot.requestSensorData();
 				if (sensorData.isScanning() == false) {
-					if (hasScanned == true) {
-						// Process scanresult.
-						processMotorRotation();
+					if (wasScanning == true) {
+						processScanResults();
+						wasScanning = false;
 					}
 
 					boolean isTurningOrMovingBackward = sensorData.isTurningOrMovingBackward();
@@ -63,9 +62,8 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 					processTravelDistance();
 
 					stepProcessing();
-					// processTachoMeterReading();
 				} else {
-					hasScanned = true;
+					wasScanning = true;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -102,13 +100,6 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		}
 	}
 
-//	private void processTachoMeterReading() {
-//		if (!sensorData.atDesiredMotorSpeed()) {
-//			setBelief("tachometerProblem", true);
-//			System.out.println("Tachometer problem encountered.");
-//		}
-//	}
-
 	private void processLightSensor(){
 		if(sensorData.getObjectType() != oldLightValue){
 			setBelief("objectInGripper", sensorData.getObjectType());
@@ -125,18 +116,9 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		// }
 	}
 
-	private void processMotorRotation() throws IOException {
-		// boolean isScanning = sensorData.isScanning();
-		// if (wasScanning && !isScanning) {
-		// setBelief("scanningArea", false);
-		// System.out.println("Motor rotation completed.");
-		// robot.ResetTrafeldistance();
-		// oldTraveledDistance = 0;
-		// wasTurning = false;
-		// }
-		// if (!wasTurning && isScanning) {
-		// wasTurning = true;
-		// }
+	private void processScanResults() throws IOException {
+		setBelief("closestBlockDistance", sensorData.getClosestblockDistance());
+		setBelief("distanceBlockAngle", sensorData.getClosestblockAngle());	
 	}
 
 	private void processSonarSensor() {
