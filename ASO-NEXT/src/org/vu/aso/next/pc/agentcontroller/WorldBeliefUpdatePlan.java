@@ -2,6 +2,7 @@ package org.vu.aso.next.pc.agentcontroller;
 
 import java.io.IOException;
 
+import org.vu.aso.next.common.ELightSensorValue;
 import org.vu.aso.next.common.EMovingMode;
 
 import org.vu.aso.next.pc.NxtBridge;
@@ -23,6 +24,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 	int oldBottomSonarDistance = -1;
 
 	boolean wasTurning = false;
+	ELightSensorValue oldLightValue = ELightSensorValue.NO_OBJECT;
 	boolean wasScanning = false;
 	boolean hasScanned = false;
 	boolean wasDrivingBackward = false;
@@ -57,6 +59,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 					processDriveBackwardUpdate(isTurningOrMovingBackward, lastCommand);
 					processTouchSensor();
 					processSonarSensor();
+					processLightSensor();
 					processTravelDistance();
 
 					stepProcessing();
@@ -99,13 +102,20 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		}
 	}
 
-	private void processTachoMeterReading() {
-		if (!sensorData.atDesiredMotorSpeed()) {
-			setBelief("tachometerProblem", true);
-			System.out.println("Tachometer problem encountered.");
-		}
-	}
+//	private void processTachoMeterReading() {
+//		if (!sensorData.atDesiredMotorSpeed()) {
+//			setBelief("tachometerProblem", true);
+//			System.out.println("Tachometer problem encountered.");
+//		}
+//	}
 
+	private void processLightSensor(){
+		if(sensorData.getObjectType() != oldLightValue){
+			setBelief("objectInGripper", sensorData.getObjectType());
+			oldLightValue = sensorData.getObjectType();
+		}	
+	}
+	
 	private void processTravelDistance() {
 		int traveledDistance = sensorData.getTravelDistance();
 		// if ((traveledDistance - oldTraveledDistance) >= 1) {
@@ -173,7 +183,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		} catch (Exception e) {
 			// sometimes I get an concurrent update error.. Jadex still works,
 			// but then I need to make sure that
-			// This belief still is updated.
+			// this belief still is updated.
 			setBelief(BeliefName, beliefValue);
 		}
 	}

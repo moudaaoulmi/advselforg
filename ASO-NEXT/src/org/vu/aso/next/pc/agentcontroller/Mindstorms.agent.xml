@@ -9,7 +9,8 @@
 		<import>jadex.adapter.fipa.SFipa</import>
 		<import>jadex.adapter.fipa.*</import>
 		<import>jadex.util.*</import>
-		<import>org.vu.advselforg.robotcontroller.*</import>
+		<import>org.vu.aso.next.pc.*</import>
+		<import>org.vu.aso.next.common.*</import>
 	</imports>
 
 	<beliefs>
@@ -26,9 +27,10 @@
 		<belief name="drivingBackward" class="boolean">
 			<fact>false</fact>
 		</belief>
-		<belief name="objectInGripper" class="String">
-			<fact>"nothing"</fact>
+		<belief name="objectInGripper" class="ELightSensorValue">
+			<fact>ELightSensorValue.NO_OBJECT</fact>
 		</belief>
+		
 		<belief name="scanningArea" class="boolean">
 			<fact>false</fact>
 		</belief>
