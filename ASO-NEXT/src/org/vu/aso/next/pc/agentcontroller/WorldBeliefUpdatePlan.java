@@ -173,4 +173,13 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 			// robot.calibrateTurret(EMotorPort.B);
 		}
 	}
+	
+	public void finalize(){
+		try {
+			robot.exit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
