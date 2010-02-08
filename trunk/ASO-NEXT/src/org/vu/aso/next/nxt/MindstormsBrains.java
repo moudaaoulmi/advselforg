@@ -57,6 +57,7 @@ public class MindstormsBrains {
 	private void waitForConnection() {
 		LCD.drawString("Waiting...", 0, 0);
 		LCD.refresh();
+		Sound.twoBeeps();
 		BTConnection conn = Bluetooth.waitForConnection();
 		LCD.clear();
 		LCD.drawString("Connected", 0, 0);
