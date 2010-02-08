@@ -8,10 +8,11 @@ public class InitPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = 2961883448970106007L;
 
-	String agentName;
+	String robotName;
 
 	public InitPlan(String agentName) {
-		this.agentName = agentName;
+		this.robotName = agentName;
+		setBelief("robotName", agentName);
 	}
 
 	@Override
@@ -28,10 +29,10 @@ public class InitPlan extends BeliefUpdatingPlan {
 		float wheelDiameter = 5.4f;
 		float trackWidth = 15.1f;
 		try {
-			robot = new NxtBridge(agentName, port1, false, port2, true, port3, true, port4, true, leftMotorPort,
+			robot = new NxtBridge(robotName, port1, false, port2, true, port3, true, port4, true, leftMotorPort,
 					rightMotorPort, motorReverse, wheelDiameter, trackWidth);
 
-			Debug(agentName, "Im connected");
+			printDebug("is connected");
 			
 			setBelief("robot", robot);
 			System.out.println("Connected");

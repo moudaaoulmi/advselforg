@@ -15,6 +15,9 @@
 
 	<beliefs>
 		<belief name="robot" class="NxtBridge" />
+		<belief name="robotName" class="String">
+			<fact>Unknown</fact>
+		</belief>
 		<belief name="Initialized" class="boolean">
 			<fact>false</fact>
 		</belief>
@@ -30,7 +33,7 @@
 		<belief name="objectInGripper" class="ELightSensorValue">
 			<fact>ELightSensorValue.NO_OBJECT</fact>
 		</belief>
-		
+
 		<belief name="scanningArea" class="boolean">
 			<fact>false</fact>
 		</belief>
@@ -70,7 +73,8 @@
 		<plan name="actionDrive">
 			<body> new DriveForwardPlan(10000)</body>
 			<trigger>
-				<condition>!$beliefbase.drivingBackward &amp;&amp;	$beliefbase.WIMRunning </condition>
+				<condition>!$beliefbase.drivingBackward &amp;&amp;
+					$beliefbase.WIMRunning </condition>
 			</trigger>
 		</plan>
 		<plan name="actionDriveBackwards">
@@ -82,11 +86,10 @@
 		<plan name="ProcessObjectChangedPlan">
 			<body>new ProcessObjectChangedPlan()</body>
 			<trigger>
-				<beliefchange ref="objectInGripper"/>
+				<beliefchange ref="objectInGripper" />
 			</trigger>
 		</plan>
 	</plans>
-
 
 	<configurations>
 		<configuration name="default">
