@@ -6,9 +6,10 @@ import org.vu.aso.next.common.EMovingMode;
 
 public class SensorData {
 
-	private final static int LIGHT_OBJECT_THRESHOLD = 45;
-	private final static int DARK_OBJECT_THRESHOLD = 38;
-	
+	private final static int MINIMUM = 0, MAXIMUM = 1;
+	private final static int[] LIGHT_OBJECT_INTERVAL = { 45, 70 };
+	private final static int[] DARK_OBJECT_INTERVAL = { 30, 40 };
+
 	private int _distanceUpperSonar;
 	private int _distanceLowerSonar;
 	private int _lightSensorValue;
@@ -39,17 +40,17 @@ public class SensorData {
 	public int getDistanceLowerSonar() {
 		return _distanceLowerSonar;
 	}
-	
+
 	public int getLightSensorValue() {
 		return _lightSensorValue;
 	}
-	
+
 	public ELightSensorValue getObjectType() {
-		if(_lightSensorValue > LIGHT_OBJECT_THRESHOLD){
+		if (_lightSensorValue >= LIGHT_OBJECT_INTERVAL[MINIMUM] && _lightSensorValue <= LIGHT_OBJECT_INTERVAL[MAXIMUM]) {
 			return ELightSensorValue.LIGHT_OBJECT;
-		}else if(_lightSensorValue < DARK_OBJECT_THRESHOLD){
+		} else if (_lightSensorValue >= DARK_OBJECT_INTERVAL[MINIMUM] && _lightSensorValue <= DARK_OBJECT_INTERVAL[MAXIMUM]) {
 			return ELightSensorValue.DARK_OBJECT;
-		}else{
+		} else {
 			return ELightSensorValue.NO_OBJECT;
 		}
 	}
@@ -73,7 +74,7 @@ public class SensorData {
 	}
 
 	public boolean isScanning() {
-		
+
 		return _isScanning;
 	}
 
@@ -88,15 +89,14 @@ public class SensorData {
 	public EMovingMode lastCommand() {
 		return _lastCommand;
 	}
-	
-	public int getClosestblockAngle(){
+
+	public int getClosestblockAngle() {
 		return _closestblockAngle;
 	}
-	
-	public int getClosestblockDistance(){
+
+	public int getClosestblockDistance() {
 		return _closestBlockDistance;
 	}
-	
 
 	public int getTravelDistance() {
 		return _travelDistance;
@@ -124,7 +124,7 @@ public class SensorData {
 		_isMoving = message[9].equals("1") ? true : false;
 
 		_isScanning = message[10].equals("1") ? true : false;
-		
+
 		_closestblockAngle = Integer.parseInt(message[11]);
 		_closestBlockDistance = Integer.parseInt(message[12]);
 	}
