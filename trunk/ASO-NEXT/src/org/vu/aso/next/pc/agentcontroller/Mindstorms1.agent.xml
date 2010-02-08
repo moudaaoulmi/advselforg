@@ -15,9 +15,7 @@
 
 	<beliefs>
 		<belief name="robot" class="NxtBridge" />
-		<belief name="robotName" class="String">
-			<fact>Unknown</fact>
-		</belief>
+		<belief name="robotName" class="String" />
 		<belief name="Initialized" class="boolean">
 			<fact>false</fact>
 		</belief>
