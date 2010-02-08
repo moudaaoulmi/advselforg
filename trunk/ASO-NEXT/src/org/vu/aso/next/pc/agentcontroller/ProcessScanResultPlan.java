@@ -6,7 +6,6 @@ public class ProcessScanResultPlan extends BeliefUpdatingPlan {
 
 	@Override
 	public void body() {
-		// TODO Auto-generated method stub
 		
 	}
 

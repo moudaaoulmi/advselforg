@@ -11,7 +11,7 @@ public abstract class BeliefUpdatingPlan extends Plan {
 	}
 	
 	protected void printDebug(String message){
-		System.out.println(getBeliefbase().getBelief("robotName") + " " + message);
+		System.out.println((String) getBeliefbase().getBelief("robotName").getFact() + " " + message);
 	}
 
 }

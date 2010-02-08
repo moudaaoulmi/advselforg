@@ -30,7 +30,6 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 	SensorData sensorData;
 	
 	public void body() {
-		
 		initialize();
 	}
 
@@ -74,7 +73,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 	private void processTurningUpdate(boolean isTurningOrDrivingBack, EMovingMode lastCommand) throws IOException {
 		if (!isTurningOrDrivingBack && lastCommand == EMovingMode.TURNING && wasTurning) {
 			setBelief("turning", false);
-			System.out.println("Turn completed.");
+			printDebug("completed a turn");
 			wasTurning = false;
 			robot.resetTravelDistance();
 			oldTraveledDistance = 0;
@@ -89,14 +88,14 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 	private void processDriveBackwardUpdate(boolean isTurningOrDrivingBack, EMovingMode lastCommand) throws IOException {
 		if (!isTurningOrDrivingBack && lastCommand == EMovingMode.BACKWARD && wasDrivingBackward) {
 			setBelief("drivingBackward", false);
-			System.out.println("Driving backwards completed.");
+			printDebug("completed driving backward");
 			wasDrivingBackward = false;
 			robot.resetTravelDistance();
 			oldTraveledDistance = 0;
 		}
 		if (isTurningOrDrivingBack && lastCommand == EMovingMode.BACKWARD && !wasDrivingBackward) {
 			wasDrivingBackward = true;
-			System.out.println("Still driving backward.");
+			printDebug("is still driving backward");
 		}
 	}
 
@@ -112,7 +111,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		// if ((traveledDistance - oldTraveledDistance) >= 1) {
 		setBelief("distanceTraveled", traveledDistance);
 		oldTraveledDistance = traveledDistance;
-		System.out.println("Traveled " + traveledDistance + " cm.");
+		printDebug("traveled " + traveledDistance + " cm");
 		// }
 	}
 
@@ -147,19 +146,23 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		boolean touched = sensorData.getTouchSensorPressed();
 		if (touched && !touchPressed) {
 			setBelief("clusterDetected", true);
-			System.out.println("Cluster detected.");
+			printDebug("detected a cluster");
 			touchPressed = true;
 		}
 
 		if (!touched && touchPressed) {
 			setBelief("clusterDetected", false);
-			System.out.println("Cluster released.");
+			printDebug("released a cluster");
 			touchPressed = false;
 		}
 	}
 	
 	private void setBelief(String BeliefName, Object beliefValue) {
 		getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
+	}
+	
+	private void printDebug(String message){
+		System.out.println((String) getExternalAccess().getBeliefbase().getBelief("robotName").getFact() + " " + message);
 	}
 
 	private void stepProcessing() {
@@ -171,15 +174,6 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		// Calibrate turret each 100 steps.
 		if (step % 100 == 0) {
 			// robot.calibrateTurret(EMotorPort.B);
-		}
-	}
-	
-	public void finalize(){
-		try {
-			robot.exit();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 }
