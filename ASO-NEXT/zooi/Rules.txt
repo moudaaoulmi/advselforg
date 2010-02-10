@@ -1,0 +1,99 @@
+General Rules:
+
+Rule #1 //When nothing happens, move forward
+If True Then
+	Perform(MoveForwardPlan(10))
+End
+
+Rule #2 //When a wall or robot is detected, avoid it
+If Observed(DistanceUpperSonar < 10) And (DepositAtWall, False) Then
+	Perform(TurnPlan)
+End
+
+Rule #3 //When a cluster is detected, avoid it leaving all blocks in the cluster
+If Observed(SensorPress, True) And (DepositAtWall, False) Then
+	Perform(DropBlockPlan)
+	Belief(Collecting, False)
+	Belief(Searching, True)
+End
+
+Rule #4 //When a light object is collected, start searching for other blocks to form a cluster
+If Belief(Collecting, True) And Observed(LightSensor(LightObject)) And Observed(SensorPress, False) Then
+	Belief(Collecting, False)
+	Belief(DepositAtWall, False)
+	Belief(locationScanned, False) //Since it just collected a block it should scan the current area again.
+	Belief(Searching, True)
+End
+
+Rule #5 //When a dark object is collected, start moving it toward a wall
+If Belief(Collecting, True) And Observed(LightSensor(DarkObject)) And Observed(SensorPress, False) Then
+	Belief(Collecting, False)
+	Belief(Searching, False)
+	Belief(DepositAtWall, True)
+End
+
+Rules While Searching:
+
+Rule #6 //If the agent is searching for a block and it did not scan the current arrea yet then scan this area.
+If Belief(Searching, True) And Belief(locationScanned, False) Then
+	Perform(ScanPlan) //Creates closestBlockAngle and closestblockDistance if succesfull
+	Belief(locationScanned, True)
+	Belief(TravelDistanceLastScan(getTravelDistance))
+End
+
+Rule #7 //If the agent found a block at a certain angle but was still searching then it starts collecting
+If Belief(Searching, True) And Belief(closestBlockAngle, Angle) Then
+	Perform(TurnToPlan(Angle))
+	Belief(Searching, False)
+	Belief(locationScanned, False)
+	Belief(Collecting, True)
+	Belief(DistanceToObject(getClosestblockDistance), True)
+End
+
+Rule #8 //After traveling some distance you no longer belief that you scanned the current area
+If Belief(Searching, True) And Belief(TravelDistanceLastScan(Distance)) And (getTravelDistance - Distance > 50) Then
+	Belief(locationScanned, False)
+End
+
+Rule #9 //In other modes the fact that a location is scanned is meaningless. If it gets back to searching it should always start scanning the current arrea.
+If Belief(Searching, False) And Belief(locationScanned, True) Then
+	Belief(locationScanned, False)
+End
+
+Rules While Collecting:
+
+Rule #10 //If the agent is collecting a block, update the belief about its distance
+If Belief(Collecting, True) And Belief(DistanceToObject(Distance)) Then
+	Perform(DriveForwardPlan(10))
+	Drop Belief(DistanceToObject(Distance))
+	Belief(DistanceToObject(Distance - 10))
+End
+
+Rule #11 //If driving for more then the distance you belief the block is away and you did not collect a block then you start searching again.
+If Belief(Collecting, True) And Belief(DistanceToObject(Distance)) And Distance < -10 Then
+	Drop Belief(DistanceToObject(Distance))
+	Belief(Collecting, False)
+	Belief(Searching, True)
+End
+
+Rules While Depositing At A Wall:
+
+Rule #12 //If a cluster is detected then try to move away with the block
+If Belief(DepositAtWall, True) And Observed(SensorPress, True) Then
+	Perform(TurnPlan)
+End
+
+Rule #13 //If a wall is detected then drop the block
+If Belief(DepositAtWall, True) And Observed(DistanceUpperSonar < 10) Then
+	Perform(DropBlockPlan)
+	Belief(DepositAtWall, False)
+	Belief(Searching, True)
+End
+
+Plans:
+
+DropBlockPlan(
+	Perform(DriveBackwardPlan(20))
+	Perform(TurnPlan)
+)
+
