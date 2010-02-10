@@ -125,6 +125,7 @@ public class MindstormsBrains {
 				break;
 			default:
 				LCD.drawString("No command!", 0, 0);
+				sendMessage(NxtProtocol.UNKNOWN_COMMAND + ";");
 				break;
 			}
 		}

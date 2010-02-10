@@ -14,6 +14,7 @@ public class NxtProtocol {
 	public final static int RESET_TRAVEL_DISTANCE = 8;
 	public final static int PERFORM_SCAN = 9;
 	public final static int CALIBRATE_TURRET = 10;
+	public final static int UNKNOWN_COMMAND = 11;
 	
 	// Sensors
 	public final static int NO_SENSOR = 0;
