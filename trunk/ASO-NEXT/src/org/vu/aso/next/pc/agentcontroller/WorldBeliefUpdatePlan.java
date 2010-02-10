@@ -9,9 +9,8 @@ import org.vu.aso.next.pc.NxtBridge;
 import org.vu.aso.next.pc.SensorData;
 
 import jadex.runtime.IFilter;
-import jadex.runtime.Plan;
 
-public class WorldBeliefUpdatePlan extends Plan implements Runnable {
+public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 	NxtBridge robot;
@@ -19,7 +18,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 
 	boolean touchPressed = false;
 
-	int oldTraveledDistance = 0;
+	int oldTravelDistance = 0;
 	int oldTopSonarDistance = -1;
 	int oldBottomSonarDistance = -1;
 
@@ -28,7 +27,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 	boolean wasScanning = false;
 	boolean wasDrivingBackward = false;
 	SensorData sensorData;
-	
+
 	public void body() {
 		initialize();
 	}
@@ -56,11 +55,11 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 					processTurningUpdate(isTurningOrMovingBackward, lastCommand);
 					processDriveBackwardUpdate(isTurningOrMovingBackward, lastCommand);
 					processTouchSensor();
-					//processSonarSensor();
+					// processSonarSensor();
 					processLightSensor();
-					//processTravelDistance();
+					processTravelDistance();
 
-					//stepProcessing();
+					stepProcessing();
 				} else {
 					wasScanning = true;
 				}
@@ -76,9 +75,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 			printDebug("completed a turn");
 			wasTurning = false;
 			robot.resetTravelDistance();
-			oldTraveledDistance = 0;
-			// TODO CALIBRATE
-			// robot.calibrateTurret(EMotorPort.B);
+			oldTravelDistance = 0;
 		}
 		if (isTurningOrDrivingBack && lastCommand == EMovingMode.TURNING && !wasTurning) {
 			wasTurning = true;
@@ -91,7 +88,7 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 			printDebug("completed driving backward");
 			wasDrivingBackward = false;
 			robot.resetTravelDistance();
-			oldTraveledDistance = 0;
+			oldTravelDistance = 0;
 		}
 		if (isTurningOrDrivingBack && lastCommand == EMovingMode.BACKWARD && !wasDrivingBackward) {
 			wasDrivingBackward = true;
@@ -99,25 +96,24 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		}
 	}
 
-	private void processLightSensor(){
-		if(sensorData.getObjectType() != oldLightValue){
+	private void processLightSensor() {
+		if (sensorData.getObjectType() != oldLightValue) {
 			setBelief("objectInGripper", sensorData.getObjectType());
 			oldLightValue = sensorData.getObjectType();
-		}	
+		}
 	}
-	
+
 	private void processTravelDistance() {
-		int traveledDistance = sensorData.getTravelDistance();
-		// if ((traveledDistance - oldTraveledDistance) >= 1) {
-		setBelief("distanceTraveled", traveledDistance);
-		oldTraveledDistance = traveledDistance;
-		printDebug("traveled " + traveledDistance + " cm");
-		// }
+		int travelDistance = sensorData.getTravelDistance();
+		if (travelDistance != oldTravelDistance) {
+			setBelief("distanceTraveled", travelDistance);
+			oldTravelDistance = travelDistance;
+		}
 	}
 
 	private void processScanResults() throws IOException {
 		setBelief("closestBlockDistance", sensorData.getClosestblockDistance());
-		setBelief("distanceBlockAngle", sensorData.getClosestblockAngle());	
+		setBelief("distanceBlockAngle", sensorData.getClosestblockAngle());
 	}
 
 	private void processSonarSensor() {
@@ -156,24 +152,23 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 			touchPressed = false;
 		}
 	}
-	
-	private void setBelief(String BeliefName, Object beliefValue) {
-		getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
-	}
-	
-	private void printDebug(String message){
-		System.out.println((String) getExternalAccess().getBeliefbase().getBelief("robotName").getFact() + " " + message);
-	}
 
-	private void stepProcessing() {
-		// reset step
+	private void stepProcessing() throws IOException {
 		step++;
-		if (step == Integer.MAX_VALUE) {
+
+		// Calibrate turret each 100 steps.
+		if (step == 100) {
+			robot.calibrateTurret();
 			step = 0;
 		}
-		// Calibrate turret each 100 steps.
-		if (step % 100 == 0) {
-			// robot.calibrateTurret(EMotorPort.B);
-		}
+	}
+
+	protected void setBelief(String BeliefName, Object beliefValue) {
+		getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
+	}
+
+	protected void printDebug(String message) {
+		System.out.println((String) getExternalAccess().getBeliefbase().getBelief("robotName").getFact() + " "
+				+ message);
 	}
 }

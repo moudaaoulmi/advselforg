@@ -10,7 +10,7 @@ public class ScanPlan extends BeliefUpdatingPlan {
 	public void body() {
 		printDebug("executed ScanPlan()");
 		try {
-			getRobot().performScan(2, -85, 85);
+			getRobot().performScan(-85, 85);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

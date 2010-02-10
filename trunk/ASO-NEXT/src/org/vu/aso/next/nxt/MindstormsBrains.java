@@ -119,6 +119,10 @@ public class MindstormsBrains {
 				scheduleScan(message);
 				sendMessage(NxtProtocol.PERFORM_SCAN + ";");
 				break;
+			case NxtProtocol.CALIBRATE_TURRET:
+				calibrateTurret();
+				sendMessage(NxtProtocol.PERFORM_SCAN + ";");
+				break;
 			default:
 				LCD.drawString("No command!", 0, 0);
 				break;
@@ -260,6 +264,10 @@ public class MindstormsBrains {
 
 	private void resetTravelDistance() {
 		pilot.reset();
+	}
+	
+	private void calibrateTurret() {
+		motors[1].rotateTo(0, true);
 	}
 
 	private void scheduleScan(String[] message) {

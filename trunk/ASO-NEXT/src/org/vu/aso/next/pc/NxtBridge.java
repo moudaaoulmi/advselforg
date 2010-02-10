@@ -43,16 +43,16 @@ public class NxtBridge {
 		communicateToNxt(initMessage);
 	}
 
-	public void moveForward(int distance) throws IOException {
-		String message = buildMessage(NxtProtocol.FORWARD, distance);
-		sensorData.setLastCommand(EMovingMode.FORWARD);
-		communicateToNxt(message);
-	}
-
 	public SensorData requestSensorData() throws IOException {
 		String message = buildMessage(NxtProtocol.SENSOR_DATA);
 		sensorData.processMessage(communicateToNxt(message));
 		return sensorData;
+	}
+	
+	public void moveForward(int distance) throws IOException {
+		String message = buildMessage(NxtProtocol.FORWARD, distance);
+		sensorData.setLastCommand(EMovingMode.FORWARD);
+		communicateToNxt(message);
 	}
 
 	public void moveBackward(int distance) throws IOException {
@@ -78,7 +78,12 @@ public class NxtBridge {
 		communicateToNxt(message);
 	}
 
-	public void performScan(int port, int fromAngle, int toAngle) throws IOException {
+	public void calibrateTurret() throws IOException {
+		String message = buildMessage(NxtProtocol.CALIBRATE_TURRET);
+		communicateToNxt(message);
+	}
+	
+	public void performScan(int fromAngle, int toAngle) throws IOException {
 		String message = buildMessage(NxtProtocol.PERFORM_SCAN, fromAngle, toAngle);
 		communicateToNxt(message);
 	}
