@@ -8,6 +8,7 @@ public class ScanPlan extends BeliefUpdatingPlan {
 
 	@Override
 	public void body() {
+		printDebug("executed ScanPlan()");
 		try {
 			getRobot().performScan(2, -85, 85);
 		} catch (IOException e) {
