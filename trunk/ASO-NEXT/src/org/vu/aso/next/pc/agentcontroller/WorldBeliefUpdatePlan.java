@@ -92,7 +92,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		}
 		if (isTurningOrDrivingBack && lastCommand == EMovingMode.BACKWARD && !wasDrivingBackward) {
 			wasDrivingBackward = true;
-			printDebug("is still driving backward");
 		}
 	}
 
