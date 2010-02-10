@@ -5,11 +5,14 @@ If True Then
 	Perform(MoveForwardPlan(10))
 End
 
+
+// Hij gaat eerst achteruit en daarna pas draaien.
 Rule #2 //When a wall or robot is detected, avoid it
 If Observed(DistanceUpperSonar < 10) And (DepositAtWall, False) Then
 	Perform(TurnPlan)
 End
 
+// Deze is niet nodig, rule 4 en 5 fixen dat.
 Rule #3 //When a cluster is detected, avoid it leaving all blocks in the cluster
 If Observed(SensorPress, True) And (DepositAtWall, False) Then
 	Perform(DropBlockPlan)
