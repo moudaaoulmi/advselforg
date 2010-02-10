@@ -306,7 +306,7 @@ public class MindstormsBrains {
 		return message;
 	}
 
-	// Extra stuff
+	// Other stuff
 
 	public static void main(String[] args) {
 		try {
