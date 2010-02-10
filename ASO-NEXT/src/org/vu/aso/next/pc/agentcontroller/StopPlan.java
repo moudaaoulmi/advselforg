@@ -8,6 +8,7 @@ public class StopPlan extends BeliefUpdatingPlan {
 
 	@Override
 	public void body() {
+		printDebug("executed StopPlan()");
 		try {
 			getRobot().stop();
 		} catch (IOException e) {

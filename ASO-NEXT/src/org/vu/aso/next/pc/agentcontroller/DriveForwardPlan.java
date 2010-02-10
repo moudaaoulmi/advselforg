@@ -13,6 +13,7 @@ public class DriveForwardPlan extends BeliefUpdatingPlan {
 
 	@Override
 	public void body() {
+		printDebug("executed DriveForwardPlan(" + distance + ")");
 		try {
 			getRobot().moveForward(distance);
 		} catch (IOException e) {

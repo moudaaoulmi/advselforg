@@ -13,6 +13,7 @@ public class TurnRightPlan extends BeliefUpdatingPlan {
 
 	@Override
 	public void body() {
+		printDebug("executed TurnRightPlan(" + angle + ")");
 		try {
 			getRobot().turnRight(angle);
 		} catch (IOException e) {
