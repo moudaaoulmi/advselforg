@@ -12,20 +12,21 @@ import jadex.runtime.IFilter;
 
 public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7096221399333292349L;
+
 	NxtBridge robot;
 	int step = 0;
-
-	boolean touchPressed = false;
 
 	int oldTravelDistance = 0;
 	int oldTopSonarDistance = -1;
 	int oldBottomSonarDistance = -1;
+	ELightSensorValue oldLightValue = ELightSensorValue.NO_OBJECT;
 
 	boolean wasTurning = false;
-	ELightSensorValue oldLightValue = ELightSensorValue.NO_OBJECT;
 	boolean wasScanning = false;
 	boolean wasDrivingBackward = false;
+	boolean wasTouchPressed = false;
+
 	SensorData sensorData;
 
 	public void body() {
@@ -49,17 +50,14 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 						wasScanning = false;
 					}
 
-					boolean isTurningOrMovingBackward = sensorData.isTurningOrMovingBackward();
-					EMovingMode lastCommand = sensorData.lastCommand();
-
-					processTurningUpdate(isTurningOrMovingBackward, lastCommand);
-					processDriveBackwardUpdate(isTurningOrMovingBackward, lastCommand);
+					processTurningUpdate();
+					processDriveBackwardUpdate();
 					processTouchSensor();
 					processSonarSensor();
 					processLightSensor();
 					processTravelDistance();
 
-					stepProcessing();
+					processSteps();
 				} else {
 					wasScanning = true;
 				}
@@ -69,28 +67,30 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		}
 	}
 
-	private void processTurningUpdate(boolean isTurningOrDrivingBack, EMovingMode lastCommand) throws IOException {
-		if (!isTurningOrDrivingBack && lastCommand == EMovingMode.TURNING && wasTurning) {
+	private void processTurningUpdate() throws IOException {
+		if (!sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.TURNING && wasTurning) {
 			setBelief("turning", false);
 			printDebug("completed a turn");
 			wasTurning = false;
 			robot.resetTravelDistance();
 			oldTravelDistance = 0;
 		}
-		if (isTurningOrDrivingBack && lastCommand == EMovingMode.TURNING && !wasTurning) {
+		if (sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.TURNING && !wasTurning) {
 			wasTurning = true;
 		}
 	}
 
-	private void processDriveBackwardUpdate(boolean isTurningOrDrivingBack, EMovingMode lastCommand) throws IOException {
-		if (!isTurningOrDrivingBack && lastCommand == EMovingMode.BACKWARD && wasDrivingBackward) {
+	private void processDriveBackwardUpdate() throws IOException {
+		if (!sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.BACKWARD
+				&& wasDrivingBackward) {
 			setBelief("drivingBackward", false);
 			printDebug("completed driving backward");
 			wasDrivingBackward = false;
 			robot.resetTravelDistance();
 			oldTravelDistance = 0;
 		}
-		if (isTurningOrDrivingBack && lastCommand == EMovingMode.BACKWARD && !wasDrivingBackward) {
+		if (sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.BACKWARD
+				&& !wasDrivingBackward) {
 			wasDrivingBackward = true;
 		}
 	}
@@ -138,24 +138,22 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	private void processTouchSensor() {
 
-		boolean touched = sensorData.getTouchSensorPressed();
-		if (touched && !touchPressed) {
+		if (sensorData.getTouchSensorPressed() && !wasTouchPressed) {
 			setBelief("clusterDetected", true);
 			printDebug("detected a cluster");
-			touchPressed = true;
+			wasTouchPressed = true;
 		}
 
-		if (!touched && touchPressed) {
+		if (!sensorData.getTouchSensorPressed() && wasTouchPressed) {
 			setBelief("clusterDetected", false);
 			printDebug("released a cluster");
-			touchPressed = false;
+			wasTouchPressed = false;
 		}
 	}
 
-	private void stepProcessing() throws IOException {
+	private void processSteps() throws IOException {
 		step++;
 
-		// Calibrate turret each 100 steps.
 		if (step == 100) {
 			robot.calibrateTurret();
 			step = 0;
