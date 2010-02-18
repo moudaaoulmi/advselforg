@@ -73,6 +73,10 @@ public class SensorData {
 		return _atDesiredMotorSpeed;
 	}
 
+	public boolean isMoving() {
+		return _isMoving;
+	}
+	
 	public boolean isScanning() {
 
 		return _isScanning;
