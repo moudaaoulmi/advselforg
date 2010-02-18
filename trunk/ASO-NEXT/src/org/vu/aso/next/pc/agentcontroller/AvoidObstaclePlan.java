@@ -21,6 +21,8 @@ public class AvoidObstaclePlan extends BeliefUpdatingPlan {
 		}
 		setBelief("drivingBackward", true);
 		
+		while (getRobot().getSensorData().isMoving());
+		
 		try {
 			getRobot().moveBackward(distance);
 		} catch (IOException e) {
