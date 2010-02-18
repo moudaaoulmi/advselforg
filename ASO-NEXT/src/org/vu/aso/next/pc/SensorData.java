@@ -82,8 +82,24 @@ public class SensorData {
 		return _isScanning;
 	}
 
-	public boolean isTurningOrMovingBackward() {
-		if (_isMoving && _lastCommand != EMovingMode.FORWARD) {
+	public boolean isTurning() {
+		if (_isMoving && _lastCommand == EMovingMode.TURNING) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean isMovingForward() {
+		if (_isMoving && _lastCommand == EMovingMode.FORWARD) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean isMovingBackward() {
+		if (_isMoving && _lastCommand == EMovingMode.BACKWARD) {
 			return true;
 		} else {
 			return false;

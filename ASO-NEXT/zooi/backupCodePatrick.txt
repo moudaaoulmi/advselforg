@@ -185,3 +185,41 @@ public class WorldBeliefUpdatePlan extends Plan implements Runnable {
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+	private void processTurningUpdate() throws IOException {
+		if (!sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.TURNING && wasTurning) {
+			setBelief(BELIEF_TURNING, false);
+			printDebug("completed a turn");
+			wasTurning = false;
+			robot.resetTravelDistance();
+			oldTravelDistance = 0;
+		}
+		if (sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.TURNING && !wasTurning) {
+			wasTurning = true;
+		}
+	}
+
+	private void processDriveBackwardUpdate() throws IOException {
+		if (!sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.BACKWARD
+				&& wasDrivingBackward) {
+			setBelief(BELIEF_DRIVING_BACKWARD, false);
+			printDebug("completed driving backward");
+			wasDrivingBackward = false;
+			robot.resetTravelDistance();
+			oldTravelDistance = 0;
+		}
+		if (sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.BACKWARD
+				&& !wasDrivingBackward) {
+			wasDrivingBackward = true;
+		}
+	}

@@ -3,7 +3,6 @@ package org.vu.aso.next.pc.agentcontroller;
 import java.io.IOException;
 
 import org.vu.aso.next.common.ELightSensorValue;
-import org.vu.aso.next.common.EMovingMode;
 
 import org.vu.aso.next.pc.NxtBridge;
 import org.vu.aso.next.pc.SensorData;
@@ -76,29 +75,29 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processTurningUpdate() throws IOException {
-		if (!sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.TURNING && wasTurning) {
+		if (!sensorData.isTurning() && wasTurning) {
 			setBelief(BELIEF_TURNING, false);
 			printDebug("completed a turn");
 			wasTurning = false;
+			
 			robot.resetTravelDistance();
 			oldTravelDistance = 0;
 		}
-		if (sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.TURNING && !wasTurning) {
+		if (sensorData.isTurning() && !wasTurning) {
 			wasTurning = true;
 		}
 	}
 
 	private void processDriveBackwardUpdate() throws IOException {
-		if (!sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.BACKWARD
-				&& wasDrivingBackward) {
+		if (!sensorData.isMovingBackward() && wasDrivingBackward) {
 			setBelief(BELIEF_DRIVING_BACKWARD, false);
 			printDebug("completed driving backward");
 			wasDrivingBackward = false;
+			
 			robot.resetTravelDistance();
 			oldTravelDistance = 0;
 		}
-		if (sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.BACKWARD
-				&& !wasDrivingBackward) {
+		if (sensorData.isMovingBackward() && !wasDrivingBackward) {
 			wasDrivingBackward = true;
 		}
 	}
