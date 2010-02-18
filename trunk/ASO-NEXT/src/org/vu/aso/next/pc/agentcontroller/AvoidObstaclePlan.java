@@ -21,10 +21,11 @@ public class AvoidObstaclePlan extends BeliefUpdatingPlan {
 		}
 		setBelief("drivingBackward", true);
 		
-		while (getRobot().getSensorData().isMoving());
+		while ((Boolean) getBelief("drivingBackward")) {}
+		printDebug("finished driving backward");
 		
 		try {
-			getRobot().moveBackward(distance);
+			getRobot().turnLeft(90);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
