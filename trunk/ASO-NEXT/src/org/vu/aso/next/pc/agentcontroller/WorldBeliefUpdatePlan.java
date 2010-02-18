@@ -24,20 +24,18 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private static final String BELIEF_TOP_SONAR_DISTANCE = "topSonarDistance";
 	private static final String BELIEF_CLUSTER_DETECTED = "clusterDetected";
 	
-	NxtBridge robot;
-	int step = 0;
+	private NxtBridge robot;
+	private int step = 0;
 
-	int oldTravelDistance = 0;
-	int oldTopSonarDistance = -1;
-	int oldBottomSonarDistance = -1;
-	ELightSensorValue oldLightValue = ELightSensorValue.NO_OBJECT;
+	private int oldTravelDistance = 0;
+	private ELightSensorValue oldLightValue = ELightSensorValue.NO_OBJECT;
 
-	boolean wasTurning = false;
-	boolean wasScanning = false;
-	boolean wasDrivingBackward = false;
-	boolean wasTouchPressed = false;
+	private boolean wasTurning = false;
+	private boolean wasScanning = false;
+	private boolean wasDrivingBackward = false;
+	private boolean wasTouchPressed = false;
 
-	SensorData sensorData;
+	private SensorData sensorData;
 
 	public void body() {
 		initialize();

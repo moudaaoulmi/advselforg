@@ -13,10 +13,10 @@ import lejos.pc.comm.NXTConnector;
 
 public class NxtBridge {
 
-	NXTConnector connection;
-	InputStream in;
-	OutputStream out;
-	SensorData sensorData = new SensorData();
+	private NXTConnector connection;
+	private InputStream in;
+	private OutputStream out;
+	private SensorData sensorData = new SensorData();
 
 	public NxtBridge(String nxtName, ESensorType port1, boolean monitorPort1, ESensorType port2, boolean monitorPort2,
 			ESensorType port3, boolean monitorPort3, ESensorType port4, boolean monitorPort4, EMotorPort pilotPortLeft,
@@ -102,6 +102,10 @@ public class NxtBridge {
 		this.stop();
 		this.exit();
 		connection.close();
+	}
+	
+	public SensorData getSensorData() {
+		return this.sensorData;
 	}
 
 	// Build a normal message
