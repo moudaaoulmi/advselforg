@@ -6,22 +6,30 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 
 public class NxtUltrasonicSensor implements INxtSensor {
-	UltrasonicSensor sensor;
-	boolean toBeMonitored;
+	public UltrasonicSensor sensor;
+	private boolean toBeMonitored;
 	
 	public NxtUltrasonicSensor(SensorPort port, boolean toBeMonitored) {
 		sensor = new UltrasonicSensor(port);
-		sensor.off();
+		//sensor.off();
 		this.toBeMonitored = toBeMonitored;
 	}
 	
 	public String getValue() {
-		sensor.ping();
+		//sensor.ping();
 		return new Integer(sensor.getDistance()).toString();
 	}
 	
 	public boolean toBeMonitored() {
 		return toBeMonitored;
+	}
+	
+	public void on() {
+		sensor.continuous();
+	}
+
+	public void off() {
+		sensor.off();
 	}
 	
 }

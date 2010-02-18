@@ -14,6 +14,8 @@ public class ScanPlan extends BeliefUpdatingPlan {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		setBelief("areaScanned", true);
 	}
 
 }

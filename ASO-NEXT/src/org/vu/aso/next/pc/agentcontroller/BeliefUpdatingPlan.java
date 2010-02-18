@@ -1,5 +1,8 @@
 package org.vu.aso.next.pc.agentcontroller;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 import org.vu.aso.next.pc.NxtBridge;
 
 import jadex.runtime.Plan;
@@ -7,7 +10,12 @@ import jadex.runtime.Plan;
 public abstract class BeliefUpdatingPlan extends Plan {
 
 	private static final long serialVersionUID = -809120734331923007L;
+	protected SimpleDateFormat formatter;
 
+	public BeliefUpdatingPlan() {
+		formatter = new SimpleDateFormat("HH:mm:ss.SSS");
+	}
+	
 	protected NxtBridge getRobot() {
 		return (NxtBridge) getBeliefbase().getBelief("robot").getFact();
 	}
@@ -22,7 +30,7 @@ public abstract class BeliefUpdatingPlan extends Plan {
 	}
 
 	protected void printDebug(String message) {
-		System.out.println((String) getBeliefbase().getBelief("robotName").getFact() + " " + message);
+		System.out.println(formatter.format(new Date()) + " " + (String) getBeliefbase().getBelief("robotName").getFact() + " " + message);
 	}
 
 }
