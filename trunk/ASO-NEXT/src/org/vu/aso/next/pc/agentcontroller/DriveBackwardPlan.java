@@ -19,6 +19,5 @@ public class DriveBackwardPlan extends BeliefUpdatingPlan {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		setBelief("drivingBackward", true);
 	}
 }

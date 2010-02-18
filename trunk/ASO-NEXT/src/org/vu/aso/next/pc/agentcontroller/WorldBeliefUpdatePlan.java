@@ -2,7 +2,7 @@ package org.vu.aso.next.pc.agentcontroller;
 
 import java.io.IOException;
 
-import org.vu.aso.next.common.ELightSensorValue;
+import org.vu.aso.next.common.EObjectType;
 
 import org.vu.aso.next.pc.NxtBridge;
 import org.vu.aso.next.pc.SensorData;
@@ -27,7 +27,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private int step = 0;
 
 	private int oldTravelDistance = 0;
-	private ELightSensorValue oldLightValue = ELightSensorValue.NO_OBJECT;
+	private EObjectType oldObjectType = EObjectType.NO_OBJECT;
 
 	private boolean wasTurning = false;
 	private boolean wasScanning = false;
@@ -75,6 +75,11 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processTurningUpdate() throws IOException {
+		if (sensorData.isTurning() && !wasTurning) {
+			setBelief(BELIEF_TURNING, true);
+			wasTurning = true;
+		}
+		
 		if (!sensorData.isTurning() && wasTurning) {
 			setBelief(BELIEF_TURNING, false);
 			printDebug("completed a turn");
@@ -83,12 +88,14 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			robot.resetTravelDistance();
 			oldTravelDistance = 0;
 		}
-		if (sensorData.isTurning() && !wasTurning) {
-			wasTurning = true;
-		}
 	}
 
 	private void processDriveBackwardUpdate() throws IOException {
+		if (sensorData.isMovingBackward() && !wasDrivingBackward) {
+			setBelief(BELIEF_DRIVING_BACKWARD, true);
+			wasDrivingBackward = true;
+		}
+		
 		if (!sensorData.isMovingBackward() && wasDrivingBackward) {
 			setBelief(BELIEF_DRIVING_BACKWARD, false);
 			printDebug("completed driving backward");
@@ -97,23 +104,19 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			robot.resetTravelDistance();
 			oldTravelDistance = 0;
 		}
-		if (sensorData.isMovingBackward() && !wasDrivingBackward) {
-			wasDrivingBackward = true;
-		}
 	}
 
 	private void processLightSensor() {
-		if (sensorData.getObjectType() != oldLightValue) {
+		if (sensorData.getObjectType() != oldObjectType) {
 			setBelief(BELIEF_OBJECT_IN_GRIPPER, sensorData.getObjectType());
-			oldLightValue = sensorData.getObjectType();
+			oldObjectType = sensorData.getObjectType();
 		}
 	}
 
 	private void processTravelDistance() {
-		int travelDistance = sensorData.getTravelDistance();
-		if (travelDistance != oldTravelDistance) {
-			setBelief(BELIEF_DISTANCE_TRAVELED, travelDistance);
-			oldTravelDistance = travelDistance;
+		if (sensorData.getTravelDistance() != oldTravelDistance) {
+			setBelief(BELIEF_DISTANCE_TRAVELED, sensorData.getTravelDistance());
+			oldTravelDistance = sensorData.getTravelDistance();
 		}
 	}
 
@@ -127,7 +130,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processTouchSensor() {
-
 		if (sensorData.getTouchSensorPressed() && !wasTouchPressed) {
 			setBelief(BELIEF_CLUSTER_DETECTED, true);
 			printDebug("detected a cluster");

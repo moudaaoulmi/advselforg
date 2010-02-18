@@ -1,6 +1,6 @@
 package org.vu.aso.next.pc;
 
-import org.vu.aso.next.common.ELightSensorValue;
+import org.vu.aso.next.common.EObjectType;
 import org.vu.aso.next.common.EMotorPort;
 import org.vu.aso.next.common.EMovingMode;
 
@@ -45,13 +45,13 @@ public class SensorData {
 		return _lightSensorValue;
 	}
 
-	public ELightSensorValue getObjectType() {
+	public EObjectType getObjectType() {
 		if (_lightSensorValue >= LIGHT_OBJECT_INTERVAL[MINIMUM] && _lightSensorValue <= LIGHT_OBJECT_INTERVAL[MAXIMUM]) {
-			return ELightSensorValue.LIGHT_OBJECT;
+			return EObjectType.LIGHT_OBJECT;
 		} else if (_lightSensorValue >= DARK_OBJECT_INTERVAL[MINIMUM] && _lightSensorValue <= DARK_OBJECT_INTERVAL[MAXIMUM]) {
-			return ELightSensorValue.DARK_OBJECT;
+			return EObjectType.DARK_OBJECT;
 		} else {
-			return ELightSensorValue.NO_OBJECT;
+			return EObjectType.NO_OBJECT;
 		}
 	}
 

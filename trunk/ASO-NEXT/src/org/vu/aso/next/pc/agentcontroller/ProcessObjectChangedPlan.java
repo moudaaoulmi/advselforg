@@ -1,6 +1,6 @@
 package org.vu.aso.next.pc.agentcontroller;
 
-import org.vu.aso.next.common.ELightSensorValue;
+import org.vu.aso.next.common.EObjectType;
 
 public class ProcessObjectChangedPlan extends BeliefUpdatingPlan {
 
@@ -8,7 +8,7 @@ public class ProcessObjectChangedPlan extends BeliefUpdatingPlan {
 
 	@Override
 	public void body() {
-		ELightSensorValue lv = (ELightSensorValue) getBeliefbase().getBelief("objectInGripper").getFact();
+		EObjectType lv = (EObjectType) getBeliefbase().getBelief("objectInGripper").getFact();
 		printDebug("detected an object " + lv);
 	}
 
