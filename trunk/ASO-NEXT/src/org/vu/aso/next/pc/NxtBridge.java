@@ -25,7 +25,7 @@ public class NxtBridge {
 
 		connection = new NXTConnector();
 		connection.connectTo("btspp://" + nxtName);
-        
+
 		in = connection.getInputStream();
 		out = connection.getOutputStream();
 		Thread.sleep(1000);
@@ -48,7 +48,7 @@ public class NxtBridge {
 		sensorData.processMessage(communicateToNxt(message));
 		return sensorData;
 	}
-	
+
 	public void moveForward(int distance) throws IOException {
 		String message = buildMessage(NxtProtocol.FORWARD, distance);
 		sensorData.setLastCommand(EMovingMode.FORWARD);
