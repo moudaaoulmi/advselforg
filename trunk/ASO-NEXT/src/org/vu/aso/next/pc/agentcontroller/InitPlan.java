@@ -38,6 +38,7 @@ public class InitPlan extends BeliefUpdatingPlan {
 			printDebug("is connected");
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Whoops, does not compute. Cannot connect to robot.");
 		}
 	}
