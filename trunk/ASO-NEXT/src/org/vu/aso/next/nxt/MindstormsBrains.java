@@ -187,6 +187,7 @@ public class MindstormsBrains {
 			data.sensorTypes[portNumber] = ESensorType.RFID;
 			break;
 		}
+		sensors[portNumber].off();
 	}
 
 	private void initPilot(String[] config) {

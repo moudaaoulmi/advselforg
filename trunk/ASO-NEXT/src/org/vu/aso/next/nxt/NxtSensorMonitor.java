@@ -19,6 +19,12 @@ public class NxtSensorMonitor extends Thread {
 	}
 
 	public void run() {
+		for (int i = 0; i < data.sensorValues.length; i++) {
+			if (parent.sensors[i].toBeMonitored()) {
+				parent.sensors[i].on();
+			}
+		}
+		
 		while (true) {
 			if (parent.scanScheduled()) {
 				data.isScanning = "1";
@@ -45,6 +51,8 @@ public class NxtSensorMonitor extends Thread {
 		int closestBlockAngle = -1;
 		int closestBlockDistance = 255;
 		
+		parent.sensors[SCANNER_DOWN].on();
+		
 		Motor motor = parent.motors[SCANNER_MOTOR];
 		
 		motor.setSpeed(HIGH_SPEED);
@@ -59,6 +67,8 @@ public class NxtSensorMonitor extends Thread {
 			moveTo -= 5;
 			motor.rotateTo(moveTo);
 		}
+		
+		parent.sensors[SCANNER_DOWN].off();
 		
 		motor.setSpeed(HIGH_SPEED);
 		motor.rotateTo(0);

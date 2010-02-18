@@ -22,4 +22,10 @@ public class NxtLightSensor implements INxtSensor {
 		return toBeMonitored;
 	}
 	
+	public void on() {
+	}
+
+	public void off() {
+	}
+	
 }

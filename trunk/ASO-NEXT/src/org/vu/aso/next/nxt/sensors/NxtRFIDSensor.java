@@ -22,4 +22,9 @@ public class NxtRFIDSensor implements INxtSensor {
 		return toBeMonitored;
 	}
 	
+	public void on() {
+	}
+
+	public void off() {
+	}
 }

@@ -25,7 +25,16 @@
 		<belief name="WIMRunning" class="boolean">
 			<fact>false</fact>
 		</belief>
+		<belief name="readyForCommand" class="boolean">
+			<fact>false</fact>
+		</belief>
 		<belief name="drivingBackward" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="drivingForward" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="turning" class="boolean">
 			<fact>false</fact>
 		</belief>
 		<belief name="searching" class="boolean">
@@ -37,20 +46,22 @@
 		<belief name="depositAtWall" class="boolean">
 			<fact>false</fact>
 		</belief>
-		
-		
-		<belief name="objectInGripper" class="ELightSensorValue">
-			<fact>ELightSensorValue.NO_OBJECT</fact>
+		<belief name="areaScanned" class="boolean">
+			<fact>false</fact>
+		</belief>
+
+		<belief name="objectInGripper" class="EObjectType">
+			<fact>EObjectType.NO_OBJECT</fact>
 		</belief>
 
 		<belief name="scanningArea" class="boolean">
 			<fact>false</fact>
 		</belief>
 		<belief name="topSonarDistance" class="int">
-			<fact>0</fact>
+			<fact>255</fact>
 		</belief>
-		<belief name="bottomSonarDistance" class="int">
-			<fact>0</fact>
+		<belief name="oldTopSonarDistance" class="int">
+			<fact>255</fact>
 		</belief>
 		<belief name="distanceTraveled" class="int">
 			<fact>0</fact>
@@ -76,36 +87,49 @@
 				<condition>$beliefbase.Initialized</condition>
 			</trigger>
 		</plan>
-		
+
+		<!-- General Rules -->
 		<!-- Rule 1: Drive forward -->
-		<plan name="actionDrive">
-			<body> new DriveForwardPlan(10000)</body>
+		<plan name="actionDrive" priority="-1">
+			<body>new DriveForwardPlan(10000)</body>
 			<trigger>
-				<condition>!$beliefbase.drivingBackward &amp;&amp;
-					$beliefbase.WIMRunning </condition>
+				<condition>$beliefbase.readyForCommand &amp;&amp;
+					!$beliefbase.drivingBackward &amp;&amp;
+					!$beliefbase.turning &amp;&amp;
+					!$beliefbase.drivingForward
+				</condition>
 			</trigger>
 		</plan>
-		
+
 		<!-- Rule 2: Avoid walls and other large obstacles -->
 		<plan name="actionAvoidObstacles">
 			<body> new AvoidObstaclePlan()</body>
 			<trigger>
-				<condition>$beliefbase.topSonarDistance &lt; 20 &amp;&amp;
-				!$beliefbase.depositAtWall</condition>
+				<condition>$beliefbase.readyForCommand &amp;&amp;
+					
+					$beliefbase.topSonarDistance &lt; 25 &amp;&amp;
+					$beliefbase.oldTopSonarDistance &lt; 25 &amp;&amp;
+					!$beliefbase.depositAtWall
+				</condition>
 			</trigger>
+			<!$beliefbase.turning &amp;&amp;
 		</plan>
-		
-		<!-- Rule 3: Leave clusters intact dropping any blocks currently held -->
+
+		<!--
+			Rule 3: Leave clusters intact dropping any blocks currently held
+		-->
 		<plan name="dropBlockPlan">
 			<body>new DropBlockPlan()</body>
 			<trigger>
 				<condition>$beliefbase.clusterDetected &amp;&amp;
-				!$beliefbase.depositAtWall</condition>
+					!$beliefbase.depositAtWall &amp;&amp;
+					$beliefbase.readyForCommand</condition>
 			</trigger>
 		</plan>
-		
-		
-		
+
+
+
+
 		<plan name="ProcessObjectChangedPlan">
 			<body>new ProcessObjectChangedPlan()</body>
 			<trigger>

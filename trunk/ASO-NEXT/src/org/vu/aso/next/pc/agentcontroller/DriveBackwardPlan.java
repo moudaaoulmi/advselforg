@@ -14,10 +14,16 @@ public class DriveBackwardPlan extends BeliefUpdatingPlan {
 	@Override
 	public void body() {
 		printDebug("executed DriveBackwardPlan(" + distance + ")");
+		
+		setBelief("readyForCommand", false);
+		
 		try {
 			getRobot().moveBackward(distance);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		setBelief("drivingBackward", true);
+		setBelief("readyForCommand", true);
 	}
 }

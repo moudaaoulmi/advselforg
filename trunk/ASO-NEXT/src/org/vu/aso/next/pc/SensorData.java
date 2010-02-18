@@ -8,7 +8,7 @@ public class SensorData {
 
 	private final static int MINIMUM = 0, MAXIMUM = 1;
 	private final static int[] LIGHT_OBJECT_INTERVAL = { 45, 70 };
-	private final static int[] DARK_OBJECT_INTERVAL = { 30, 37 };
+	private final static int[] DARK_OBJECT_INTERVAL = { 35, 45 };
 
 	private int _distanceUpperSonar;
 	private int _distanceLowerSonar;
@@ -31,6 +31,10 @@ public class SensorData {
 
 	public void setLastCommand(EMovingMode mm) {
 		_lastCommand = mm;
+	}
+	
+	public void setMoving(boolean moving) {
+		_isMoving = moving;
 	}
 
 	public int getDistanceUpperSonar() {
