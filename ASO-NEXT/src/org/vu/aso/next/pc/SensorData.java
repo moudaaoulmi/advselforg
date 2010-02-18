@@ -8,7 +8,7 @@ public class SensorData {
 
 	private final static int MINIMUM = 0, MAXIMUM = 1;
 	private final static int[] LIGHT_OBJECT_INTERVAL = { 45, 70 };
-	private final static int[] DARK_OBJECT_INTERVAL = { 30, 40 };
+	private final static int[] DARK_OBJECT_INTERVAL = { 30, 37 };
 
 	private int _distanceUpperSonar;
 	private int _distanceLowerSonar;
