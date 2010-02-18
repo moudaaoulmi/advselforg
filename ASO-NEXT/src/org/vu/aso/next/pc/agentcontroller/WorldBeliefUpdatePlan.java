@@ -21,7 +21,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private static final String BELIEF_DISTANCE_TRAVELED = "distanceTraveled";
 	private static final String BELIEF_CLOSEST_BLOCK_DISTANCE = "closestBlockDistance";
 	private static final String BELIEF_CLOSEST_BLOCK_ANGLE = "distanceBlockAngle";
-	private static final String BELIEF_UPPER_SONAR_DISTANCE = "upperSonarDistance";
+	private static final String BELIEF_TOP_SONAR_DISTANCE = "topSonarDistance";
 	private static final String BELIEF_CLUSTER_DETECTED = "clusterDetected";
 	
 	NxtBridge robot;
@@ -126,7 +126,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processSonarSensor() {
-		setBelief(BELIEF_UPPER_SONAR_DISTANCE, sensorData.getDistanceUpperSonar());
+		setBelief(BELIEF_TOP_SONAR_DISTANCE, sensorData.getDistanceUpperSonar());
 	}
 
 	private void processTouchSensor() {
