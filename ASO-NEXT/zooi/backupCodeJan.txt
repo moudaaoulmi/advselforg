@@ -1,0 +1,18 @@
+		// Send a message for every sonar read.
+		// "SonarSensorStatus {sonarRelativeID} {distance} {tachoMeterCount 0=default/middle}"
+		/*
+		 * int newTopDistance = robot.getDistance(0,
+		 * DistanceMode.HIGHEST_NOT255); int newBottomDistance =
+		 * robot.getDistance(1, DistanceMode.LOWEST); int
+		 * tachoMeterCountSonarTurret = robot.getTachoMeterCount(OutputPort.B);
+		 * 
+		 * if(oldBottomSonarDistance == -1 || (Math.abs(newBottomDistance -
+		 * oldBottomSonarDistance)) >= 1){ sendMessage("SonarSensorStatus 0 " +
+		 * newBottomDistance +" " +tachoMeterCountSonarTurret );
+		 * oldBottomSonarDistance = newBottomDistance; }
+		 * 
+		 * if(oldTopSonarDistance == -1 || (Math.abs(newBottomDistance -
+		 * oldTopSonarDistance)) >= 1){ sendMessage("SonarSensorStatus 1 " +
+		 * newTopDistance + " " + tachoMeterCountSonarTurret );
+		 * oldTopSonarDistance = newTopDistance; }
+		 */

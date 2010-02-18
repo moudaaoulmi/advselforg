@@ -14,6 +14,16 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	private static final long serialVersionUID = -7096221399333292349L;
 
+	private static final String BELIEF_WIM_RUNNING = "WIMRunning";
+	private static final String BELIEF_TURNING = "turning";
+	private static final String BELIEF_DRIVING_BACKWARD = "drivingBackward";
+	private static final String BELIEF_OBJECT_IN_GRIPPER = "objectInGripper";
+	private static final String BELIEF_DISTANCE_TRAVELED = "distanceTraveled";
+	private static final String BELIEF_CLOSEST_BLOCK_DISTANCE = "closestBlockDistance";
+	private static final String BELIEF_CLOSEST_BLOCK_ANGLE = "distanceBlockAngle";
+	private static final String BELIEF_UPPER_SONAR_DISTANCE = "upperSonarDistance";
+	private static final String BELIEF_CLUSTER_DETECTED = "clusterDetected";
+	
 	NxtBridge robot;
 	int step = 0;
 
@@ -36,7 +46,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void initialize() {
 		robot = (NxtBridge) getBeliefbase().getBelief("robot").getFact();
 		new Thread(this).start();
-		getBeliefbase().getBelief("WIMRunning").setFact(true);
+		getBeliefbase().getBelief(BELIEF_WIM_RUNNING).setFact(true);
 		waitFor(IFilter.NEVER);
 	}
 
@@ -69,7 +79,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	private void processTurningUpdate() throws IOException {
 		if (!sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.TURNING && wasTurning) {
-			setBelief("turning", false);
+			setBelief(BELIEF_TURNING, false);
 			printDebug("completed a turn");
 			wasTurning = false;
 			robot.resetTravelDistance();
@@ -83,7 +93,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void processDriveBackwardUpdate() throws IOException {
 		if (!sensorData.isTurningOrMovingBackward() && sensorData.lastCommand() == EMovingMode.BACKWARD
 				&& wasDrivingBackward) {
-			setBelief("drivingBackward", false);
+			setBelief(BELIEF_DRIVING_BACKWARD, false);
 			printDebug("completed driving backward");
 			wasDrivingBackward = false;
 			robot.resetTravelDistance();
@@ -97,7 +107,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	private void processLightSensor() {
 		if (sensorData.getObjectType() != oldLightValue) {
-			setBelief("objectInGripper", sensorData.getObjectType());
+			setBelief(BELIEF_OBJECT_IN_GRIPPER, sensorData.getObjectType());
 			oldLightValue = sensorData.getObjectType();
 		}
 	}
@@ -105,47 +115,30 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void processTravelDistance() {
 		int travelDistance = sensorData.getTravelDistance();
 		if (travelDistance != oldTravelDistance) {
-			setBelief("distanceTraveled", travelDistance);
+			setBelief(BELIEF_DISTANCE_TRAVELED, travelDistance);
 			oldTravelDistance = travelDistance;
 		}
 	}
 
 	private void processScanResults() throws IOException {
-		setBelief("closestBlockDistance", sensorData.getClosestblockDistance());
-		setBelief("distanceBlockAngle", sensorData.getClosestblockAngle());
+		setBelief(BELIEF_CLOSEST_BLOCK_DISTANCE, sensorData.getClosestblockDistance());
+		setBelief(BELIEF_CLOSEST_BLOCK_ANGLE, sensorData.getClosestblockAngle());
 	}
 
 	private void processSonarSensor() {
-		// Send a message for every sonar read.
-		// "SonarSensorStatus {sonarRelativeID} {distance} {tachoMeterCount 0=default/middle}"
-		/*
-		 * int newTopDistance = robot.getDistance(0,
-		 * DistanceMode.HIGHEST_NOT255); int newBottomDistance =
-		 * robot.getDistance(1, DistanceMode.LOWEST); int
-		 * tachoMeterCountSonarTurret = robot.getTachoMeterCount(OutputPort.B);
-		 * 
-		 * if(oldBottomSonarDistance == -1 || (Math.abs(newBottomDistance -
-		 * oldBottomSonarDistance)) >= 1){ sendMessage("SonarSensorStatus 0 " +
-		 * newBottomDistance +" " +tachoMeterCountSonarTurret );
-		 * oldBottomSonarDistance = newBottomDistance; }
-		 * 
-		 * if(oldTopSonarDistance == -1 || (Math.abs(newBottomDistance -
-		 * oldTopSonarDistance)) >= 1){ sendMessage("SonarSensorStatus 1 " +
-		 * newTopDistance + " " + tachoMeterCountSonarTurret );
-		 * oldTopSonarDistance = newTopDistance; }
-		 */
+		setBelief(BELIEF_UPPER_SONAR_DISTANCE, sensorData.getDistanceUpperSonar());
 	}
 
 	private void processTouchSensor() {
 
 		if (sensorData.getTouchSensorPressed() && !wasTouchPressed) {
-			setBelief("clusterDetected", true);
+			setBelief(BELIEF_CLUSTER_DETECTED, true);
 			printDebug("detected a cluster");
 			wasTouchPressed = true;
 		}
 
 		if (!sensorData.getTouchSensorPressed() && wasTouchPressed) {
-			setBelief("clusterDetected", false);
+			setBelief(BELIEF_CLUSTER_DETECTED, false);
 			printDebug("released a cluster");
 			wasTouchPressed = false;
 		}
