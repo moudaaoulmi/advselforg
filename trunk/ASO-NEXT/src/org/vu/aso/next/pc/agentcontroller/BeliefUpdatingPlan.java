@@ -12,12 +12,13 @@ public abstract class BeliefUpdatingPlan extends Plan {
 		return (NxtBridge) getBeliefbase().getBelief("robot").getFact();
 	}
 
-	protected Object getBelief(String BeliefName) {
-		return getBeliefbase().getBelief(BeliefName).getFact();
+	protected Object getBelief(String beliefName) {
+		return getBeliefbase().getBelief(beliefName).getFact();
 	}
 	
-	protected void setBelief(String BeliefName, Object beliefValue) {
-		getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
+	protected void setBelief(String beliefName, Object beliefValue) {
+		getBeliefbase().getBelief(beliefName).setFact(beliefValue);
+		printDebug("has value '" + beliefValue.toString() + "' for belief '" + beliefName + "'");
 	}
 
 	protected void printDebug(String message) {
