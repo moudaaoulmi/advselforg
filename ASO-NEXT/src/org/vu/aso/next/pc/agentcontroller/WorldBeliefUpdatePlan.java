@@ -150,8 +150,9 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		}
 	}
 
-	protected void setBelief(String BeliefName, Object beliefValue) {
-		getExternalAccess().getBeliefbase().getBelief(BeliefName).setFact(beliefValue);
+	protected void setBelief(String beliefName, Object beliefValue) {
+		getExternalAccess().getBeliefbase().getBelief(beliefName).setFact(beliefValue);
+		printDebug("has value '" + beliefValue.toString() + "' for belief '" + beliefName + "'");
 	}
 
 	protected void printDebug(String message) {
