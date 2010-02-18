@@ -28,6 +28,17 @@
 		<belief name="drivingBackward" class="boolean">
 			<fact>false</fact>
 		</belief>
+		<belief name="searching" class="boolean">
+			<fact>true</fact>
+		</belief>
+		<belief name="collecting" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="depositAtWall" class="boolean">
+			<fact>false</fact>
+		</belief>
+		
+		
 		<belief name="objectInGripper" class="ELightSensorValue">
 			<fact>ELightSensorValue.NO_OBJECT</fact>
 		</belief>
@@ -79,15 +90,17 @@
 		<plan name="actionAvoidObstacles">
 			<body> new AvoidObstaclePlan()</body>
 			<trigger>
-				<condition>$beliefbase.topSonarDistance &lt; 20</condition>
+				<condition>$beliefbase.topSonarDistance &lt; 20 &amp;&amp;
+				!$beliefbase.depositAtWall</condition>
 			</trigger>
 		</plan>
 		
-		<!-- Rule 3: Leave clusters intact -->
-		<plan name="actionDriveBackwards">
-			<body>new AvoidClusterPlan()</body>
+		<!-- Rule 3: Leave clusters intact dropping any blocks currently held -->
+		<plan name="dropBlockPlan">
+			<body>new DropBlockPlan()</body>
 			<trigger>
-				<condition>$beliefbase.clusterDetected</condition>
+				<condition>$beliefbase.clusterDetected &amp;&amp;
+				!$beliefbase.depositAtWall</condition>
 			</trigger>
 		</plan>
 		
