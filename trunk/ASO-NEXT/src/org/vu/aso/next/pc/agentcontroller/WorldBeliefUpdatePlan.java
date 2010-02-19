@@ -33,12 +33,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private int oldTravelDistance = 0;
 	private EObjectType oldObjectType = EObjectType.NO_OBJECT;
 
-	private boolean wasTurning = false;
-	private boolean wasScanning = false;
-	private boolean wasDrivingBackward = false;
-	private boolean wasDrivingForward = false;
-	private boolean wasTouchPressed = false;
-
 	private SensorData sensorData;
 
 	public void body() {
@@ -58,9 +52,9 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			try {
 				sensorData = robot.requestSensorData();
 				if (sensorData.isScanning() == false) {
-					if (wasScanning == true) {
+					if (sensorData.wasScanning == true) {
 						processScanResults();
-						wasScanning = false;
+						sensorData.wasScanning = false;
 					}
 
 					processTurningUpdate();
@@ -76,7 +70,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 					processSteps();
 				} else {
-					wasScanning = true;
+					sensorData.wasScanning = true;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -86,14 +80,14 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processTurningUpdate() throws IOException {
-		if (sensorData.isTurning() && !wasTurning) {
-			wasTurning = true;
+		if (sensorData.isTurning() && !sensorData.wasTurning) {
+			sensorData.wasTurning = true;
 		}
 
-		if (!sensorData.isTurning() && wasTurning) {
+		if (!sensorData.isTurning() && sensorData.wasTurning) {
 			setBelief(BELIEF_TURNING, false);
 			printDebug("completed a turn");
-			wasTurning = false;
+			sensorData.wasTurning = false;
 
 			robot.resetTravelDistance();
 			oldTravelDistance = 0;
@@ -101,14 +95,14 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processDriveBackwardUpdate() throws IOException {
-		if (sensorData.isMovingBackward() && !wasDrivingBackward) {
-			wasDrivingBackward = true;
+		if (sensorData.isMovingBackward() && !sensorData.wasDrivingBackward) {
+			sensorData.wasDrivingBackward = true;
 		}
 
-		if (!sensorData.isMovingBackward() && wasDrivingBackward) {
+		if (!sensorData.isMovingBackward() && sensorData.wasDrivingBackward) {
 			setBelief(BELIEF_DRIVING_BACKWARD, false);
 			printDebug("completed driving backward");
-			wasDrivingBackward = false;
+			sensorData.wasDrivingBackward = false;
 
 			robot.resetTravelDistance();
 			oldTravelDistance = 0;
@@ -116,14 +110,14 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processDriveForwardUpdate() throws IOException {
-		if (sensorData.isMovingForward() && !wasDrivingForward) {
-			wasDrivingForward = true;
+		if (sensorData.isMovingForward() && !sensorData.wasDrivingForward) {
+			sensorData.wasDrivingForward = true;
 		}
 
-		if (!sensorData.isMovingForward() && wasDrivingForward) {
+		if (!sensorData.isMovingForward() && sensorData.wasDrivingForward) {
 			setBelief(BELIEF_DRIVING_FORWARD, false);
 			printDebug("completed driving forward");
-			wasDrivingForward = false;
+			sensorData.wasDrivingForward = false;
 
 			robot.resetTravelDistance();
 			oldTravelDistance = 0;
@@ -161,16 +155,16 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processTouchSensor() {
-		if (sensorData.getTouchSensorPressed() && !wasTouchPressed) {
+		if (sensorData.getTouchSensorPressed() && !sensorData.wasTouchPressed) {
 			setBelief(BELIEF_CLUSTER_DETECTED, true);
 			printDebug("detected a cluster");
-			wasTouchPressed = true;
+			sensorData.wasTouchPressed = true;
 		}
 
-		if (!sensorData.getTouchSensorPressed() && wasTouchPressed) {
+		if (!sensorData.getTouchSensorPressed() && sensorData.wasTouchPressed) {
 			setBelief(BELIEF_CLUSTER_DETECTED, false);
 			printDebug("released a cluster");
-			wasTouchPressed = false;
+			sensorData.wasTouchPressed = false;
 		}
 	}
 
