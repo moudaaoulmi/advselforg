@@ -23,10 +23,7 @@ public class AvoidObstaclePlan extends BeliefUpdatingPlan {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		setBelief("topSonarDistance", 255);
-		setBelief("oldTopSonarDistance", 255);
-
-		setBelief("readyForCommand", true);
+		
+		//readyForCommand true door WIM
 	}
 }
