@@ -14,9 +14,5 @@ public class AvoidClusterPlan extends BeliefUpdatingPlan {
 		printDebug("executed AvoidObstaclePlan(" + distance + ")");
 
 		getRobot().driveBackward(distance);
-		setBelief(Beliefs.DRIVING_BACKWARD, true);
-
-		getRobot().driveBackward(distance);
-		
 	}
 }

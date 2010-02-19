@@ -14,7 +14,7 @@
 	</imports>
 
 	<beliefs>
-		<belief name="robot" class="NxtBridge" />
+		<belief name="robot" class="NxtAgent" />
 		<belief name="robotName" class="String" />
 		<belief name="Initialized" class="boolean">
 			<fact>false</fact>
@@ -54,7 +54,7 @@
 			<fact>EObjectType.NO_OBJECT</fact>
 		</belief>
 
-		<belief name="scanningArea" class="boolean">
+		<belief name="scanning" class="boolean">
 			<fact>false</fact>
 		</belief>
 		<belief name="topSonarDistance" class="int">

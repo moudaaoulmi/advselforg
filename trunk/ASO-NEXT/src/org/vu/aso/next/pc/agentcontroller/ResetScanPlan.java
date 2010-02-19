@@ -10,7 +10,7 @@ public class ResetScanPlan extends BeliefUpdatingPlan {
 	@Override
 	public void body() {
 		printDebug("executed ResetScanPlan()");
-		setBelief("areaScanned", false);
+		setBelief(Beliefs.AREA_SCANNED, false);
 		getRobot().resetTravelDistance();
 	}
 }

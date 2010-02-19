@@ -17,7 +17,7 @@ public class InitPlan extends BeliefUpdatingPlan {
 
 	@Override
 	public void body() {
-		NxtBridge robot;
+		NxtAgent robot;
 
 		EMotorPort leftMotorPort = EMotorPort.A;
 		EMotorPort rightMotorPort = EMotorPort.C;
@@ -28,19 +28,13 @@ public class InitPlan extends BeliefUpdatingPlan {
 		ESensorType port4 = ESensorType.TOUCH;
 		float wheelDiameter = 5.4f;
 		float trackWidth = 15.1f;
-		try {
 
-			robot = new NxtBridge(robotName, port1, false, port2, true, port3, true, port4, true, leftMotorPort, rightMotorPort,
-					motorReverse, wheelDiameter, trackWidth);
+		robot = new NxtAgent(robotName, port1, false, port2, true, port3, true, port4, true, leftMotorPort,
+				rightMotorPort, motorReverse, wheelDiameter, trackWidth, getBeliefbase());
 
-			setBelief(Beliefs.ROBOT, robot);
-			setBelief(Beliefs.INITIALIZED, true);
+		setBelief(Beliefs.ROBOT, robot);
+		setBelief(Beliefs.INITIALIZED, true);
 
-			printDebug("is connected");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Whoops, does not compute. Cannot connect to robot.");
-		}
+		printDebug("is connected");
 	}
 }

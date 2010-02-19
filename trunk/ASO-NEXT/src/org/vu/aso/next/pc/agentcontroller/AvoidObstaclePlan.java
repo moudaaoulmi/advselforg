@@ -15,8 +15,5 @@ public class AvoidObstaclePlan extends BeliefUpdatingPlan {
 
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		getRobot().turnLeft(angle);
-		setBelief(Beliefs.TURNING, true);
-		
-		//readyForCommand true door WIM
 	}
 }
