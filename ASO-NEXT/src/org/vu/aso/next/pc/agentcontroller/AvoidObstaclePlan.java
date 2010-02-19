@@ -1,7 +1,5 @@
 package org.vu.aso.next.pc.agentcontroller;
 
-import java.io.IOException;
-
 public class AvoidObstaclePlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = -8758789822720288236L;
@@ -16,12 +14,8 @@ public class AvoidObstaclePlan extends BeliefUpdatingPlan {
 		printDebug("executed AvoidObstaclePlan()");
 
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
-		try {
-			getRobot().turnLeft(angle);
-			setBelief(Beliefs.TURNING, true);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		getRobot().turnLeft(angle);
+		setBelief(Beliefs.TURNING, true);
 		
 		//readyForCommand true door WIM
 	}

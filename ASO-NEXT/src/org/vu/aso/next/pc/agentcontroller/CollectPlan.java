@@ -1,7 +1,5 @@
 package org.vu.aso.next.pc.agentcontroller;
 
-import java.io.IOException;
-
 public class CollectPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = -8758789822720288236L;
@@ -17,21 +15,13 @@ public class CollectPlan extends BeliefUpdatingPlan {
 		
 		setBelief("readyForCommand", false);
 		
-		try {
-			getRobot().turnLeft(angle);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		getRobot().turnLeft(angle);
 		
 		while ((Boolean) getBelief("turning")) {}
 		
 		setBelief("topSonarDistance", 255);
 		
-		try {
-			getRobot().driveForward(10);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		getRobot().driveForward(10);
 		
 		while ((Boolean) getBelief("drivingForward")) {}
 		

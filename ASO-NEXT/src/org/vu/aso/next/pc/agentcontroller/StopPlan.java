@@ -1,7 +1,5 @@
 package org.vu.aso.next.pc.agentcontroller;
 
-import java.io.IOException;
-
 public class StopPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = -6604377277788735724L;
@@ -9,11 +7,7 @@ public class StopPlan extends BeliefUpdatingPlan {
 	@Override
 	public void body() {
 		printDebug("executed StopPlan()");
-		try {
-			getRobot().stop();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		getRobot().stop();
 	}
 
 }
