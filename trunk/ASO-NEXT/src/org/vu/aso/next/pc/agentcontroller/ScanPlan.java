@@ -7,8 +7,12 @@ public class ScanPlan extends BeliefUpdatingPlan {
 	@Override
 	public void body() {
 		printDebug("executed ScanPlan()");
+
+		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		getRobot().performScan(-85, 85);
-		
+		setBelief("scanningArea", true);
+
+		waitForBeliefChange("scanningArea");
 		setBelief("areaScanned", true);
 	}
 
