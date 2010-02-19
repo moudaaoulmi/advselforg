@@ -19,7 +19,7 @@ public class DropBlockPlan extends BeliefUpdatingPlan {
 		
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		try {
-			getRobot().moveBackward(distance);
+			getRobot().driveBackward(distance);
 			setBelief(Beliefs.DRIVING_BACKWARD, true);
 		} catch (IOException e) {
 			e.printStackTrace();

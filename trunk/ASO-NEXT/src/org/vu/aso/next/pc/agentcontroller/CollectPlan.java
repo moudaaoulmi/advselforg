@@ -28,7 +28,7 @@ public class CollectPlan extends BeliefUpdatingPlan {
 		setBelief("topSonarDistance", 255);
 		
 		try {
-			getRobot().moveForward(10);
+			getRobot().driveForward(10);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

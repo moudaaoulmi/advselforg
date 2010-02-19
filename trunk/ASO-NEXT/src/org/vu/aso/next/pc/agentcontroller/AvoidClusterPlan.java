@@ -15,14 +15,14 @@ public class AvoidClusterPlan extends BeliefUpdatingPlan {
 	public void body() {
 		printDebug("executed AvoidObstaclePlan(" + distance + ")");
 		try {
-			getRobot().moveBackward(distance);
+			getRobot().driveBackward(distance);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		setBelief(Beliefs.DRIVING_BACKWARD, true);
 		
 		try {
-			getRobot().moveBackward(distance);
+			getRobot().driveBackward(distance);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

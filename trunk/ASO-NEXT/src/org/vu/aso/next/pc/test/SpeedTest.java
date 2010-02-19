@@ -16,7 +16,7 @@ public class SpeedTest {
 		long oldTime;
 		long newTime;
 		Thread.sleep(500);
-		bridge.moveForward(500);
+		bridge.driveForward(500);
 		for (int i = 0; i < 100; i++) {
 			oldTime = System.currentTimeMillis();
 			bridge.requestSensorData();

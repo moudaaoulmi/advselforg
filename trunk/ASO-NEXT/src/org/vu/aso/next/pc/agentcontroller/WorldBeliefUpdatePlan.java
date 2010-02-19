@@ -26,7 +26,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void initialize() {
-		robot = (NxtBridge) getBeliefbase().getBelief("robot").getFact();
+		robot = (NxtBridge) getBeliefbase().getBelief(Beliefs.ROBOT).getFact();
 		new Thread(this).start();
 		getBeliefbase().getBelief(Beliefs.WIM_RUNNING).setFact(true);
 		getBeliefbase().getBelief(Beliefs.READY_FOR_COMMAND).setFact(true);
@@ -48,9 +48,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 					processTurningUpdate();
 					proccesReadyForCommand();
 					processTouchSensor();
-					//if(!sensorData.isTurning()){
-					      processSonarSensor();
-					//}
+					processSonarSensor();
 					processLightSensor();
 					processTravelDistance();
 
@@ -70,8 +68,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			setBelief(Beliefs.TURNING, false);
 			printDebug("completed a turn");
 			sensorData.wasTurning = false;
-
-			robot.resetTravelDistance();
 		}
 	}
 
@@ -80,8 +76,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			setBelief(Beliefs.DRIVING_BACKWARD, false);
 			printDebug("completed driving backward");
 			sensorData.wasDrivingBackward = false;
-
-			robot.resetTravelDistance();
 		}
 	}
 
@@ -90,11 +84,9 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			setBelief(Beliefs.DRIVING_FORWARD, false);
 			printDebug("completed driving forward");
 			sensorData.wasDrivingForward = false;
-
-			robot.resetTravelDistance();
 		}
 	}
-	
+
 	private void proccesReadyForCommand() {
 		if (!sensorData.isMoving()) {
 			setBelief(Beliefs.READY_FOR_COMMAND, true);
@@ -160,7 +152,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	@Override
 	protected void printDebug(String message) {
-		System.out.println(formatter.format(new Date()) + " " + (String) getExternalAccess().getBeliefbase().getBelief("robotName").getFact() + ":WIM "
-				+ message);
+		System.out.println(formatter.format(new Date()) + " "
+				+ (String) getExternalAccess().getBeliefbase().getBelief(Beliefs.ROBOT_NAME).getFact() + ":WIM " + message);
 	}
 }
