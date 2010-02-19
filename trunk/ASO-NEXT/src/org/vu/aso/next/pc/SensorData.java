@@ -42,6 +42,10 @@ public class SensorData {
 	public void setMoving(boolean moving) {
 		_isMoving = moving;
 	}
+	
+	public void setScanning(boolean scanning) {
+		_isScanning = scanning;
+	}
 
 	public int getDistanceUpperSonar() {
 		return _distanceUpperSonar;
@@ -89,7 +93,6 @@ public class SensorData {
 	}
 
 	public boolean isScanning() {
-
 		return _isScanning;
 	}
 

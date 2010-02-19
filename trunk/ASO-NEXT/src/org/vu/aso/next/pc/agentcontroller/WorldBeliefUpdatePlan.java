@@ -1,6 +1,5 @@
 package org.vu.aso.next.pc.agentcontroller;
 
-import java.io.IOException;
 import java.util.Date;
 
 import org.vu.aso.next.common.EObjectType;
@@ -35,35 +34,28 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	public void run() {
 		while (true) {
-			try {
-				sensorData = robot.requestSensorData();
-				if (sensorData.isScanning() == false) {
-					if (sensorData.wasScanning == true) {
-						processScanResults();
-						sensorData.wasScanning = false;
-					}
-
-					processDriveForwardUpdate();
-					processDriveBackwardUpdate();
-					processTurningUpdate();
-					proccesReadyForCommand();
-					processTouchSensor();
-					processSonarSensor();
-					processLightSensor();
-					processTravelDistance();
-
-					processSteps();
-				} else {
-					sensorData.wasScanning = true;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+			sensorData = robot.requestSensorData();
+			if (!sensorData.isScanning() && sensorData.wasScanning) {
+				processScanResults();
+				sensorData.wasScanning = false;
 			}
+
+			processDriveForwardUpdate();
+			processDriveBackwardUpdate();
+			processTurningUpdate();
+			proccesReadyForCommand();
+			processTouchSensor();
+			processSonarSensor();
+			processLightSensor();
+			processTravelDistance();
+
+			processSteps();
+
 			printDebug("processed sensor data");
 		}
 	}
 
-	private void processTurningUpdate() throws IOException {
+	private void processTurningUpdate() {
 		if (!sensorData.isTurning() && sensorData.wasTurning) {
 			setBelief(Beliefs.TURNING, false);
 			printDebug("completed a turn");
@@ -71,7 +63,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		}
 	}
 
-	private void processDriveBackwardUpdate() throws IOException {
+	private void processDriveBackwardUpdate() {
 		if (!sensorData.isDrivingBackward() && sensorData.wasDrivingBackward) {
 			setBelief(Beliefs.DRIVING_BACKWARD, false);
 			printDebug("completed driving backward");
@@ -79,7 +71,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		}
 	}
 
-	private void processDriveForwardUpdate() throws IOException {
+	private void processDriveForwardUpdate() {
 		if (!sensorData.isDrivingForward() && sensorData.wasDrivingForward) {
 			setBelief(Beliefs.DRIVING_FORWARD, false);
 			printDebug("completed driving forward");
@@ -88,7 +80,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void proccesReadyForCommand() {
-		if (!sensorData.isMoving()) {
+		if (!sensorData.isMoving() && !sensorData.isScanning()) {
 			setBelief(Beliefs.READY_FOR_COMMAND, true);
 		}
 	}
@@ -106,7 +98,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		}
 	}
 
-	private void processScanResults() throws IOException {
+	private void processScanResults() {
 		setBelief(Beliefs.CLOSEST_BLOCK_DISTANCE, sensorData.getClosestblockDistance());
 		setBelief(Beliefs.CLOSEST_BLOCK_ANGLE, sensorData.getClosestblockAngle());
 	}
@@ -130,7 +122,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		}
 	}
 
-	private void processSteps() throws IOException {
+	private void processSteps() {
 		step++;
 
 		if (step == 100) {
@@ -153,6 +145,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	@Override
 	protected void printDebug(String message) {
 		System.out.println(formatter.format(new Date()) + " "
-				+ (String) getExternalAccess().getBeliefbase().getBelief(Beliefs.ROBOT_NAME).getFact() + ":WIM " + message);
+				+ (String) getExternalAccess().getBeliefbase().getBelief(Beliefs.ROBOT_NAME).getFact() + ":WIM "
+				+ message);
 	}
 }
