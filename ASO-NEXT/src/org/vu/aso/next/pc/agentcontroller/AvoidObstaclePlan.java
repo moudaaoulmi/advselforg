@@ -16,7 +16,6 @@ public class AvoidObstaclePlan extends BeliefUpdatingPlan {
 		printDebug("executed AvoidObstaclePlan()");
 
 		setBelief("readyForCommand", false);
-
 		try {
 			getRobot().turnLeft(angle);
 			setBelief("turning", true);

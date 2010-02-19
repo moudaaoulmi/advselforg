@@ -128,7 +128,7 @@
 			<body>new DropBlockPlan()</body>
 			<trigger>
 				<condition>
-					$beliefbase.depositAtWall
+					$beliefbase.clusterDetected
 				</condition>
 			</trigger>
 			<precondition>
@@ -137,8 +137,36 @@
 				$beliefbase.readyForCommand
 			</precondition>
 		</plan>
-
-
+		
+		<!-- Rule 4: Light object detected -->
+		<plan name="lightObjectPlan">
+			<body>new LightObjectDetectedPlan()</body>
+			<trigger>
+				<condition>
+					$beliefbase.objectInGripper == EObjectType.LIGHT_OBJECT
+				</condition>
+			</trigger>
+			<precondition>
+				$beliefbase.clusterDetected &amp;&amp;
+				!$beliefbase.depositAtWall &amp;&amp;
+				$beliefbase.readyForCommand
+			</precondition>
+		</plan>
+		
+		<!-- Rule 5: Dark object detected -->
+		<plan name="darkObjectPlan">
+			<body>new DarkObjectDetectedPlan()</body>
+			<trigger>
+				<condition>
+					$beliefbase.objectInGripper == EObjectType.DARK_OBJECT
+				</condition>
+			</trigger>
+			<precondition>
+				$beliefbase.clusterDetected &amp;&amp;
+				!$beliefbase.depositAtWall &amp;&amp;
+				$beliefbase.readyForCommand
+			</precondition>
+		</plan>
 
 
 		<plan name="ProcessObjectChangedPlan">

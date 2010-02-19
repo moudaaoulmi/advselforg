@@ -9,28 +9,31 @@ public class DropBlockPlan extends BeliefUpdatingPlan {
 	private int angle;
 
 	public DropBlockPlan() {
-		this.distance = 60;
+		this.distance = 20;
 		this.angle = 180;
 	}
 
 	@Override
 	public void body() {
 		printDebug("executed DropBlockPlan(" + distance + ", " + angle + ")");
+		
+		setBelief("readyForCommand", false);
 		try {
 			getRobot().moveBackward(distance);
+			setBelief("drivingBackward", true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		while ((Boolean) getBelief("drivingBackward")) {}
-		printDebug("finished driving backward");
+		waitForBeliefChange("drivingBackward");
 		
+		setBelief("readyForCommand", false);
 		try {
 			getRobot().turnLeft(angle);
+			setBelief("turning", true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		setBelief("readyForCommand", true);
 	}
 }

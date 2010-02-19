@@ -30,7 +30,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private NxtBridge robot;
 	private int step = 0;
 
-	private int oldTravelDistance = 0;
 	private EObjectType oldObjectType = EObjectType.NO_OBJECT;
 
 	private SensorData sensorData;
@@ -57,14 +56,14 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 						sensorData.wasScanning = false;
 					}
 
-					processTurningUpdate();
-					processDriveBackwardUpdate();
 					processDriveForwardUpdate();
+					processDriveBackwardUpdate();
+					processTurningUpdate();
 					proccesReadyForCommand();
 					processTouchSensor();
-					if(!sensorData.isTurning()){
+					//if(!sensorData.isTurning()){
 					      processSonarSensor();
-					}
+					//}
 					processLightSensor();
 					processTravelDistance();
 
@@ -86,7 +85,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			sensorData.wasTurning = false;
 
 			robot.resetTravelDistance();
-			oldTravelDistance = 0;
 		}
 	}
 
@@ -97,7 +95,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			sensorData.wasDrivingBackward = false;
 
 			robot.resetTravelDistance();
-			oldTravelDistance = 0;
 		}
 	}
 
@@ -108,7 +105,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			sensorData.wasDrivingForward = false;
 
 			robot.resetTravelDistance();
-			oldTravelDistance = 0;
 		}
 	}
 	
@@ -126,9 +122,8 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processTravelDistance() {
-		if (sensorData.getTravelDistance() != oldTravelDistance) {
+		if (sensorData.getTravelDistance() != (Integer) getBelief(BELIEF_DISTANCE_TRAVELED)) {
 			setBelief(BELIEF_DISTANCE_TRAVELED, sensorData.getTravelDistance());
-			oldTravelDistance = sensorData.getTravelDistance();
 		}
 	}
 
