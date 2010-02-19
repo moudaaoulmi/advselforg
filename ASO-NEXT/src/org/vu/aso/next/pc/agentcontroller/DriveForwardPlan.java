@@ -17,11 +17,11 @@ public class DriveForwardPlan extends BeliefUpdatingPlan {
 		
 		try {
 			getRobot().moveForward(distance);
-			setBelief("drivingForward", true);
+			setBelief(Beliefs.DRIVING_FORWARD, true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		setBelief("readyForCommand", true);
+		setBelief(Beliefs.READY_FOR_COMMAND, true);
 	}
 }

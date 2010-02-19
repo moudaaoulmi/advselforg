@@ -15,10 +15,10 @@ public class AvoidObstaclePlan extends BeliefUpdatingPlan {
 	public void body() {
 		printDebug("executed AvoidObstaclePlan()");
 
-		setBelief("readyForCommand", false);
+		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		try {
 			getRobot().turnLeft(angle);
-			setBelief("turning", true);
+			setBelief(Beliefs.TURNING, true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

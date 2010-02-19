@@ -14,19 +14,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	private static final long serialVersionUID = -7096221399333292349L;
 
-	private static final String BELIEF_WIM_RUNNING = "WIMRunning";
-	private static final String BELIEF_READY_FOR_COMMAND = "readyForCommand";
-	private static final String BELIEF_TURNING = "turning";
-	private static final String BELIEF_DRIVING_BACKWARD = "drivingBackward";
-	private static final String BELIEF_DRIVING_FORWARD = "drivingForward";
-	private static final String BELIEF_OBJECT_IN_GRIPPER = "objectInGripper";
-	private static final String BELIEF_DISTANCE_TRAVELED = "distanceTraveled";
-	private static final String BELIEF_CLOSEST_BLOCK_DISTANCE = "closestBlockDistance";
-	private static final String BELIEF_CLOSEST_BLOCK_ANGLE = "distanceBlockAngle";
-	private static final String BELIEF_TOP_SONAR_DISTANCE = "topSonarDistance";
-	private static final String BELIEF_OLD_TOP_SONAR_DISTANCE = "oldTopSonarDistance";
-	private static final String BELIEF_CLUSTER_DETECTED = "clusterDetected";
-
 	private NxtBridge robot;
 	private int step = 0;
 
@@ -41,8 +28,8 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void initialize() {
 		robot = (NxtBridge) getBeliefbase().getBelief("robot").getFact();
 		new Thread(this).start();
-		getBeliefbase().getBelief(BELIEF_WIM_RUNNING).setFact(true);
-		getBeliefbase().getBelief(BELIEF_READY_FOR_COMMAND).setFact(true);
+		getBeliefbase().getBelief(Beliefs.WIM_RUNNING).setFact(true);
+		getBeliefbase().getBelief(Beliefs.READY_FOR_COMMAND).setFact(true);
 		waitFor(IFilter.NEVER);
 	}
 
@@ -80,7 +67,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	private void processTurningUpdate() throws IOException {
 		if (!sensorData.isTurning() && sensorData.wasTurning) {
-			setBelief(BELIEF_TURNING, false);
+			setBelief(Beliefs.TURNING, false);
 			printDebug("completed a turn");
 			sensorData.wasTurning = false;
 
@@ -89,8 +76,8 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processDriveBackwardUpdate() throws IOException {
-		if (!sensorData.isMovingBackward() && sensorData.wasDrivingBackward) {
-			setBelief(BELIEF_DRIVING_BACKWARD, false);
+		if (!sensorData.isDrivingBackward() && sensorData.wasDrivingBackward) {
+			setBelief(Beliefs.DRIVING_BACKWARD, false);
 			printDebug("completed driving backward");
 			sensorData.wasDrivingBackward = false;
 
@@ -99,8 +86,8 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processDriveForwardUpdate() throws IOException {
-		if (!sensorData.isMovingForward() && sensorData.wasDrivingForward) {
-			setBelief(BELIEF_DRIVING_FORWARD, false);
+		if (!sensorData.isDrivingForward() && sensorData.wasDrivingForward) {
+			setBelief(Beliefs.DRIVING_FORWARD, false);
 			printDebug("completed driving forward");
 			sensorData.wasDrivingForward = false;
 
@@ -110,42 +97,42 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	
 	private void proccesReadyForCommand() {
 		if (!sensorData.isMoving()) {
-			setBelief(BELIEF_READY_FOR_COMMAND, true);
+			setBelief(Beliefs.READY_FOR_COMMAND, true);
 		}
 	}
 
 	private void processLightSensor() {
 		if (sensorData.getObjectType() != oldObjectType) {
-			setBelief(BELIEF_OBJECT_IN_GRIPPER, sensorData.getObjectType());
+			setBelief(Beliefs.OBJECT_IN_GRIPPER, sensorData.getObjectType());
 			oldObjectType = sensorData.getObjectType();
 		}
 	}
 
 	private void processTravelDistance() {
-		if (sensorData.getTravelDistance() != (Integer) getBelief(BELIEF_DISTANCE_TRAVELED)) {
-			setBelief(BELIEF_DISTANCE_TRAVELED, sensorData.getTravelDistance());
+		if (sensorData.getTravelDistance() != (Integer) getBelief(Beliefs.DISTANCE_TRAVELED)) {
+			setBelief(Beliefs.DISTANCE_TRAVELED, sensorData.getTravelDistance());
 		}
 	}
 
 	private void processScanResults() throws IOException {
-		setBelief(BELIEF_CLOSEST_BLOCK_DISTANCE, sensorData.getClosestblockDistance());
-		setBelief(BELIEF_CLOSEST_BLOCK_ANGLE, sensorData.getClosestblockAngle());
+		setBelief(Beliefs.CLOSEST_BLOCK_DISTANCE, sensorData.getClosestblockDistance());
+		setBelief(Beliefs.CLOSEST_BLOCK_ANGLE, sensorData.getClosestblockAngle());
 	}
 
 	private void processSonarSensor() {
-		setBelief(BELIEF_OLD_TOP_SONAR_DISTANCE, getBelief(BELIEF_TOP_SONAR_DISTANCE));
-		setBelief(BELIEF_TOP_SONAR_DISTANCE, sensorData.getDistanceUpperSonar());
+		setBelief(Beliefs.OLD_TOP_SONAR_DISTANCE, getBelief(Beliefs.TOP_SONAR_DISTANCE));
+		setBelief(Beliefs.TOP_SONAR_DISTANCE, sensorData.getDistanceUpperSonar());
 	}
 
 	private void processTouchSensor() {
 		if (sensorData.getTouchSensorPressed() && !sensorData.wasTouchPressed) {
-			setBelief(BELIEF_CLUSTER_DETECTED, true);
+			setBelief(Beliefs.CLUSTER_DETECTED, true);
 			printDebug("detected a cluster");
 			sensorData.wasTouchPressed = true;
 		}
 
 		if (!sensorData.getTouchSensorPressed() && sensorData.wasTouchPressed) {
-			setBelief(BELIEF_CLUSTER_DETECTED, false);
+			setBelief(Beliefs.CLUSTER_DETECTED, false);
 			printDebug("released a cluster");
 			sensorData.wasTouchPressed = false;
 		}
