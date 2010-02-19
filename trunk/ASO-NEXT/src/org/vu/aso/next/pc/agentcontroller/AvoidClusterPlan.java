@@ -19,7 +19,7 @@ public class AvoidClusterPlan extends BeliefUpdatingPlan {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		setBelief("drivingBackward", true);
+		setBelief(Beliefs.DRIVING_BACKWARD, true);
 		
 		try {
 			getRobot().moveBackward(distance);

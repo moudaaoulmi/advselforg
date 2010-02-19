@@ -15,7 +15,7 @@ public class DriveBackwardPlan extends BeliefUpdatingPlan {
 	public void body() {
 		printDebug("executed DriveBackwardPlan(" + distance + ")");
 		
-		setBelief("readyForCommand", false);
+		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		
 		try {
 			getRobot().moveBackward(distance);
@@ -23,7 +23,7 @@ public class DriveBackwardPlan extends BeliefUpdatingPlan {
 			e.printStackTrace();
 		}
 		
-		setBelief("drivingBackward", true);
-		setBelief("readyForCommand", true);
+		setBelief(Beliefs.READY_FOR_COMMAND, true);
+		setBelief(Beliefs.READY_FOR_COMMAND, true);
 	}
 }

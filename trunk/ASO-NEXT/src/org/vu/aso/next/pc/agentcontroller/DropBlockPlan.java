@@ -17,20 +17,20 @@ public class DropBlockPlan extends BeliefUpdatingPlan {
 	public void body() {
 		printDebug("executed DropBlockPlan(" + distance + ", " + angle + ")");
 		
-		setBelief("readyForCommand", false);
+		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		try {
 			getRobot().moveBackward(distance);
-			setBelief("drivingBackward", true);
+			setBelief(Beliefs.DRIVING_BACKWARD, true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		waitForBeliefChange("drivingBackward");
+		waitForBeliefChange(Beliefs.DRIVING_BACKWARD);
 		
-		setBelief("readyForCommand", false);
+		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		try {
 			getRobot().turnLeft(angle);
-			setBelief("turning", true);
+			setBelief(Beliefs.TURNING, true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

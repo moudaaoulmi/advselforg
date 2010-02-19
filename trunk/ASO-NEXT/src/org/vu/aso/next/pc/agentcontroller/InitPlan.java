@@ -12,7 +12,7 @@ public class InitPlan extends BeliefUpdatingPlan {
 
 	public InitPlan(String robotName) {
 		this.robotName = robotName;
-		setBelief("robotName", robotName);
+		setBelief(Beliefs.ROBOT_NAME, robotName);
 	}
 
 	@Override
@@ -33,8 +33,8 @@ public class InitPlan extends BeliefUpdatingPlan {
 			robot = new NxtBridge(robotName, port1, false, port2, true, port3, true, port4, true, leftMotorPort, rightMotorPort,
 					motorReverse, wheelDiameter, trackWidth);
 
-			setBelief("robot", robot);
-			setBelief("Initialized", true);
+			setBelief(Beliefs.ROBOT, robot);
+			setBelief(Beliefs.INITIALIZED, true);
 
 			printDebug("is connected");
 

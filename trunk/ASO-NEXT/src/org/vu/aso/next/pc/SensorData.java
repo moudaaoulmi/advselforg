@@ -101,7 +101,7 @@ public class SensorData {
 		}
 	}
 
-	public boolean isMovingForward() {
+	public boolean isDrivingForward() {
 		if (_isMoving && _lastCommand == EMovingMode.FORWARD) {
 			return true;
 		} else {
@@ -109,7 +109,7 @@ public class SensorData {
 		}
 	}
 
-	public boolean isMovingBackward() {
+	public boolean isDrivingBackward() {
 		if (_isMoving && _lastCommand == EMovingMode.BACKWARD) {
 			return true;
 		} else {
