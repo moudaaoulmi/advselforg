@@ -7,7 +7,7 @@ import org.vu.aso.next.common.ESensorType;
 import org.vu.aso.next.pc.NxtBridge;
 import org.vu.aso.next.pc.SensorData;
 
-public class TachometerTest {
+public class ScanTest {
 
 	public static void main(String[] args) throws InterruptedException, IOException {
 
