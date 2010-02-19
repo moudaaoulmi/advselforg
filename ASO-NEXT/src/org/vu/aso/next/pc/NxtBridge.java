@@ -61,7 +61,7 @@ public class NxtBridge {
 		return sensorData;
 	}
 
-	public void moveForward(int distance) throws IOException {
+	public void driveForward(int distance) throws IOException {
 		String message = buildMessage(NxtProtocol.FORWARD, distance);
 		sensorData.setLastCommand(EMovingMode.FORWARD);
 		sensorData.setMoving(true);
@@ -69,7 +69,7 @@ public class NxtBridge {
 		communicateToNxt(message);
 	}
 
-	public void moveBackward(int distance) throws IOException {
+	public void driveBackward(int distance) throws IOException {
 		String message = buildMessage(NxtProtocol.BACKWARD, distance);
 		sensorData.setLastCommand(EMovingMode.BACKWARD);
 		sensorData.setMoving(true);
