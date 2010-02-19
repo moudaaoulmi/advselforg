@@ -10,60 +10,81 @@ public class SensorData {
 	private final static int[] LIGHT_OBJECT_INTERVAL = { 45, 70 };
 	private final static int[] DARK_OBJECT_INTERVAL = { 35, 45 };
 
-	private int _distanceUpperSonar;
-	private int _distanceLowerSonar;
-	private int _lightSensorValue;
-	private boolean _touchSensorPressed;
-	private int _motorATachoCount;
-	private int _motorBTachoCount;
-	private int _motorCTachoCount;
-	private boolean _atDesiredMotorSpeed = true;
-	private boolean _isMoving;
-	private boolean _isScanning;
-	private EMovingMode _lastCommand;
-	private int _travelDistance;
-	private int _closestblockAngle;
-	private int _closestBlockDistance;
+	private int distanceUpperSonar;
+	private int distanceLowerSonar;
+	private int lightSensorValue;
+	private boolean touchSensorPressed;
+	private int motorATachoCount;
+	private int motorBTachoCount;
+	private int motorCTachoCount;
+	private boolean isMoving;
+	private boolean isScanning;
+	private EMovingMode lastCommand;
+	private int travelDistance;
+	private int closestblockAngle;
+	private int closestBlockDistance;
 
-	public boolean wasTurning = false;
-	public boolean wasScanning = false;
-	public boolean wasDrivingBackward = false;
-	public boolean wasDrivingForward = false;
-	public boolean wasTouchPressed = false;
+	public boolean wasTouchPressed = false; // moet nog weg!
 
 	public SensorData() {
-		_lastCommand = EMovingMode.FORWARD;
+		lastCommand = EMovingMode.FORWARD;
 	}
 
+	// At this moment, sensor types are fixed. Port 1 and 2 ultrasonic, port 3
+	// light, port 4 touch.
+	public void processMessage(String[] message) {
+		distanceLowerSonar = Integer.parseInt(message[1]);
+		distanceUpperSonar = Integer.parseInt(message[2]);
+
+		lightSensorValue = Integer.parseInt(message[3]);
+		if (message[4].equals("1")) {
+			touchSensorPressed = true;
+		} else {
+			touchSensorPressed = false;
+		}
+
+		motorATachoCount = Integer.parseInt(message[5]);
+		motorBTachoCount = Integer.parseInt(message[6]);
+		motorCTachoCount = Integer.parseInt(message[7]);
+
+		travelDistance = Integer.parseInt(message[8]);
+
+		isMoving = message[9].equals("1") ? true : false;
+		isScanning = message[10].equals("1") ? true : false;
+
+		closestblockAngle = Integer.parseInt(message[11]);
+		closestBlockDistance = Integer.parseInt(message[12]);
+	}
+	
 	public void setLastCommand(EMovingMode mm) {
-		_lastCommand = mm;
+		lastCommand = mm;
 	}
 
 	public void setMoving(boolean moving) {
-		_isMoving = moving;
+		isMoving = moving;
 	}
-	
+
 	public void setScanning(boolean scanning) {
-		_isScanning = scanning;
+		isScanning = scanning;
 	}
 
 	public int getDistanceUpperSonar() {
-		return _distanceUpperSonar;
+		return distanceUpperSonar;
 	}
-
+	
 	public int getDistanceLowerSonar() {
-		return _distanceLowerSonar;
+		return distanceLowerSonar;
 	}
 
 	public int getLightSensorValue() {
-		return _lightSensorValue;
+		return lightSensorValue;
 	}
 
 	public EObjectType getObjectType() {
-		if (_lightSensorValue >= LIGHT_OBJECT_INTERVAL[MINIMUM] && _lightSensorValue <= LIGHT_OBJECT_INTERVAL[MAXIMUM]) {
+		if (lightSensorValue >= LIGHT_OBJECT_INTERVAL[MINIMUM] && lightSensorValue <= LIGHT_OBJECT_INTERVAL[MAXIMUM]) {
 			return EObjectType.LIGHT_OBJECT;
-		} else if (_lightSensorValue >= DARK_OBJECT_INTERVAL[MINIMUM]
-				&& _lightSensorValue <= DARK_OBJECT_INTERVAL[MAXIMUM]) {
+		} else if (lightSensorValue >= DARK_OBJECT_INTERVAL[MINIMUM]
+				&& lightSensorValue <= DARK_OBJECT_INTERVAL[MAXIMUM]) {
 			return EObjectType.DARK_OBJECT;
 		} else {
 			return EObjectType.NO_OBJECT;
@@ -71,95 +92,55 @@ public class SensorData {
 	}
 
 	public boolean getTouchSensorPressed() {
-		return _touchSensorPressed;
+		return touchSensorPressed;
 	}
 
 	public int getTachoMeterCount(EMotorPort port) {
 		if (port == EMotorPort.A) {
-			return _motorATachoCount;
+			return motorATachoCount;
 		} else if (port == EMotorPort.B) {
-			return _motorBTachoCount;
+			return motorBTachoCount;
+		} else if (port == EMotorPort.C) {
+			return motorCTachoCount;
 		} else {
-			return _motorCTachoCount;
+			return -1;
 		}
-	}
-
-	public boolean atDesiredMotorSpeed() {
-		return _atDesiredMotorSpeed;
 	}
 
 	public boolean isMoving() {
-		return _isMoving;
+		return isMoving;
 	}
 
 	public boolean isScanning() {
-		return _isScanning;
+		return isScanning;
 	}
 
 	public boolean isTurning() {
-		if (_isMoving && _lastCommand == EMovingMode.TURNING) {
-			return true;
-		} else {
-			return false;
-		}
+		return isMoving && lastCommand == EMovingMode.TURNING;
 	}
 
 	public boolean isDrivingForward() {
-		if (_isMoving && _lastCommand == EMovingMode.FORWARD) {
-			return true;
-		} else {
-			return false;
-		}
+		return isMoving && lastCommand == EMovingMode.FORWARD;
 	}
 
 	public boolean isDrivingBackward() {
-		if (_isMoving && _lastCommand == EMovingMode.BACKWARD) {
-			return true;
-		} else {
-			return false;
-		}
+		return isMoving && lastCommand == EMovingMode.BACKWARD;
 	}
 
 	public EMovingMode lastCommand() {
-		return _lastCommand;
+		return lastCommand;
 	}
 
 	public int getClosestblockAngle() {
-		return _closestblockAngle;
+		return closestblockAngle;
 	}
 
 	public int getClosestblockDistance() {
-		return _closestBlockDistance;
+		return closestBlockDistance;
 	}
 
 	public int getTravelDistance() {
-		return _travelDistance;
+		return travelDistance;
 	}
 
-	// At this moment I expect fixed sensortypes. Port 1 and 2 ultra sonic, port
-	// 3 licht, port 4 touch.
-	public void processMessage(String[] message) {
-		_distanceLowerSonar = Integer.parseInt(message[1]);
-		_distanceUpperSonar = Integer.parseInt(message[2]);
-
-		_lightSensorValue = Integer.parseInt(message[3]);
-		if (message[4].equals("1")) {
-			_touchSensorPressed = true;
-		} else {
-			_touchSensorPressed = false;
-		}
-
-		_motorATachoCount = Integer.parseInt(message[5]);
-		_motorBTachoCount = Integer.parseInt(message[6]);
-		_motorCTachoCount = Integer.parseInt(message[7]);
-
-		_travelDistance = Integer.parseInt(message[8]);
-
-		_isMoving = message[9].equals("1") ? true : false;
-
-		_isScanning = message[10].equals("1") ? true : false;
-
-		_closestblockAngle = Integer.parseInt(message[11]);
-		_closestBlockDistance = Integer.parseInt(message[12]);
-	}
 }

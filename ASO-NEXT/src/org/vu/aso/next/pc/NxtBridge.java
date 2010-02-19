@@ -5,6 +5,7 @@ import org.vu.aso.next.common.EMovingMode;
 import org.vu.aso.next.common.ESensorType;
 import org.vu.aso.next.common.NxtProtocol;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -27,12 +28,14 @@ public class NxtBridge {
 
 	public NxtBridge(String nxtName, ESensorType port1, boolean monitorPort1, ESensorType port2, boolean monitorPort2,
 			ESensorType port3, boolean monitorPort3, ESensorType port4, boolean monitorPort4, EMotorPort pilotPortLeft,
-			EMotorPort pilotPortRight, Boolean MotorReverse, float wheelDiameter, float trackWidth)
-			throws InterruptedException, IOException {
+			EMotorPort pilotPortRight, Boolean MotorReverse, float wheelDiameter, float trackWidth) {
 
-		logfile = new FileOutputStream("C:\\log.txt");
+		try {
+			logfile = new FileOutputStream("C:\\log.txt");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		logstream = new PrintStream(logfile);
-
 		formatter = new SimpleDateFormat("HH:mm:ss.SSS");
 
 		connection = new NXTConnector();
@@ -40,7 +43,11 @@ public class NxtBridge {
 
 		in = connection.getInputStream();
 		out = connection.getOutputStream();
-		Thread.sleep(1000);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		int reverse = MotorReverse ? NxtProtocol.TRUE : NxtProtocol.FALSE;
 		int monitorPort1_int = monitorPort1 ? NxtProtocol.TRUE : NxtProtocol.FALSE;
@@ -65,7 +72,7 @@ public class NxtBridge {
 		String message = buildMessage(NxtProtocol.FORWARD, distance);
 		sensorData.setLastCommand(EMovingMode.FORWARD);
 		sensorData.setMoving(true);
-		sensorData.wasDrivingForward = true;
+		//sensorData.wasDrivingForward = true;
 		communicateToNxt(message);
 	}
 
@@ -73,7 +80,7 @@ public class NxtBridge {
 		String message = buildMessage(NxtProtocol.BACKWARD, distance);
 		sensorData.setLastCommand(EMovingMode.BACKWARD);
 		sensorData.setMoving(true);
-		sensorData.wasDrivingBackward = true;
+		//sensorData.wasDrivingBackward = true;
 		communicateToNxt(message);
 	}
 
@@ -81,7 +88,7 @@ public class NxtBridge {
 		String message = buildMessage(NxtProtocol.TURN_LEFT, angle);
 		sensorData.setLastCommand(EMovingMode.TURNING);
 		sensorData.setMoving(true);
-		sensorData.wasTurning = true;
+		//sensorData.wasTurning = true;
 		communicateToNxt(message);
 	}
 
@@ -89,7 +96,7 @@ public class NxtBridge {
 		String message = buildMessage(NxtProtocol.TURN_RIGHT, angle);
 		sensorData.setLastCommand(EMovingMode.TURNING);
 		sensorData.setMoving(true);
-		sensorData.wasTurning = true;
+		//sensorData.wasTurning = true;
 		communicateToNxt(message);
 	}
 
@@ -106,7 +113,7 @@ public class NxtBridge {
 	public void performScan(int fromAngle, int toAngle) {
 		String message = buildMessage(NxtProtocol.PERFORM_SCAN, fromAngle, toAngle);
 		sensorData.setScanning(true);
-		sensorData.wasScanning = true;
+		//sensorData.wasScanning = true;
 		communicateToNxt(message);
 	}
 
@@ -120,10 +127,14 @@ public class NxtBridge {
 		communicateToNxt(message);
 	}
 
-	public void close() throws IOException {
+	public void close() {
 		this.stop();
 		this.exit();
-		connection.close();
+		try {
+			connection.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public SensorData getSensorData() {

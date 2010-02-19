@@ -35,11 +35,14 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	public void run() {
 		while (true) {
 			sensorData = robot.requestSensorData();
-			if (!sensorData.isScanning() && sensorData.wasScanning) {
+			
+			// Process scan results if finished scanning
+			if (!sensorData.isScanning() && (Boolean) getBelief(Beliefs.SCANNING)) {
 				processScanResults();
-				sensorData.wasScanning = false;
+				setBelief(Beliefs.SCANNING, false);
 			}
 
+			// Read the sensor values
 			processDriveForwardUpdate();
 			processDriveBackwardUpdate();
 			processTurningUpdate();
@@ -49,6 +52,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			processLightSensor();
 			processTravelDistance();
 
+			// Perform some actions every n steps
 			processSteps();
 
 			printDebug("processed sensor data");
@@ -56,26 +60,23 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processTurningUpdate() {
-		if (!sensorData.isTurning() && sensorData.wasTurning) {
+		if (!sensorData.isTurning() && (Boolean) getBelief(Beliefs.TURNING)) {
 			setBelief(Beliefs.TURNING, false);
 			printDebug("completed a turn");
-			sensorData.wasTurning = false;
 		}
 	}
 
 	private void processDriveBackwardUpdate() {
-		if (!sensorData.isDrivingBackward() && sensorData.wasDrivingBackward) {
+		if (!sensorData.isDrivingBackward() && (Boolean) getBelief(Beliefs.DRIVING_BACKWARD)) {
 			setBelief(Beliefs.DRIVING_BACKWARD, false);
 			printDebug("completed driving backward");
-			sensorData.wasDrivingBackward = false;
 		}
 	}
 
 	private void processDriveForwardUpdate() {
-		if (!sensorData.isDrivingForward() && sensorData.wasDrivingForward) {
+		if (!sensorData.isDrivingForward() && (Boolean) getBelief(Beliefs.DRIVING_FORWARD)) {
 			setBelief(Beliefs.DRIVING_FORWARD, false);
 			printDebug("completed driving forward");
-			sensorData.wasDrivingForward = false;
 		}
 	}
 

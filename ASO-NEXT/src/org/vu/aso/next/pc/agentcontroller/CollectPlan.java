@@ -13,18 +13,14 @@ public class CollectPlan extends BeliefUpdatingPlan {
 	public void body() {
 		printDebug("executed AvoidObstaclePlan()");
 		
-		setBelief("readyForCommand", false);
+		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		
 		getRobot().turnLeft(angle);
-		
-		while ((Boolean) getBelief("turning")) {}
-		
-		setBelief("topSonarDistance", 255);
+		waitForBeliefChange(Beliefs.TURNING);
 		
 		getRobot().driveForward(10);
+		waitForBeliefChange(Beliefs.DRIVING_FORWARD);
 		
-		while ((Boolean) getBelief("drivingForward")) {}
-		
-		setBelief("readyForCommand", true);
+		setBelief(Beliefs.READY_FOR_COMMAND, true);
 	}
 }
