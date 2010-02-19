@@ -1,7 +1,5 @@
 package org.vu.aso.next.pc.agentcontroller;
 
-import java.io.IOException;
-
 public class AvoidClusterPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = -8758789822720288236L;
@@ -14,18 +12,11 @@ public class AvoidClusterPlan extends BeliefUpdatingPlan {
 	@Override
 	public void body() {
 		printDebug("executed AvoidObstaclePlan(" + distance + ")");
-		try {
-			getRobot().driveBackward(distance);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+		getRobot().driveBackward(distance);
 		setBelief(Beliefs.DRIVING_BACKWARD, true);
-		
-		try {
-			getRobot().driveBackward(distance);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+		getRobot().driveBackward(distance);
 		
 	}
 }

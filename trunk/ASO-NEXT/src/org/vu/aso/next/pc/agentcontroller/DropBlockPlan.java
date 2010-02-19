@@ -1,7 +1,5 @@
 package org.vu.aso.next.pc.agentcontroller;
 
-import java.io.IOException;
-
 public class DropBlockPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = -8758789822720288236L;
@@ -18,22 +16,14 @@ public class DropBlockPlan extends BeliefUpdatingPlan {
 		printDebug("executed DropBlockPlan(" + distance + ", " + angle + ")");
 		
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
-		try {
-			getRobot().driveBackward(distance);
-			setBelief(Beliefs.DRIVING_BACKWARD, true);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		getRobot().driveBackward(distance);
+		setBelief(Beliefs.DRIVING_BACKWARD, true);
 		
 		waitForBeliefChange(Beliefs.DRIVING_BACKWARD);
 		
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
-		try {
-			getRobot().turnLeft(angle);
-			setBelief(Beliefs.TURNING, true);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		getRobot().turnLeft(angle);
+		setBelief(Beliefs.TURNING, true);
 		
 	}
 }

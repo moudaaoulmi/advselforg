@@ -1,7 +1,5 @@
 package org.vu.aso.next.pc.agentcontroller;
 
-import java.io.IOException;
-
 public class TurnLeftPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = -6357593709536921293L;
@@ -14,10 +12,6 @@ public class TurnLeftPlan extends BeliefUpdatingPlan {
 	@Override
 	public void body() {
 		printDebug("executed TurnLeftPlan(" + angle + ")");
-		try {
-			getRobot().turnLeft(angle);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		getRobot().turnLeft(angle);
 	}
 }

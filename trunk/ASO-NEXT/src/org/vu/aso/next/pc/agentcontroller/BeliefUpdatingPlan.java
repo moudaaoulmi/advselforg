@@ -17,7 +17,7 @@ public abstract class BeliefUpdatingPlan extends Plan {
 	}
 	
 	protected NxtBridge getRobot() {
-		return (NxtBridge) getBeliefbase().getBelief("robot").getFact();
+		return (NxtBridge) getBeliefbase().getBelief(Beliefs.ROBOT).getFact();
 	}
 
 	protected Object getBelief(String beliefName) {

@@ -1,7 +1,5 @@
 package org.vu.aso.next.pc.agentcontroller;
 
-import java.io.IOException;
-
 public class DriveForwardPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = 6054116585490038881L;
@@ -15,12 +13,8 @@ public class DriveForwardPlan extends BeliefUpdatingPlan {
 	public void body() {
 		printDebug("executed DriveForwardPlan(" + distance + ")");
 		
-		try {
-			getRobot().driveForward(distance);
-			setBelief(Beliefs.DRIVING_FORWARD, true);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		getRobot().driveForward(distance);
+		setBelief(Beliefs.DRIVING_FORWARD, true);
 		
 		setBelief(Beliefs.READY_FOR_COMMAND, true);
 	}

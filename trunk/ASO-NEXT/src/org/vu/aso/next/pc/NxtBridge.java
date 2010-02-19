@@ -32,7 +32,7 @@ public class NxtBridge {
 
 		logfile = new FileOutputStream("C:\\log.txt");
 		logstream = new PrintStream(logfile);
-		
+
 		formatter = new SimpleDateFormat("HH:mm:ss.SSS");
 
 		connection = new NXTConnector();
@@ -55,13 +55,13 @@ public class NxtBridge {
 		communicateToNxt(initMessage);
 	}
 
-	public SensorData requestSensorData() throws IOException {
+	public SensorData requestSensorData() {
 		String message = buildMessage(NxtProtocol.SENSOR_DATA);
 		sensorData.processMessage(communicateToNxt(message));
 		return sensorData;
 	}
 
-	public void driveForward(int distance) throws IOException {
+	public void driveForward(int distance) {
 		String message = buildMessage(NxtProtocol.FORWARD, distance);
 		sensorData.setLastCommand(EMovingMode.FORWARD);
 		sensorData.setMoving(true);
@@ -69,7 +69,7 @@ public class NxtBridge {
 		communicateToNxt(message);
 	}
 
-	public void driveBackward(int distance) throws IOException {
+	public void driveBackward(int distance) {
 		String message = buildMessage(NxtProtocol.BACKWARD, distance);
 		sensorData.setLastCommand(EMovingMode.BACKWARD);
 		sensorData.setMoving(true);
@@ -77,7 +77,7 @@ public class NxtBridge {
 		communicateToNxt(message);
 	}
 
-	public void turnLeft(int angle) throws IOException {
+	public void turnLeft(int angle) {
 		String message = buildMessage(NxtProtocol.TURN_LEFT, angle);
 		sensorData.setLastCommand(EMovingMode.TURNING);
 		sensorData.setMoving(true);
@@ -85,7 +85,7 @@ public class NxtBridge {
 		communicateToNxt(message);
 	}
 
-	public void turnRight(int angle) throws IOException {
+	public void turnRight(int angle) {
 		String message = buildMessage(NxtProtocol.TURN_RIGHT, angle);
 		sensorData.setLastCommand(EMovingMode.TURNING);
 		sensorData.setMoving(true);
@@ -93,27 +93,27 @@ public class NxtBridge {
 		communicateToNxt(message);
 	}
 
-	public void resetTravelDistance() throws IOException {
+	public void resetTravelDistance() {
 		String message = buildMessage(NxtProtocol.RESET_TRAVEL_DISTANCE);
 		communicateToNxt(message);
 	}
 
-	public void calibrateTurret() throws IOException {
+	public void calibrateTurret() {
 		String message = buildMessage(NxtProtocol.CALIBRATE_TURRET);
 		communicateToNxt(message);
 	}
 
-	public void performScan(int fromAngle, int toAngle) throws IOException {
+	public void performScan(int fromAngle, int toAngle) {
 		String message = buildMessage(NxtProtocol.PERFORM_SCAN, fromAngle, toAngle);
 		communicateToNxt(message);
 	}
 
-	public void stop() throws IOException {
+	public void stop() {
 		String message = buildMessage(NxtProtocol.STOP);
 		communicateToNxt(message);
 	}
 
-	public void exit() throws IOException {
+	public void exit() {
 		String message = buildMessage(NxtProtocol.EXIT);
 		communicateToNxt(message);
 	}
@@ -148,10 +148,15 @@ public class NxtBridge {
 		return sb.toString();
 	}
 
-	private synchronized String[] communicateToNxt(String message) throws IOException {
+	private synchronized String[] communicateToNxt(String message) {
 		logstream.println(formatter.format(new Date()) + " " + message);
-		writeMessage(message);
-		return getMessage();
+		try {
+			writeMessage(message);
+			return getMessage();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	private void writeMessage(String message) throws IOException {
