@@ -80,10 +80,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processTurningUpdate() throws IOException {
-		if (sensorData.isTurning() && !sensorData.wasTurning) {
-			sensorData.wasTurning = true;
-		}
-
 		if (!sensorData.isTurning() && sensorData.wasTurning) {
 			setBelief(BELIEF_TURNING, false);
 			printDebug("completed a turn");
@@ -95,10 +91,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processDriveBackwardUpdate() throws IOException {
-		if (sensorData.isMovingBackward() && !sensorData.wasDrivingBackward) {
-			sensorData.wasDrivingBackward = true;
-		}
-
 		if (!sensorData.isMovingBackward() && sensorData.wasDrivingBackward) {
 			setBelief(BELIEF_DRIVING_BACKWARD, false);
 			printDebug("completed driving backward");
@@ -110,10 +102,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processDriveForwardUpdate() throws IOException {
-		if (sensorData.isMovingForward() && !sensorData.wasDrivingForward) {
-			sensorData.wasDrivingForward = true;
-		}
-
 		if (!sensorData.isMovingForward() && sensorData.wasDrivingForward) {
 			setBelief(BELIEF_DRIVING_FORWARD, false);
 			printDebug("completed driving forward");
