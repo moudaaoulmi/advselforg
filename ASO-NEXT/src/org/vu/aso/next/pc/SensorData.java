@@ -25,6 +25,12 @@ public class SensorData {
 	private int _closestblockAngle;
 	private int _closestBlockDistance;
 
+	public boolean wasTurning = false;
+	public boolean wasScanning = false;
+	public boolean wasDrivingBackward = false;
+	public boolean wasDrivingForward = false;
+	public boolean wasTouchPressed = false;
+
 	public SensorData() {
 		_lastCommand = EMovingMode.FORWARD;
 	}
@@ -32,7 +38,7 @@ public class SensorData {
 	public void setLastCommand(EMovingMode mm) {
 		_lastCommand = mm;
 	}
-	
+
 	public void setMoving(boolean moving) {
 		_isMoving = moving;
 	}
@@ -52,7 +58,8 @@ public class SensorData {
 	public EObjectType getObjectType() {
 		if (_lightSensorValue >= LIGHT_OBJECT_INTERVAL[MINIMUM] && _lightSensorValue <= LIGHT_OBJECT_INTERVAL[MAXIMUM]) {
 			return EObjectType.LIGHT_OBJECT;
-		} else if (_lightSensorValue >= DARK_OBJECT_INTERVAL[MINIMUM] && _lightSensorValue <= DARK_OBJECT_INTERVAL[MAXIMUM]) {
+		} else if (_lightSensorValue >= DARK_OBJECT_INTERVAL[MINIMUM]
+				&& _lightSensorValue <= DARK_OBJECT_INTERVAL[MAXIMUM]) {
 			return EObjectType.DARK_OBJECT;
 		} else {
 			return EObjectType.NO_OBJECT;
@@ -80,7 +87,7 @@ public class SensorData {
 	public boolean isMoving() {
 		return _isMoving;
 	}
-	
+
 	public boolean isScanning() {
 
 		return _isScanning;
@@ -93,7 +100,7 @@ public class SensorData {
 			return false;
 		}
 	}
-	
+
 	public boolean isMovingForward() {
 		if (_isMoving && _lastCommand == EMovingMode.FORWARD) {
 			return true;
@@ -101,7 +108,7 @@ public class SensorData {
 			return false;
 		}
 	}
-	
+
 	public boolean isMovingBackward() {
 		if (_isMoving && _lastCommand == EMovingMode.BACKWARD) {
 			return true;

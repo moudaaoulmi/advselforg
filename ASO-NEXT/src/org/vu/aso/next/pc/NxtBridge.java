@@ -65,6 +65,7 @@ public class NxtBridge {
 		String message = buildMessage(NxtProtocol.FORWARD, distance);
 		sensorData.setLastCommand(EMovingMode.FORWARD);
 		sensorData.setMoving(true);
+		sensorData.wasDrivingForward = true;
 		communicateToNxt(message);
 	}
 
@@ -72,6 +73,7 @@ public class NxtBridge {
 		String message = buildMessage(NxtProtocol.BACKWARD, distance);
 		sensorData.setLastCommand(EMovingMode.BACKWARD);
 		sensorData.setMoving(true);
+		sensorData.wasDrivingBackward = true;
 		communicateToNxt(message);
 	}
 
@@ -79,6 +81,7 @@ public class NxtBridge {
 		String message = buildMessage(NxtProtocol.TURN_LEFT, angle);
 		sensorData.setLastCommand(EMovingMode.TURNING);
 		sensorData.setMoving(true);
+		sensorData.wasTurning = true;
 		communicateToNxt(message);
 	}
 
@@ -86,6 +89,7 @@ public class NxtBridge {
 		String message = buildMessage(NxtProtocol.TURN_RIGHT, angle);
 		sensorData.setLastCommand(EMovingMode.TURNING);
 		sensorData.setMoving(true);
+		sensorData.wasTurning = true;
 		communicateToNxt(message);
 	}
 
