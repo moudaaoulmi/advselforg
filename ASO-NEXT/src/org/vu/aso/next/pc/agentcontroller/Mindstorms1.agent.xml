@@ -147,8 +147,7 @@
 				</condition>
 			</trigger>
 			<precondition>
-				$beliefbase.clusterDetected &amp;&amp;
-				!$beliefbase.depositAtWall &amp;&amp;
+				$beliefbase.collecting &amp;&amp;
 				$beliefbase.readyForCommand
 			</precondition>
 		</plan>
@@ -162,12 +161,41 @@
 				</condition>
 			</trigger>
 			<precondition>
-				$beliefbase.clusterDetected &amp;&amp;
-				!$beliefbase.depositAtWall &amp;&amp;
+				$beliefbase.collecting &amp;&amp;
 				$beliefbase.readyForCommand
 			</precondition>
 		</plan>
 
+		
+		<!-- Rules while searching -->
+		<!-- Rule 6: Scan the area -->
+		<plan name="scanPlan">
+			<body>new ScanPlan()</body>
+			<trigger>
+				<condition>
+					!$beliefbase.areaScanned &amp;&amp;
+					$beliefbase.searching
+				</condition>
+			</trigger>
+			<precondition>
+				$beliefbase.searching &amp;&amp;
+				!$beliefbase.areaScanned &amp;&amp;
+				$beliefbase.readyForCommand
+			</precondition>
+		</plan>
+
+		<!-- Rule 8: Reset area scanned -->
+		<plan name="resetScanPlan">
+			<body>new ResetScanPlan()</body>
+			<trigger>
+				<condition>
+					$beliefbase.distanceTraveled &gt; 30
+				</condition>
+			</trigger>
+			<precondition>
+				$beliefbase.readyForCommand
+			</precondition>
+		</plan>
 
 		<plan name="ProcessObjectChangedPlan">
 			<body>new ProcessObjectChangedPlan()</body>
