@@ -66,6 +66,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 					processTurningUpdate();
 					processDriveBackwardUpdate();
 					processDriveForwardUpdate();
+					proccesReadyForCommand();
 					processTouchSensor();
 					if(!sensorData.isTurning()){
 					      processSonarSensor();
@@ -126,6 +127,12 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 			robot.resetTravelDistance();
 			oldTravelDistance = 0;
+		}
+	}
+	
+	private void proccesReadyForCommand() {
+		if (!sensorData.isMoving()) {
+			setBelief(BELIEF_READY_FOR_COMMAND, true);
 		}
 	}
 
