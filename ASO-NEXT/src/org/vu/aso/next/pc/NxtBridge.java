@@ -105,6 +105,8 @@ public class NxtBridge {
 
 	public void performScan(int fromAngle, int toAngle) {
 		String message = buildMessage(NxtProtocol.PERFORM_SCAN, fromAngle, toAngle);
+		sensorData.setScanning(true);
+		sensorData.wasScanning = true;
 		communicateToNxt(message);
 	}
 

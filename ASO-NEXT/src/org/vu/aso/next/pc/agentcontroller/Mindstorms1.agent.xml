@@ -174,7 +174,8 @@
 			<trigger>
 				<condition>
 					!$beliefbase.areaScanned &amp;&amp;
-					$beliefbase.searching
+					$beliefbase.searching &amp;&amp;
+					$beliefbase.readyForCommand
 				</condition>
 			</trigger>
 			<precondition>

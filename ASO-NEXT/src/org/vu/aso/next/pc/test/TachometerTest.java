@@ -16,7 +16,7 @@ public class TachometerTest {
 
 		SensorData data;
 
-		bridge.performScan(90, -90);
+		bridge.performScan(85, -85);
 		do {
 			data = bridge.requestSensorData();
 		} while (data.isScanning());
