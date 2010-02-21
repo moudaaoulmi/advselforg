@@ -47,11 +47,10 @@ public class NxtSensorMonitor extends Thread {
 	}
 
 	private void performScan() {
-		boolean reverseDirection = true;
-
-		int currentAngle = parent.scanFrom * (reverseDirection ? -1 : 1);
-		int finalAngle = parent.scanTo * (reverseDirection ? -1 : 1);
-		int increment = 2 * (reverseDirection ? -1 : 1);
+		int currentAngle = parent.scanFrom;
+		int finalAngle = parent.scanTo;
+		int increment = 2;
+		
 		int closestBlockAngle = -1;
 		int closestBlockDistance = 255;
 		// int distanceUp, distanceDown;
@@ -81,7 +80,7 @@ public class NxtSensorMonitor extends Thread {
 		motor.setSpeed(HIGH_SPEED);
 		motor.rotateTo(0);
 
-		data.closestBlockAngle = Integer.toString((int) (closestBlockAngle * -0.77));
+		data.closestBlockAngle = Integer.toString((int) (closestBlockAngle * 0.77));
 		data.closestBlockDistance = Integer.toString(closestBlockDistance);
 	}
 
