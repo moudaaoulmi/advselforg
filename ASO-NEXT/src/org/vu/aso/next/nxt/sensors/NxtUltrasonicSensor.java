@@ -40,7 +40,7 @@ public class NxtUltrasonicSensor implements INxtSensor {
 			list.add(j, distances[i]);
 		}
 
-		return ((Integer) list.get(3) + (Integer) list.get(4));
+		return ((Integer) list.get(3) + (Integer) list.get(4)) / 2;
 	}
 
 	public boolean toBeMonitored() {
