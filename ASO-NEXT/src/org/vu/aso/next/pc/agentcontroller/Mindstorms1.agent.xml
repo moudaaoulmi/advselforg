@@ -14,7 +14,7 @@
 	</imports>
 
 	<beliefs>
-		<belief name="robot" class="NxtAgent" />
+		<belief name="robot" class="NxtBridge" />
 		<belief name="robotName" class="String" />
 		<belief name="Initialized" class="boolean">
 			<fact>false</fact>
@@ -196,13 +196,6 @@
 			<precondition>
 				$beliefbase.readyForCommand
 			</precondition>
-		</plan>
-
-		<plan name="ProcessObjectChangedPlan">
-			<body>new ProcessObjectChangedPlan()</body>
-			<trigger>
-				<beliefchange ref="objectInGripper" />
-			</trigger>
 		</plan>
 	</plans>
 
