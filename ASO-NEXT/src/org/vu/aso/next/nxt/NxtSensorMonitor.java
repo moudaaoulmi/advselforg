@@ -1,5 +1,7 @@
 package org.vu.aso.next.nxt;
 
+import org.vu.aso.next.nxt.sensors.NxtUltrasonicSensor;
+
 import lejos.nxt.Motor;
 
 public class NxtSensorMonitor extends Thread {
@@ -48,41 +50,43 @@ public class NxtSensorMonitor extends Thread {
 
 	private void performScan() {
 		boolean reverseDirection = true;
-
+		NxtUltrasonicSensor scannerUp = (NxtUltrasonicSensor) parent.sensors[SCANNER_UP];
+		NxtUltrasonicSensor scannerDown = (NxtUltrasonicSensor) parent.sensors[SCANNER_DOWN];
+		Motor motor = parent.motors[SCANNER_MOTOR];
+		
 		int currentAngle = parent.scanFrom;
 		int finalAngle = parent.scanTo;
 		int closestBlockAngle = -1;
 		int closestBlockDistance = 255;
+		int distanceUp, distanceDown;
 
-		parent.sensors[SCANNER_DOWN].on();
-
-		Motor motor = parent.motors[SCANNER_MOTOR];
-		motor.reverseDirection();
+		scannerUp.ping();
+		scannerDown.ping();
 
 		motor.setSpeed(HIGH_SPEED);
 		motor.rotateTo(currentAngle * (reverseDirection ? -1 : 1));
 
 		motor.setSpeed(LOW_SPEED);
 		while (currentAngle < finalAngle) {
-			if (distance(SCANNER_UP) > distance(SCANNER_DOWN) + 20 && distance(SCANNER_DOWN) < closestBlockDistance) {
+			distanceUp = scannerUp.getDistance();
+			distanceDown = scannerDown.getDistance();
+			
+			if (distanceUp > distanceDown + 20 && distanceDown < closestBlockDistance) {
 				closestBlockAngle = currentAngle;
-				closestBlockDistance = distance(SCANNER_DOWN);
+				closestBlockDistance = distanceDown;
 			}
 			currentAngle += 2;
 			motor.rotateTo(currentAngle * (reverseDirection ? -1 : 1));
 		}
 
-		parent.sensors[SCANNER_DOWN].off();
+		scannerUp.on();
+		scannerDown.off();
 
 		motor.setSpeed(HIGH_SPEED);
 		motor.rotateTo(0);
 
 		data.closestBlockAngle = Integer.toString(closestBlockAngle);
 		data.closestBlockDistance = Integer.toString(closestBlockDistance);
-	}
-
-	private int distance(int scannerPort) {
-		return Integer.parseInt(parent.sensors[scannerPort].getValue());
 	}
 
 }
