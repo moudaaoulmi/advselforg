@@ -146,7 +146,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	@Override
 	protected void printDebug(String message) {
 		System.out.println(formatter.format(new Date()) + " "
-				+ (String) getExternalAccess().getBeliefbase().getBelief(Beliefs.ROBOT_NAME).getFact() + ":WIM "
+				+ (String) getBelief(Beliefs.ROBOT_NAME) + ":WIM "
 				+ message);
 	}
 }
