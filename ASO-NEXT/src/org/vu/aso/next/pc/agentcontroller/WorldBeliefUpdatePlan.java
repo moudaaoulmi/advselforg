@@ -4,7 +4,6 @@ import java.util.Date;
 
 import org.vu.aso.next.common.EObjectType;
 
-import org.vu.aso.next.pc.NxtBridge;
 import org.vu.aso.next.pc.SensorData;
 
 import jadex.runtime.IFilter;
@@ -13,7 +12,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	private static final long serialVersionUID = -7096221399333292349L;
 
-	private NxtBridge robot;
+	private NxtAgent robot;
 	private int step = 0;
 
 	private EObjectType oldObjectType = EObjectType.NO_OBJECT;
@@ -25,7 +24,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void initialize() {
-		robot = (NxtBridge) getBeliefbase().getBelief(Beliefs.ROBOT).getFact();
+		robot = (NxtAgent) getBeliefbase().getBelief(Beliefs.ROBOT).getFact();
 		new Thread(this).start();
 		getBeliefbase().getBelief(Beliefs.WIM_RUNNING).setFact(true);
 		getBeliefbase().getBelief(Beliefs.READY_FOR_COMMAND).setFact(true);
