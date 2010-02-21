@@ -1,11 +1,7 @@
 package org.vu.aso.next.nxt.sensors;
 
-import java.util.ArrayList;
-
 import org.vu.aso.next.nxt.INxtSensor;
 
-import lejos.nxt.Button;
-import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 
