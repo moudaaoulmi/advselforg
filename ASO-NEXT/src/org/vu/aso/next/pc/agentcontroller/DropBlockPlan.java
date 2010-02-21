@@ -17,10 +17,11 @@ public class DropBlockPlan extends BeliefUpdatingPlan {
 		
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		getRobot().driveBackward(distance);
-		
+		setBelief(Beliefs.DRIVING_BACKWARD, true);
 		waitForBeliefChange(Beliefs.DRIVING_BACKWARD);
 		
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		getRobot().turnLeft(angle);
+		setBelief(Beliefs.TURNING, true);
 	}
 }

@@ -16,9 +16,11 @@ public class CollectPlan extends BeliefUpdatingPlan {
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		
 		getRobot().turnLeft(angle);
+		setBelief(Beliefs.TURNING, true);
 		waitForBeliefChange(Beliefs.TURNING);
 		
 		getRobot().driveForward(10);
+		setBelief(Beliefs.DRIVING_FORWARD, true);
 		waitForBeliefChange(Beliefs.DRIVING_FORWARD);
 		
 		setBelief(Beliefs.READY_FOR_COMMAND, true);

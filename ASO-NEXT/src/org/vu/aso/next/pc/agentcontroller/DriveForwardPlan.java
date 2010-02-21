@@ -14,6 +14,7 @@ public class DriveForwardPlan extends BeliefUpdatingPlan {
 		printDebug("executed DriveForwardPlan(" + distance + ")");
 		
 		getRobot().driveForward(distance);
+		setBelief(Beliefs.DRIVING_FORWARD, true);
 		
 		setBelief(Beliefs.READY_FOR_COMMAND, true);
 	}

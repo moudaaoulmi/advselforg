@@ -13,5 +13,6 @@ public class TurnRightPlan extends BeliefUpdatingPlan {
 	public void body() {
 		printDebug("executed TurnRightPlan(" + angle + ")");
 		getRobot().turnRight(angle);
+		setBelief(Beliefs.TURNING, true);
 	}
 }
