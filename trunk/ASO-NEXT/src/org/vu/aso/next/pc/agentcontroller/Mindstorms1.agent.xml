@@ -173,9 +173,7 @@
 			<body>new ScanPlan()</body>
 			<trigger>
 				<condition>
-					!$beliefbase.areaScanned &amp;&amp;
-					$beliefbase.searching &amp;&amp;
-					$beliefbase.readyForCommand
+					!$beliefbase.areaScanned
 				</condition>
 			</trigger>
 			<precondition>
@@ -190,7 +188,7 @@
 			<body>new ResetScanPlan()</body>
 			<trigger>
 				<condition>
-					$beliefbase.distanceTraveled &gt; 30
+					$beliefbase.distanceTraveled &gt; 70
 				</condition>
 			</trigger>
 			<precondition>
