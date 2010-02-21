@@ -20,6 +20,12 @@ public class ScanTest {
 		} while (data.isScanning());
 		System.out.println("Angle: " + data.getClosestblockAngle());
 		System.out.println("Distance: " + data.getClosestblockDistance());
+		
+		bridge.turnLeft(data.getClosestblockAngle());
+		do {
+			data = bridge.requestSensorData();
+		} while (data.isTurning());
+		bridge.driveForward(data.getClosestblockDistance());
 
 		bridge.close();
 	}
