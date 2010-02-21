@@ -31,7 +31,7 @@ public class NxtBridge {
 			EMotorPort pilotPortRight, Boolean MotorReverse, float wheelDiameter, float trackWidth) {
 
 		try {
-			logfile = new FileOutputStream("C:\\log.txt");
+			logfile = new FileOutputStream("C:\\Users\\Patrick\\log.txt");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
