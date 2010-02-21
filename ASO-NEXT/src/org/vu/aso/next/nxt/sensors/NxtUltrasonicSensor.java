@@ -44,7 +44,7 @@ public class NxtUltrasonicSensor implements INxtSensor {
 
 		//return ((Integer) list.get(3) + (Integer) list.get(4)) / 2;
 		LCD.drawString("dist: " + list.get(0), 0, 1);
-		Button.waitForPress();
+		Button.waitForPress(1000);
 		return (Integer) list.get(0);
 	}
 
