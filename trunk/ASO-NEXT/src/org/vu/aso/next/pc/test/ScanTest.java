@@ -14,17 +14,23 @@ public class ScanTest {
 
 		SensorData data;
 
+		// Perform the scan
 		bridge.performScan(-85, 85);
 		do {
 			data = bridge.requestSensorData();
 		} while (data.isScanning());
+		
+		// Print the results
 		System.out.println("Angle: " + data.getClosestblockAngle());
 		System.out.println("Distance: " + data.getClosestblockDistance());
 		
+		// Turn towards the object
 		bridge.turnRight(data.getClosestblockAngle());
 		do {
 			data = bridge.requestSensorData();
 		} while (data.isTurning());
+		
+		// Drive towards the object
 		bridge.driveForward(data.getClosestblockDistance());
 		do {
 			data = bridge.requestSensorData();
