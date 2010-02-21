@@ -80,7 +80,7 @@ public class NxtSensorMonitor extends Thread {
 		motor.setSpeed(HIGH_SPEED);
 		motor.rotateTo(0);
 
-		data.closestBlockAngle = Integer.toString(closestBlockAngle);
+		data.closestBlockAngle = Integer.toString((int)(closestBlockAngle*0.77));
 		data.closestBlockDistance = Integer.toString(closestBlockDistance);
 	}
 
