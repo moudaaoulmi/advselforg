@@ -52,12 +52,16 @@ public class NxtAgent extends NxtBridge {
 		setBelief(Beliefs.SCANNING, true);
 	}
 	
+	protected Object getBelief(String beliefName) {
+		return beliefBase.getBelief(beliefName).getFact();
+	}
+	
 	protected void setBelief(String beliefName, Object beliefValue) {
 		beliefBase.getBelief(beliefName).setFact(beliefValue);
 		printDebug("has value '" + beliefValue.toString() + "' for belief '" + beliefName + "'");
 	}
 	
 	protected void printDebug(String message) {
-		System.out.println(formatter.format(new Date()) + " " + (String) beliefBase.getBelief(Beliefs.ROBOT_NAME).getFact() + " " + message);
+		System.out.println(formatter.format(new Date()) + " " + (String) getBelief(Beliefs.ROBOT_NAME) + " " + message);
 	}
 }
