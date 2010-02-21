@@ -3,6 +3,8 @@ package org.vu.aso.next.pc.agentcontroller;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import org.vu.aso.next.pc.NxtBridge;
+
 import jadex.runtime.Plan;
 
 public abstract class BeliefUpdatingPlan extends Plan {
@@ -14,8 +16,8 @@ public abstract class BeliefUpdatingPlan extends Plan {
 		formatter = new SimpleDateFormat("HH:mm:ss.SSS");
 	}
 	
-	protected NxtAgent getRobot() {
-		return (NxtAgent) getBeliefbase().getBelief(Beliefs.ROBOT).getFact();
+	protected NxtBridge getRobot() {
+		return (NxtBridge) getBeliefbase().getBelief(Beliefs.ROBOT).getFact();
 	}
 
 	protected Object getBelief(String beliefName) {
