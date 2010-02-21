@@ -3,7 +3,7 @@ package org.vu.aso.next.pc.agentcontroller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import jadex.runtime.IBeliefbase;
+import jadex.runtime.IExternalAccess;
 
 import org.vu.aso.next.common.EMotorPort;
 import org.vu.aso.next.common.ESensorType;
@@ -12,14 +12,14 @@ import org.vu.aso.next.pc.NxtBridge;
 public class NxtAgent extends NxtBridge {
 	
 	protected SimpleDateFormat formatter;
-	IBeliefbase beliefBase;
+	IExternalAccess ea;
 
 	public NxtAgent(String nxtName, ESensorType port1, boolean monitorPort1, ESensorType port2, boolean monitorPort2,
 			ESensorType port3, boolean monitorPort3, ESensorType port4, boolean monitorPort4, EMotorPort pilotPortLeft,
-			EMotorPort pilotPortRight, Boolean MotorReverse, float wheelDiameter, float trackWidth, IBeliefbase beliefBase) {
+			EMotorPort pilotPortRight, Boolean MotorReverse, float wheelDiameter, float trackWidth, IExternalAccess ea) {
 		super(nxtName, port1, monitorPort1, port2, monitorPort2, port3, monitorPort3, port4, monitorPort4, pilotPortLeft,
 				pilotPortRight, MotorReverse, wheelDiameter, trackWidth);
-		this.beliefBase = beliefBase;
+		this.ea = ea;
 	}
 
 	@Override
@@ -53,11 +53,11 @@ public class NxtAgent extends NxtBridge {
 	}
 	
 	protected Object getBelief(String beliefName) {
-		return beliefBase.getBelief(beliefName).getFact();
+		return ea.getBeliefbase().getBelief(beliefName).getFact();
 	}
 	
 	protected void setBelief(String beliefName, Object beliefValue) {
-		beliefBase.getBelief(beliefName).setFact(beliefValue);
+		ea.getBeliefbase().getBelief(beliefName).setFact(beliefValue);
 		printDebug("has value '" + beliefValue.toString() + "' for belief '" + beliefName + "'");
 	}
 	
