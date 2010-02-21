@@ -57,7 +57,7 @@ public class NxtSensorMonitor extends Thread {
 		int currentAngle = parent.scanFrom;
 		int finalAngle = parent.scanTo;
 		int closestBlockAngle = -1;
-		int closestBlockDistance = 255;
+		int closestBlockDistance = 256;
 		int distanceUp, distanceDown;
 
 		scannerUp.ping();
