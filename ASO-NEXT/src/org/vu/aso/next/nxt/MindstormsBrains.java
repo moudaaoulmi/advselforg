@@ -253,14 +253,14 @@ public class MindstormsBrains {
 	private void turnLeft(String[] message) {
 		float angle = Float.parseFloat(message[1]);
 		if (angle > 0) {
-			pilot.rotate(angle, false);
+			pilot.rotate(angle * -1, false);
 		}
 	}
 
 	private void turnRight(String[] message) {
 		float angle = Float.parseFloat(message[1]);
 		if (angle > 0) {
-			pilot.rotate(angle * -1, false);
+			pilot.rotate(angle, false);
 		}
 	}
 
