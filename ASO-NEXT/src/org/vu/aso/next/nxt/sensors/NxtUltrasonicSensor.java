@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.vu.aso.next.nxt.INxtSensor;
 
+import lejos.nxt.Button;
+import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 
@@ -41,6 +43,8 @@ public class NxtUltrasonicSensor implements INxtSensor {
 		}
 
 		//return ((Integer) list.get(3) + (Integer) list.get(4)) / 2;
+		LCD.drawString("dist: " + list.get(0), 0, 1);
+		Button.waitForPress();
 		return (Integer) list.get(0);
 	}
 
