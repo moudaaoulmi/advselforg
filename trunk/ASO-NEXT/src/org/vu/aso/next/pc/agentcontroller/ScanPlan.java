@@ -10,7 +10,7 @@ public class ScanPlan extends BeliefUpdatingPlan {
 
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		getRobot().stop();
-		getRobot().performScan(85, -85);
+		getRobot().performScan(-85, 85);
 		setBelief(Beliefs.SCANNING, true);
 		waitForBeliefChange(Beliefs.SCANNING);
 		
