@@ -17,13 +17,14 @@ public class InitPlan extends BeliefUpdatingPlan {
 
 	@Override
 	public void body() {
+		printDebug("executed initPlan");
 		NxtBridge robot;
 
 		EMotorPort leftMotorPort = EMotorPort.A;
 		EMotorPort rightMotorPort = EMotorPort.C;
 		boolean motorReverse = false;
-		ESensorType port1 = ESensorType.ULTRASONIC; // Lower sensor
-		ESensorType port2 = ESensorType.ULTRASONIC; // Upper sensor
+		ESensorType port1 = ESensorType.NONE;
+		ESensorType port2 = ESensorType.ULTRASONIC;
 		ESensorType port3 = ESensorType.LIGHT;
 		ESensorType port4 = ESensorType.TOUCH;
 		float wheelDiameter = 5.4f;

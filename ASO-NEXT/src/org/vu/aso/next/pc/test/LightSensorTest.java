@@ -9,7 +9,7 @@ public class LightSensorTest {
 
 	public static void main(String[] args) {
 
-		NxtBridge bridge = new NxtBridge("JOEY", ESensorType.ULTRASONIC, true, ESensorType.ULTRASONIC, true,
+		NxtBridge bridge = new NxtBridge("JOEY", ESensorType.NONE, false, ESensorType.ULTRASONIC, true,
 				ESensorType.LIGHT, true, ESensorType.TOUCH, true, EMotorPort.A, EMotorPort.C, false, 5.4f, 15.1f);
 
 		SensorData data;

@@ -2,8 +2,6 @@ package org.vu.aso.next.nxt;
 
 public class NxtSensorMonitor extends Thread {
 
-	private static final int SONAR_POSITION = 7;
-
 	MindstormsBrains parent;
 	NxtSensorData data;
 
@@ -14,14 +12,14 @@ public class NxtSensorMonitor extends Thread {
 
 	public void run() {
 		for (int i = 0; i < data.sensorValues.length; i++) {
-			if (parent.sensors[i].toBeMonitored()) {
+			if (parent.sensors[i] != null && parent.sensors[i].toBeMonitored()) {
 				parent.sensors[i].on();
 			}
 		}
 
 		while (true) {
 			for (int i = 0; i < data.sensorValues.length; i++) {
-				if (parent.sensors[i].toBeMonitored()) {
+				if (parent.sensors[i] != null && parent.sensors[i].toBeMonitored()) {
 					data.sensorValues[i] = parent.sensors[i].getValue();
 				}
 			}

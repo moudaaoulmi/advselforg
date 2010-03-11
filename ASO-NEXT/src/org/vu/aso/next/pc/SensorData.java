@@ -11,7 +11,6 @@ public class SensorData {
 	private final static int[] DARK_OBJECT_INTERVAL = { 35, 45 };
 
 	private int distanceUpperSonar;
-	private int distanceLowerSonar;
 	private int lightSensorValue;
 	private boolean touchSensorPressed;
 	private int motorATachoCount;
@@ -30,7 +29,6 @@ public class SensorData {
 	// At this moment, sensor types are fixed. Port 1 and 2 ultrasonic, port 3
 	// light, port 4 touch.
 	public void processMessage(String[] message) {
-		distanceLowerSonar = Integer.parseInt(message[1]);
 		distanceUpperSonar = Integer.parseInt(message[2]);
 
 		lightSensorValue = Integer.parseInt(message[3]);
@@ -59,10 +57,6 @@ public class SensorData {
 
 	public int getDistanceUpperSonar() {
 		return distanceUpperSonar;
-	}
-	
-	public int getDistanceLowerSonar() {
-		return distanceLowerSonar;
 	}
 
 	public int getLightSensorValue() {

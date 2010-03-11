@@ -21,7 +21,7 @@ public class NxtSensorData {
 		}
 		tachoCounts = new String[3];
 		for (int i = 0; i < tachoCounts.length; i++) {
-			sensorValues[i] = "-1";
+			tachoCounts[i] = "-1";
 		}
 		travelDistance = "0";
 	}
