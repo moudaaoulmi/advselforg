@@ -11,7 +11,6 @@ public class NxtSensorMonitor extends Thread {
 	private static final int SCANNER_MOTOR = 1;
 	private static final int SCANNER_UP = 1;
 	private static final int SCANNER_DOWN = 0;
-	private static final int ANGLE = 2;
 
 	MindstormsBrains parent;
 	NxtSensorData data;
@@ -60,7 +59,6 @@ public class NxtSensorMonitor extends Thread {
 		boolean[] closestObjectVisible = new boolean[numberOfMeasurements];
 
 		int closestBlockAngle = -1;
-		int closestBlockDistance = 255;
 
 		parent.sensors[SCANNER_DOWN].on();
 
@@ -92,21 +90,18 @@ public class NxtSensorMonitor extends Thread {
 		motor.rotateTo(0);
 
 		for (int i = 0; i < numberOfMeasurements; i++) {
-			objectVisible[i] = measurements[SCANNER_UP][i] >= measurements[SCANNER_DOWN][i] + 20 ? true
-					: false;
+			objectVisible[i] = measurements[SCANNER_UP][i] >= measurements[SCANNER_DOWN][i] + 20 ? true : false;
 		}
 		int lowestDistance = lowest(measurements[SCANNER_DOWN], objectVisible);
 		for (int i = 0; i < numberOfMeasurements; i++) {
 			closestObjectVisible[i] = objectVisible[i]
-			                                        && measurements[SCANNER_DOWN][i] - 5 <= lowestDistance ? true : false;
-			                                        && measurements[SCANNER_DOWN][i] - 5 <= lowestDistance ? true : false;
-					&& measurements[SCANNER_DOWN][i] - 5 <= lowestDistance ? true : false;
+					&& (measurements[SCANNER_DOWN][i] - 5 <= lowestDistance ? true : false);
 		}
 
-		closestBlockAngle = angle(first(closestObjectVisible)) + angle(last(closestObjectVisible)) / 2;
-
+		closestBlockAngle = (angle(first(closestObjectVisible)) + angle(last(closestObjectVisible))) / 2;
+		
 		data.closestBlockAngle = Integer.toString(closestBlockAngle);
-		data.closestBlockDistance = Integer.toString(closestBlockDistance);
+		data.closestBlockDistance = Integer.toString(lowestDistance);
 		parent.scanResults = result.toString();
 	}
 
@@ -114,6 +109,20 @@ public class NxtSensorMonitor extends Thread {
 		return parent.scanFrom + i * INCREMENT;
 	}
 
+	private int lowest(int[] ints, boolean[] bools) {
+		int lowest = -1;
+		for (int i = 0; i < ints.length; i++) {
+			if (bools[i] && ints[i] < lowest) {
+				lowest = ints[i];
+			}
+		}
+		return lowest;
+	}
+
+	private int distance(int scannerPort) {
+		return Integer.parseInt(parent.sensors[scannerPort].getValue());
+	}
+	
 	private int first(boolean[] bools) {
 		for (int i = 0; i < bools.length; i++) {
 			if (bools[i]) {
@@ -141,20 +150,6 @@ public class NxtSensorMonitor extends Thread {
 			}
 			return bools.length - 1;
 		}
-	}
-
-	private int lowest(int[] ints, boolean[] bools) {
-		int lowest = -1;
-		for (int i = 0; i < ints.length; i++) {
-			if (bools[i] && ints[i] < lowest) {
-				lowest = ints[i];
-			}
-		}
-		return lowest;
-	}
-
-	private int distance(int scannerPort) {
-		return Integer.parseInt(parent.sensors[scannerPort].getValue());
 	}
 
 }

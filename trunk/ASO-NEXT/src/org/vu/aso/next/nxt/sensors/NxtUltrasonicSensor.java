@@ -7,7 +7,6 @@ import lejos.nxt.UltrasonicSensor;
 
 public class NxtUltrasonicSensor implements INxtSensor {
 
-	static final int NUMBER_OF_MEASUREMENTS = 8;
 	public UltrasonicSensor sensor;
 	private boolean toBeMonitored;
 
