@@ -25,7 +25,7 @@ public class ScanTest {
 		System.out.println("Distance: " + data.getClosestblockDistance());
 		
 		// Turn towards the object
-		/*bridge.turnRight(data.getClosestblockAngle());
+		bridge.turnRight(data.getClosestblockAngle());
 		do {
 			data = bridge.requestSensorData();
 		} while (data.isTurning());
@@ -35,7 +35,7 @@ public class ScanTest {
 		do {
 			data = bridge.requestSensorData();
 		} while (data.isDrivingForward());
-*/
+
 		bridge.close();
 	}
 }

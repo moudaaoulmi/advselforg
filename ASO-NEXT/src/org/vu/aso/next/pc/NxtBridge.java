@@ -31,7 +31,7 @@ public class NxtBridge {
 			EMotorPort pilotPortRight, Boolean MotorReverse, float wheelDiameter, float trackWidth) {
 
 		try {
-			logfile = new FileOutputStream("C:\\Users\\Patrick\\log.txt");
+			logfile = new FileOutputStream("C:\\log.txt");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -108,17 +108,6 @@ public class NxtBridge {
 
 	public void resetTravelDistance() {
 		String message = buildMessage(NxtProtocol.RESET_TRAVEL_DISTANCE);
-		communicateToNxt(message);
-	}
-
-	public void calibrateTurret() {
-		String message = buildMessage(NxtProtocol.CALIBRATE_TURRET);
-		communicateToNxt(message);
-	}
-
-	public void performScan(int fromAngle, int toAngle) {
-		String message = buildMessage(NxtProtocol.PERFORM_SCAN, fromAngle, toAngle);
-		sensorData.setScanning(true);
 		communicateToNxt(message);
 	}
 

@@ -14,10 +14,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private static final long serialVersionUID = -7096221399333292349L;
 
 	private NxtBridge robot;
-	private int step = 0;
-
 	private EObjectType oldObjectType = EObjectType.NO_OBJECT;
-
 	private SensorData sensorData;
 
 	public void body() {
@@ -35,12 +32,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	public void run() {
 		while (true) {
 			sensorData = robot.requestSensorData();
-			
-			// Process scan results if finished scanning
-			if (!sensorData.isScanning() && (Boolean) getBelief(Beliefs.SCANNING)) {
-				processScanResults();
-				setBelief(Beliefs.SCANNING, false);
-			}
 
 			// Read the sensor values
 			processDriveForwardUpdate();
@@ -51,9 +42,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			processSonarSensor();
 			processLightSensor();
 			processTravelDistance();
-
-			// Perform some actions every n steps
-			processSteps();
 
 			printDebug("processed sensor data");
 		}
@@ -81,7 +69,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void proccesReadyForCommand() {
-		if (!sensorData.isMoving() && !sensorData.isScanning()) {
+		if (!sensorData.isMoving()) {
 			setBelief(Beliefs.READY_FOR_COMMAND, true);
 		}
 	}
@@ -97,11 +85,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		if (sensorData.getTravelDistance() != (Integer) getBelief(Beliefs.DISTANCE_TRAVELED)) {
 			setBelief(Beliefs.DISTANCE_TRAVELED, sensorData.getTravelDistance());
 		}
-	}
-
-	private void processScanResults() {
-		setBelief(Beliefs.CLOSEST_BLOCK_DISTANCE, sensorData.getClosestblockDistance());
-		setBelief(Beliefs.CLOSEST_BLOCK_ANGLE, sensorData.getClosestblockAngle());
 	}
 
 	private void processSonarSensor() {
@@ -120,15 +103,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			setBelief(Beliefs.CLUSTER_DETECTED, false);
 			printDebug("released a cluster");
 			sensorData.wasTouchPressed = false;
-		}
-	}
-
-	private void processSteps() {
-		step++;
-
-		if (step == 100) {
-			robot.calibrateTurret();
-			step = 0;
 		}
 	}
 
