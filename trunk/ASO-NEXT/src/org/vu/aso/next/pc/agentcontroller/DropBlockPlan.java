@@ -1,14 +1,17 @@
 package org.vu.aso.next.pc.agentcontroller;
 
+import java.util.Random;
+
 public class DropBlockPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = -8758789822720288236L;
 	private int distance;
 	private int angle;
+	private Random r = new Random();
 
-	public DropBlockPlan() {
-		this.distance = 20;
-		this.angle = 180;
+	public DropBlockPlan(int distance, int from, int to) {
+		this.distance = distance;
+		this.angle = r.nextInt(to - from + 1) + from;
 	}
 
 	@Override
