@@ -8,8 +8,7 @@ public class NxtSensorData {
 	protected ESensorType[] sensorTypes;
 	protected String[] tachoCounts;
 	protected String travelDistance;
-	protected String isMoving, isScanning;
-	protected String closestBlockAngle, closestBlockDistance;
+	protected String isMoving;
 
 	protected NxtSensorData() {
 		sensorValues = new String[4];
@@ -25,7 +24,5 @@ public class NxtSensorData {
 			sensorValues[i] = "-1";
 		}
 		travelDistance = "0";
-		isMoving = isScanning = "0";
-		closestBlockAngle = closestBlockDistance = "-1";
 	}
 }

@@ -18,11 +18,8 @@ public class SensorData {
 	private int motorBTachoCount;
 	private int motorCTachoCount;
 	private boolean isMoving;
-	private boolean isScanning;
 	private EMovingMode lastCommand;
 	private int travelDistance;
-	private int closestblockAngle;
-	private int closestBlockDistance;
 
 	public boolean wasTouchPressed = false; // moet nog weg!
 
@@ -50,10 +47,6 @@ public class SensorData {
 		travelDistance = Integer.parseInt(message[8]);
 
 		isMoving = message[9].equals("1") ? true : false;
-		isScanning = message[10].equals("1") ? true : false;
-
-		closestblockAngle = Integer.parseInt(message[11]);
-		closestBlockDistance = Integer.parseInt(message[12]);
 	}
 	
 	public void setLastCommand(EMovingMode mm) {
@@ -62,10 +55,6 @@ public class SensorData {
 
 	public void setMoving(boolean moving) {
 		isMoving = moving;
-	}
-
-	public void setScanning(boolean scanning) {
-		isScanning = scanning;
 	}
 
 	public int getDistanceUpperSonar() {
@@ -111,10 +100,6 @@ public class SensorData {
 		return isMoving;
 	}
 
-	public boolean isScanning() {
-		return isScanning;
-	}
-
 	public boolean isTurning() {
 		return isMoving && lastCommand == EMovingMode.TURNING;
 	}
@@ -129,14 +114,6 @@ public class SensorData {
 
 	public EMovingMode lastCommand() {
 		return lastCommand;
-	}
-
-	public int getClosestblockAngle() {
-		return closestblockAngle;
-	}
-
-	public int getClosestblockDistance() {
-		return closestBlockDistance;
 	}
 
 	public int getTravelDistance() {

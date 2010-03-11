@@ -27,11 +27,6 @@ public class MindstormsBrains {
 	private OutputStream out;
 	private InputStream in;
 
-	private boolean scanScheduled = false;
-	protected int scanFrom;
-	protected int scanTo;
-	protected String scanResults = "";
-
 	// Constructor and startup
 
 	MindstormsBrains() {
@@ -115,14 +110,6 @@ public class MindstormsBrains {
 			case NxtProtocol.RESET_TRAVEL_DISTANCE:
 				resetTravelDistance();
 				sendMessage(NxtProtocol.RESET_TRAVEL_DISTANCE + ";");
-				break;
-			case NxtProtocol.PERFORM_SCAN:
-				scheduleScan(message);
-				sendMessage(NxtProtocol.PERFORM_SCAN + ";");
-				break;
-			case NxtProtocol.CALIBRATE_TURRET:
-				calibrateTurret();
-				sendMessage(NxtProtocol.PERFORM_SCAN + ";");
 				break;
 			default:
 				LCD.drawString("No command!", 0, 0);
@@ -223,14 +210,6 @@ public class MindstormsBrains {
 		result.append(';');
 		result.append(data.isMoving);
 		result.append(';');
-		result.append(data.isScanning);
-		result.append(';');
-		result.append(data.closestBlockAngle);
-		result.append(';');
-		result.append(data.closestBlockDistance);
-		result.append(';');
-		result.append(scanResults);
-		result.append(';');
 
 		sendMessage(result.toString());
 	}
@@ -269,24 +248,6 @@ public class MindstormsBrains {
 
 	private void resetTravelDistance() {
 		pilot.reset();
-	}
-	
-	private void calibrateTurret() {
-		motors[1].rotateTo(0, true);
-	}
-
-	private void scheduleScan(String[] message) {
-		scanScheduled = true;
-		this.scanFrom = Integer.parseInt(message[1]);
-		this.scanTo = Integer.parseInt(message[2]);
-	}
-
-	protected void descheduleScan() {
-		scanScheduled = false;
-	}
-
-	protected boolean scanScheduled() {
-		return scanScheduled;
 	}
 
 	protected void beep() {
