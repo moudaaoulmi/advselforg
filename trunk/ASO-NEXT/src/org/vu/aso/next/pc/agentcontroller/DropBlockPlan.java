@@ -23,5 +23,8 @@ public class DropBlockPlan extends BeliefUpdatingPlan {
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		getRobot().turnLeft(angle);
 		setBelief(Beliefs.TURNING, true);
+		
+		setBelief("carryingWhiteBlock", false);
+		setBelief("carryingBlackBlock", false);
 	}
 }

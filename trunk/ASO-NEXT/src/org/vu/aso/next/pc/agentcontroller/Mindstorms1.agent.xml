@@ -37,13 +37,10 @@
 		<belief name="turning" class="boolean">
 			<fact>false</fact>
 		</belief>
-		<belief name="searching" class="boolean">
+		<belief name="carryingWhiteBlock" class="boolean">
 			<fact>true</fact>
 		</belief>
-		<belief name="collecting" class="boolean">
-			<fact>false</fact>
-		</belief>
-		<belief name="depositAtWall" class="boolean">
+		<belief name="carryingBlackBlock" class="boolean">
 			<fact>false</fact>
 		</belief>
 		<belief name="areaScanned" class="boolean">
@@ -115,16 +112,29 @@
 				$beliefbase.readyForCommand &amp;&amp;
 				$beliefbase.topSonarDistance &lt; 25 &amp;&amp;
 				!$beliefbase.turning &amp;&amp;
-				!$beliefbase.depositAtWall
+				!$beliefbase.carryingBlackBlock
 			</precondition>
-
-
 		</plan>
 
-		<!--
-			Rule 3: Leave clusters intact dropping any blocks currently held
-		-->
-		<plan name="dropBlockPlan">
+		<!-- Rule 3: Avoid walls and other large obstacles, dropping the black block held -->
+		<plan name="dropBlackBlockPlan">
+			<body>new DropBlockPlan()</body>
+			<trigger>
+				<condition>
+					$beliefbase.topSonarDistance &lt; 25
+				</condition>
+			</trigger>
+			<precondition>
+				$beliefbase.readyForCommand &amp;&amp;
+				$beliefbase.topSonarDistance &lt; 25 &amp;&amp;
+				!$beliefbase.turning &amp;&amp;
+				$beliefbase.carryingBlackBlock
+			</precondition>
+		</plan>
+
+
+		<!--Rule 4: Leave clusters intact dropping any blocks currently held-->
+		<plan name="dropWhiteBlockPlan">
 			<body>new DropBlockPlan()</body>
 			<trigger>
 				<condition>
@@ -133,12 +143,27 @@
 			</trigger>
 			<precondition>
 				$beliefbase.clusterDetected &amp;&amp;
-				!$beliefbase.depositAtWall &amp;&amp;
+				!$beliefbase.carryingBlackBlock &amp;&amp;
 				$beliefbase.readyForCommand
 			</precondition>
 		</plan>
 		
-		<!-- Rule 4: Light object detected -->
+		<!--Rule 5: Leave clusters intact dropping any blocks currently held-->
+		<plan name="avoidClusterPlan">
+			<body>new AvoidObstaclePlan()</body>
+			<trigger>
+				<condition>
+					$beliefbase.clusterDetected
+				</condition>
+			</trigger>
+			<precondition>
+				$beliefbase.clusterDetected &amp;&amp;
+				$beliefbase.carryingBlackBlock &amp;&amp;
+				$beliefbase.readyForCommand
+			</precondition>
+		</plan>
+		
+		<!-- Rule 6: Light object detected -->
 		<plan name="lightObjectPlan">
 			<body>new LightObjectDetectedPlan()</body>
 			<trigger>
@@ -147,12 +172,11 @@
 				</condition>
 			</trigger>
 			<precondition>
-				$beliefbase.collecting &amp;&amp;
 				$beliefbase.readyForCommand
 			</precondition>
 		</plan>
 		
-		<!-- Rule 5: Dark object detected -->
+		<!-- Rule 7: Dark object detected -->
 		<plan name="darkObjectPlan">
 			<body>new DarkObjectDetectedPlan()</body>
 			<trigger>
@@ -161,40 +185,10 @@
 				</condition>
 			</trigger>
 			<precondition>
-				$beliefbase.collecting &amp;&amp;
 				$beliefbase.readyForCommand
 			</precondition>
 		</plan>
 
-		
-		<!-- Rules while searching -->
-		<!-- Rule 6: Scan the area -->
-		<plan name="scanPlan">
-			<body>new ScanPlan()</body>
-			<trigger>
-				<condition>
-					!$beliefbase.areaScanned
-				</condition>
-			</trigger>
-			<precondition>
-				$beliefbase.searching &amp;&amp;
-				!$beliefbase.areaScanned &amp;&amp;
-				$beliefbase.readyForCommand
-			</precondition>
-		</plan>
-
-		<!-- Rule 8: Reset area scanned -->
-		<plan name="resetScanPlan">
-			<body>new ResetScanPlan()</body>
-			<trigger>
-				<condition>
-					$beliefbase.distanceTraveled &gt; 70
-				</condition>
-			</trigger>
-			<precondition>
-				$beliefbase.readyForCommand
-			</precondition>
-		</plan>
 	</plans>
 
 	<configurations>

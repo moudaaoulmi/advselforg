@@ -2,6 +2,8 @@ package org.vu.aso.next.nxt;
 
 public class NxtSensorMonitor extends Thread {
 
+	private static final int SONAR_POSITION = 7;
+
 	MindstormsBrains parent;
 	NxtSensorData data;
 
@@ -30,5 +32,4 @@ public class NxtSensorMonitor extends Thread {
 			data.isMoving = parent.pilot.isMoving() ? "1" : "0";
 		}
 	}
-
 }
