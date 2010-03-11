@@ -102,7 +102,7 @@
 
 		<!-- Rule 2: Avoid walls and other large obstacles -->
 		<plan name="actionAvoidObstacles">
-			<body> new AvoidObstaclePlan()</body>
+			<body> new RandomTurnPlan(90,270)</body>
 			<trigger>
 				<condition>
 					$beliefbase.topSonarDistance &lt; 25
@@ -118,7 +118,7 @@
 
 		<!-- Rule 3: Avoid walls and other large obstacles, dropping the black block held -->
 		<plan name="dropBlackBlockPlan">
-			<body>new DropBlockPlan()</body>
+			<body>new DropBlockPlan(20, 90, 270)</body>
 			<trigger>
 				<condition>
 					$beliefbase.topSonarDistance &lt; 25
@@ -135,7 +135,7 @@
 
 		<!--Rule 4: Leave clusters intact dropping any blocks currently held-->
 		<plan name="dropWhiteBlockPlan">
-			<body>new DropBlockPlan()</body>
+			<body>new DropBlockPlan(20, 90, 270)</body>
 			<trigger>
 				<condition>
 					$beliefbase.clusterDetected
@@ -150,7 +150,7 @@
 		
 		<!--Rule 5: Leave clusters intact dropping any blocks currently held-->
 		<plan name="avoidClusterPlan">
-			<body>new AvoidObstaclePlan()</body>
+			<body>new RandomTurnPlan(90,270)</body>
 			<trigger>
 				<condition>
 					$beliefbase.clusterDetected
