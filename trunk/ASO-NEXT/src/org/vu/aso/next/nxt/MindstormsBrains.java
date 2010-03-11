@@ -175,7 +175,9 @@ public class MindstormsBrains {
 			data.sensorTypes[portNumber] = ESensorType.RFID;
 			break;
 		}
-		sensors[portNumber].off();
+		if (type != NxtProtocol.NO_SENSOR) {
+			sensors[portNumber].off();
+		}
 	}
 
 	private void initPilot(String[] config) {
@@ -282,13 +284,7 @@ public class MindstormsBrains {
 
 	// Other stuff
 
-	public static void main(String[] args) {
-		try {
-			new MindstormsBrains().run();
-		} catch (Exception e) {
-			LCD.drawString(e.getMessage(), 0, 5);
-			Button.waitForPress();
-			System.exit(1);
-		}
+	public static void main(String[] args) throws Exception {
+		new MindstormsBrains().run();
 	}
 }
