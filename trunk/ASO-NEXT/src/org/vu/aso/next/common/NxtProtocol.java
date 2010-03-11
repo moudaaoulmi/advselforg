@@ -28,6 +28,6 @@ public class NxtProtocol {
 	public final static int TRUE = 1;
 	public final static int FALSE = 0;
 	public final static int TERMINATION_BYTE = -1;
-	public final static int MESSAGE_SIZE = 50;
+	public final static int MESSAGE_SIZE = 500;
 	
 }

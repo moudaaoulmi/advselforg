@@ -30,6 +30,7 @@ public class MindstormsBrains {
 	private boolean scanScheduled = false;
 	protected int scanFrom;
 	protected int scanTo;
+	protected String scanResults = "";
 
 	// Constructor and startup
 
@@ -227,6 +228,8 @@ public class MindstormsBrains {
 		result.append(data.closestBlockAngle);
 		result.append(';');
 		result.append(data.closestBlockDistance);
+		result.append(';');
+		result.append(scanResults);
 		result.append(';');
 
 		sendMessage(result.toString());
