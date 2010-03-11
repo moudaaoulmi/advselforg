@@ -10,7 +10,7 @@ public class LightObjectDetectedPlan extends BeliefUpdatingPlan {
 	@Override
 	public void body() {
 		printDebug("executed LightObjectDetectedPlan()");
-		setBelief("carryingWhiteBlock", true);
-		setBelief("carryingBlackBlock", false);
+		setBelief(Beliefs.CARRYING_WHITE_BLOCK, true);
+		setBelief(Beliefs.CARRYING_BLACK_BLOCK, false);
 	}
 }
