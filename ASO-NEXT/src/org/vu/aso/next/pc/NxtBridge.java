@@ -167,7 +167,7 @@ public class NxtBridge {
 	}
 
 	private synchronized String[] communicateToNxt(String message) {
-		logstream.println(formatter.format(new Date()) + " " + message);
+		logstream.println(formatter.format(new Date()) + " -> " + message);
 		try {
 			writeMessage(message);
 			return getMessage();
@@ -189,6 +189,7 @@ public class NxtBridge {
 		while ((b = (byte) in.read()) != NxtProtocol.TERMINATION_BYTE) {
 			sb.append((char) b);
 		}
+		logstream.println(formatter.format(new Date()) + " <- " + sb);
 		return sb.toString().split(";");
 	}
 }
