@@ -43,16 +43,8 @@
 		<belief name="carryingBlackBlock" class="boolean">
 			<fact>false</fact>
 		</belief>
-		<belief name="areaScanned" class="boolean">
-			<fact>false</fact>
-		</belief>
-
 		<belief name="objectInGripper" class="EObjectType">
 			<fact>EObjectType.NO_OBJECT</fact>
-		</belief>
-
-		<belief name="scanning" class="boolean">
-			<fact>false</fact>
 		</belief>
 		<belief name="topSonarDistance" class="int">
 			<fact>255</fact>
@@ -61,12 +53,6 @@
 			<fact>255</fact>
 		</belief>
 		<belief name="distanceTraveled" class="int">
-			<fact>0</fact>
-		</belief>
-		<belief name="closestBlockDistance" class="int">
-			<fact>0</fact>
-		</belief>
-		<belief name="distanceBlockAngle" class="int">
 			<fact>0</fact>
 		</belief>
 	</beliefs>
