@@ -9,6 +9,7 @@ import jadex.runtime.Plan;
 
 public abstract class BeliefUpdatingPlan extends Plan {
 
+	private static final boolean DEFAULT_PRINT_SETTING = false;
 	private static final long serialVersionUID = -809120734331923007L;
 	protected SimpleDateFormat formatter;
 
@@ -25,7 +26,7 @@ public abstract class BeliefUpdatingPlan extends Plan {
 	}
 
 	protected void setBelief(String beliefName, Object beliefValue) {
-		setBelief(beliefName, beliefValue, true);
+		setBelief(beliefName, beliefValue, DEFAULT_PRINT_SETTING);
 	}
 
 	protected void setBelief(String beliefName, Object beliefValue, boolean printDebug) {
