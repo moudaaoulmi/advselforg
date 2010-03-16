@@ -93,7 +93,7 @@
 		</plan>
 
 		<!-- Rule 3: Avoid walls and other large obstacles, dropping the black block held -->
-		<plan name="dropBlackBlockPlan">
+		<plan name="actionDropBlackBlock">
 			<body>new DropBlockPlan(20, 90, 270)</body>
 			<trigger>
 				<condition>
@@ -107,8 +107,8 @@
 		</plan>
 
 		<!-- Cluster detected rules -->
-		<!--Rule 4: Leave clusters intact dropping any block currently held-->
-		<plan name="dropWhiteBlockPlan">
+		<!-- Rule 4: Leave clusters intact -->
+		<plan name="actionAvoidClusters">
 			<body>new DropBlockPlan(20, 90, 270)</body>
 			<trigger>
 				<condition>
@@ -117,12 +117,27 @@
 			</trigger>
 			<precondition>
 				!$beliefbase.carryingBlackBlock &amp;&amp;
+				!$beliefbase.carryingWhiteBlock &amp;&amp;
 				$beliefbase.readyForCommand
 			</precondition>
 		</plan>
 		
-		<!--Rule 5: Leave clusters intact taking the black block currently held-->
-		<plan name="avoidClusterPlan">
+		<!-- Rule 5: Leave clusters intact dropping the white block currently held -->
+		<plan name="actionDropWhiteBlock">
+			<body>new DropBlockPlan(20, 90, 270)</body>
+			<trigger>
+				<condition>
+					$beliefbase.clusterDetected
+				</condition>
+			</trigger>
+			<precondition>
+				$beliefbase.carryingWhiteBlock &amp;&amp;
+				$beliefbase.readyForCommand
+			</precondition>
+		</plan>
+		
+		<!-- Rule 6: Avoid the cluster taking the black block currently held-->
+		<plan name="actionAvoidClusterBlackBlock">
 			<body>new RandomTurnPlan(90,270)</body>
 			<trigger>
 				<condition>
@@ -136,8 +151,8 @@
 		</plan>
 		
 		<!-- Object detected rules -->
-		<!-- Rule 6: Light object detected -->
-		<plan name="lightObjectPlan">
+		<!-- Rule 7: Light object detected -->
+		<plan name="beliefLightObject">
 			<body>new LightObjectDetectedPlan()</body>
 			<trigger>
 				<condition>
@@ -149,8 +164,8 @@
 			</precondition>
 		</plan>
 		
-		<!-- Rule 7: Dark object detected -->
-		<plan name="darkObjectPlan">
+		<!-- Rule 8: Dark object detected -->
+		<plan name="beliefDarkObject">
 			<body>new DarkObjectDetectedPlan()</body>
 			<trigger>
 				<condition>

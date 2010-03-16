@@ -1,4 +1,4 @@
-package org.vu.aso.next.pc;
+	package org.vu.aso.next.pc;
 
 import org.vu.aso.next.common.EObjectType;
 import org.vu.aso.next.common.EMotorPort;
@@ -7,8 +7,8 @@ import org.vu.aso.next.common.EMovingMode;
 public class SensorData {
 
 	private final static int MINIMUM = 0, MAXIMUM = 1;
-	private final static int[] LIGHT_OBJECT_INTERVAL = { 45, 70 };
-	private final static int[] DARK_OBJECT_INTERVAL = { 35, 45 };
+	private final static int[] LIGHT_OBJECT_INTERVAL = { 42, 70 };
+	private final static int[] DARK_OBJECT_INTERVAL = { 28, 38 };
 
 	private int distanceUpperSonar;
 	private int lightSensorValue;
