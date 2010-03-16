@@ -13,10 +13,14 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	private static final boolean DEFAULT_PRINT_SETTING = false;
 	private static final long serialVersionUID = -7096221399333292349L;
-
+	private static final long minutes = 60000;
+	private static final long experimentDuration = 30 * minutes;
+	
 	private NxtBridge robot;
 	private EObjectType oldObjectType = EObjectType.NO_OBJECT;
 	private SensorData sensorData;
+	
+	private Date endTime;
 
 	public void body() {
 		initialize();
@@ -27,11 +31,12 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		new Thread(this).start();
 		getBeliefbase().getBelief(Beliefs.WIM_RUNNING).setFact(true);
 		getBeliefbase().getBelief(Beliefs.READY_FOR_COMMAND).setFact(true);
+		endTime = new Date(System.currentTimeMillis()+ experimentDuration);
 		waitFor(IFilter.NEVER);
 	}
 
 	public void run() {
-		while (true) {
+		while (new Date().before(endTime)) {
 			sensorData = robot.requestSensorData();
 
 			// Read the sensor values
@@ -43,6 +48,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			processLightSensor();
 			processTravelDistance();
 		}
+		exit();
 	}
 
 	private void processTurningUpdate() {
