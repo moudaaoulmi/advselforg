@@ -75,12 +75,6 @@
 			<trigger>
 				<condition>$beliefbase.readyForCommand</condition>
 			</trigger>
-			<precondition>
-				$beliefbase.readyForCommand &amp;&amp;
-				!$beliefbase.drivingBackward &amp;&amp;
-				!$beliefbase.turning &amp;&amp;
-				!$beliefbase.drivingForward
-			</precondition>
 		</plan>
 
 		<!-- Obstacle detected rules -->
