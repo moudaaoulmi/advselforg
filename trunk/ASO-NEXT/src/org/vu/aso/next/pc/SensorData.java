@@ -19,8 +19,8 @@ public class SensorData {
 	private boolean isMoving;
 	private EMovingMode lastCommand;
 	private int travelDistance;
-
-	public boolean wasTouchPressed = false; // moet nog weg!
+	
+	private boolean processNextSensorData = true;
 
 	public SensorData() {
 		lastCommand = EMovingMode.FORWARD;
@@ -32,11 +32,7 @@ public class SensorData {
 		distanceUpperSonar = Integer.parseInt(message[2]);
 
 		lightSensorValue = Integer.parseInt(message[3]);
-		if (message[4].equals("1")) {
-			touchSensorPressed = true;
-		} else {
-			touchSensorPressed = false;
-		}
+		touchSensorPressed = message[4].equals("1") ? true : false;
 
 		motorATachoCount = Integer.parseInt(message[5]);
 		motorBTachoCount = Integer.parseInt(message[6]);
@@ -45,6 +41,16 @@ public class SensorData {
 		travelDistance = Integer.parseInt(message[8]);
 
 		isMoving = message[9].equals("1") ? true : false;
+	}
+	
+	public void discardNextSensorData() {
+		processNextSensorData = false;
+	}
+	
+	public boolean processNextSensorData() {
+		boolean temp = processNextSensorData;
+		processNextSensorData = true;
+		return temp;
 	}
 	
 	public void setLastCommand(EMovingMode mm) {
