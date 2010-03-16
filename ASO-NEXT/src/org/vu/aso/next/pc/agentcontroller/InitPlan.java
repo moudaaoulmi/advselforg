@@ -30,7 +30,7 @@ public class InitPlan extends BeliefUpdatingPlan {
 		String name = in.nextLine();
 		String rest = "";
 		while (in.hasNext()) {
-			rest += '\n' + in.nextLine();
+			rest += in.nextLine() + '\n';
 		}
 		in.close();
 
