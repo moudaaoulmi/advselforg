@@ -48,21 +48,24 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void processTurningUpdate() {
 		if (!sensorData.isTurning() && (Boolean) getBelief(Beliefs.TURNING)) {
 			setBelief(Beliefs.TURNING, false);
-			printDebug("completed a turn");
+			if (DEFAULT_PRINT_SETTING)
+				printDebug("completed a turn");
 		}
 	}
 
 	private void processDriveBackwardUpdate() {
 		if (!sensorData.isDrivingBackward() && (Boolean) getBelief(Beliefs.DRIVING_BACKWARD)) {
 			setBelief(Beliefs.DRIVING_BACKWARD, false);
-			printDebug("completed driving backward");
+			if (DEFAULT_PRINT_SETTING)
+				printDebug("completed driving backward");
 		}
 	}
 
 	private void processDriveForwardUpdate() {
 		if (!sensorData.isDrivingForward() && (Boolean) getBelief(Beliefs.DRIVING_FORWARD)) {
 			setBelief(Beliefs.DRIVING_FORWARD, false);
-			printDebug("completed driving forward");
+			if (DEFAULT_PRINT_SETTING)
+				printDebug("completed driving forward");
 		}
 	}
 
@@ -86,12 +89,14 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void processTouchSensor() {
 		if (sensorData.getTouchSensorPressed() && !(Boolean) getBelief(Beliefs.CLUSTER_DETECTED)) {
 			setBelief(Beliefs.CLUSTER_DETECTED, true);
-			printDebug("detected a cluster");
+			if (DEFAULT_PRINT_SETTING)
+				printDebug("detected a cluster");
 		}
 
 		if (!sensorData.getTouchSensorPressed() && (Boolean) getBelief(Beliefs.CLUSTER_DETECTED)) {
 			setBelief(Beliefs.CLUSTER_DETECTED, false);
-			printDebug("released a cluster");
+			if (DEFAULT_PRINT_SETTING)
+				printDebug("released a cluster");
 		}
 	}
 
