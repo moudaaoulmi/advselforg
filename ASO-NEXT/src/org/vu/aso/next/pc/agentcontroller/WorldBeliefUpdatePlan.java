@@ -14,7 +14,7 @@ import jadex.runtime.IFilter;
 public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnable {
 
 	private static final boolean DEFAULT_PRINT_SETTING = false;
-	private static final long MINUTES = 60000;
+	private static final long MINUTES = 6000;
 	private static final long EXPERIMENT_DURATION = 1 * MINUTES;
 	private static final String ROBOT_NAMES = "JOEY\nCHANDLER\nROSS\nPatrick\n";
 	private static final long serialVersionUID = -7096221399333292349L;
@@ -34,11 +34,11 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		new Thread(this).start();
 		getBeliefbase().getBelief(Beliefs.WIM_RUNNING).setFact(true);
 		getBeliefbase().getBelief(Beliefs.READY_FOR_COMMAND).setFact(true);
-		endTime = new Date(System.currentTimeMillis() + EXPERIMENT_DURATION);
 		waitFor(IFilter.NEVER);
 	}
 
 	public void run() {
+		endTime = new Date(System.currentTimeMillis() + EXPERIMENT_DURATION);
 		while (new Date().before(endTime)) {
 			sensorData = robot.requestSensorData();
 
