@@ -37,7 +37,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			processDriveForwardUpdate();
 			processDriveBackwardUpdate();
 			processTurningUpdate();
-			proccesReadyForCommand();
+			//proccesReadyForCommand();
 			processTouchSensor();
 			processSonarSensor();
 			processLightSensor();
