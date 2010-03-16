@@ -11,6 +11,7 @@ import jadex.runtime.IFilter;
 
 public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnable {
 
+	private static final boolean DEFAULT_PRINT_SETTING = false;
 	private static final long serialVersionUID = -7096221399333292349L;
 
 	private NxtBridge robot;
@@ -67,7 +68,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	private void processLightSensor() {
 		if (sensorData.getObjectType() != oldObjectType) {
-			setBelief(Beliefs.OBJECT_IN_GRIPPER, sensorData.getObjectType());
+			setBelief(Beliefs.OBJECT_IN_GRIPPER, sensorData.getObjectType(), true);
 			oldObjectType = sensorData.getObjectType();
 		}
 	}
@@ -101,7 +102,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	@Override
 	protected void setBelief(String beliefName, Object beliefValue) {
-		setBelief(beliefName, beliefValue, true);
+		setBelief(beliefName, beliefValue, DEFAULT_PRINT_SETTING);
 	}
 
 	@Override
