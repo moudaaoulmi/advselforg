@@ -99,6 +99,14 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 				printDebug("released a cluster");
 		}
 	}
+	
+	private void exit() {
+		writeNamesToFile();
+	}
+	
+	private void writeNamesToFile() {
+		
+	}
 
 	@Override
 	protected Object getBelief(String beliefName) {
