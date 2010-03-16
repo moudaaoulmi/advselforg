@@ -1,5 +1,6 @@
 package org.vu.aso.next.pc.agentcontroller;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Scanner;
@@ -25,7 +26,7 @@ public class InitPlan extends BeliefUpdatingPlan {
 
 	public String getRobotName() throws FileNotFoundException {
 		// Get the first name
-		Scanner in = new Scanner("C:\\names.txt");
+		Scanner in = new Scanner(new FileInputStream("C:\\names.txt"));
 		String name = in.nextLine();
 		String rest = "";
 		while (in.hasNext()) {
