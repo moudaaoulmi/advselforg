@@ -3,13 +3,13 @@ package org.vu.aso.next.pc.agentcontroller;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import org.vu.aso.next.common.NxtSettings;
 import org.vu.aso.next.pc.NxtBridge;
 
 import jadex.runtime.Plan;
 
 public abstract class BeliefUpdatingPlan extends Plan {
 
-	private static final boolean DEFAULT_PRINT_SETTING = false;
 	private static final long serialVersionUID = -809120734331923007L;
 	protected SimpleDateFormat formatter;
 
@@ -26,7 +26,7 @@ public abstract class BeliefUpdatingPlan extends Plan {
 	}
 
 	protected void setBelief(String beliefName, Object beliefValue) {
-		setBelief(beliefName, beliefValue, DEFAULT_PRINT_SETTING);
+		setBelief(beliefName, beliefValue, NxtSettings.DEFAULT_PRINT_SETTING);
 	}
 
 	protected void setBelief(String beliefName, Object beliefValue, boolean printDebug) {

@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import java.util.Date;
 
 import org.vu.aso.next.common.EObjectType;
+import org.vu.aso.next.common.NxtSettings;
 
 import org.vu.aso.next.pc.NxtBridge;
 import org.vu.aso.next.pc.SensorData;
@@ -13,10 +14,8 @@ import jadex.runtime.IFilter;
 
 public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnable {
 
-	private static final boolean DEFAULT_PRINT_SETTING = false;
 	private static final long MINUTES = 6000;
-	private static final long EXPERIMENT_DURATION = 1 * MINUTES;
-	private static final String ROBOT_NAMES = "JOEY\nCHANDLER\nROSS\nPatrick\n";
+	private static final long EXPERIMENT_DURATION_MILLIS = NxtSettings.EXPERIMENT_DURATION * MINUTES;
 	private static final long serialVersionUID = -7096221399333292349L;
 
 	private NxtBridge robot;
@@ -38,7 +37,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	public void run() {
-		endTime = new Date(System.currentTimeMillis() + EXPERIMENT_DURATION);
+		endTime = new Date(System.currentTimeMillis() + EXPERIMENT_DURATION_MILLIS);
 		while (new Date().before(endTime)) {
 			sensorData = robot.requestSensorData();
 
@@ -57,7 +56,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void processTurningUpdate() {
 		if (!sensorData.isTurning() && (Boolean) getBelief(Beliefs.TURNING)) {
 			setBelief(Beliefs.TURNING, false);
-			if (DEFAULT_PRINT_SETTING)
+			if (NxtSettings.DEFAULT_PRINT_SETTING)
 				printDebug("completed a turn");
 		}
 	}
@@ -65,7 +64,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void processDriveBackwardUpdate() {
 		if (!sensorData.isDrivingBackward() && (Boolean) getBelief(Beliefs.DRIVING_BACKWARD)) {
 			setBelief(Beliefs.DRIVING_BACKWARD, false);
-			if (DEFAULT_PRINT_SETTING)
+			if (NxtSettings.DEFAULT_PRINT_SETTING)
 				printDebug("completed driving backward");
 		}
 	}
@@ -73,14 +72,14 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void processDriveForwardUpdate() {
 		if (!sensorData.isDrivingForward() && (Boolean) getBelief(Beliefs.DRIVING_FORWARD)) {
 			setBelief(Beliefs.DRIVING_FORWARD, false);
-			if (DEFAULT_PRINT_SETTING)
+			if (NxtSettings.DEFAULT_PRINT_SETTING)
 				printDebug("completed driving forward");
 		}
 	}
 
 	private void processLightSensor() {
 		if (sensorData.getObjectType() != oldObjectType) {
-			setBelief(Beliefs.OBJECT_IN_GRIPPER, sensorData.getObjectType(), true);
+			setBelief(Beliefs.OBJECT_IN_GRIPPER, sensorData.getObjectType());
 			oldObjectType = sensorData.getObjectType();
 		}
 	}
@@ -98,13 +97,13 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void processTouchSensor() {
 		if (sensorData.getTouchSensorPressed() && !(Boolean) getBelief(Beliefs.CLUSTER_DETECTED)) {
 			setBelief(Beliefs.CLUSTER_DETECTED, true);
-			if (DEFAULT_PRINT_SETTING)
+			if (NxtSettings.DEFAULT_PRINT_SETTING)
 				printDebug("detected a cluster");
 		}
 
 		if (!sensorData.getTouchSensorPressed() && (Boolean) getBelief(Beliefs.CLUSTER_DETECTED)) {
 			setBelief(Beliefs.CLUSTER_DETECTED, false);
-			if (DEFAULT_PRINT_SETTING)
+			if (NxtSettings.DEFAULT_PRINT_SETTING)
 				printDebug("released a cluster");
 		}
 	}
@@ -122,8 +121,8 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	private void writeNamesToFile() throws FileNotFoundException {
 		PrintStream out;
-		out = new PrintStream("C:\\names.txt");
-		out.print(ROBOT_NAMES);
+		out = new PrintStream(NxtSettings.NAMES_PATH);
+		out.print(NxtSettings.ROBOT_NAMES);
 		out.close();
 	}
 
@@ -134,7 +133,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	@Override
 	protected void setBelief(String beliefName, Object beliefValue) {
-		setBelief(beliefName, beliefValue, DEFAULT_PRINT_SETTING);
+		setBelief(beliefName, beliefValue, NxtSettings.DEFAULT_PRINT_SETTING);
 	}
 
 	@Override
