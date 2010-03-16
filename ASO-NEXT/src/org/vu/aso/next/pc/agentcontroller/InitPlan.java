@@ -11,22 +11,24 @@ import org.vu.aso.next.pc.NxtBridge;
 
 public class InitPlan extends BeliefUpdatingPlan {
 
+	private static final String ROBOT_NAMES = "JOEY\nCHANDLER\nROSS\nPatrick\n";
 	private static final long serialVersionUID = 2961883448970106007L;
 
 	String robotName;
 
 	public InitPlan() {
-		try {
-			this.robotName = getRobotName();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		this.robotName = getRobotName();
 		setBelief(Beliefs.ROBOT_NAME, this.robotName);
 	}
 
-	public String getRobotName() throws FileNotFoundException {
+	public String getRobotName() {
 		// Get the first name
-		Scanner in = new Scanner(new FileInputStream("C:\\names.txt"));
+		Scanner in;
+		try {
+			in = new Scanner(new FileInputStream("C:\\names.txt"));
+		} catch (FileNotFoundException e) {
+			in = new Scanner(ROBOT_NAMES);
+		}
 		String name = in.nextLine();
 		String rest = "";
 		while (in.hasNext()) {
@@ -35,9 +37,14 @@ public class InitPlan extends BeliefUpdatingPlan {
 		in.close();
 
 		// Print the remainder back to the file
-		PrintStream out = new PrintStream("C:\\names.txt");
-		out.print(rest);
-		out.close();
+		PrintStream out;
+		try {
+			out = new PrintStream("C:\\names.txt");
+			out.print(rest);
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 
 		return name;
 	}

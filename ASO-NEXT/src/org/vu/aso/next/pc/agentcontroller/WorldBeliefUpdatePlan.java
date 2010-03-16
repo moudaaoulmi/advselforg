@@ -14,9 +14,10 @@ import jadex.runtime.IFilter;
 public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnable {
 
 	private static final boolean DEFAULT_PRINT_SETTING = false;
-	private static final long serialVersionUID = -7096221399333292349L;
 	private static final long MINUTES = 60000;
 	private static final long EXPERIMENT_DURATION = 1 * MINUTES;
+	private static final String ROBOT_NAMES = "JOEY\nCHANDLER\nROSS\nPatrick\n";
+	private static final long serialVersionUID = -7096221399333292349L;
 
 	private NxtBridge robot;
 	private EObjectType oldObjectType = EObjectType.NO_OBJECT;
@@ -121,7 +122,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void writeNamesToFile() throws FileNotFoundException {
 		PrintStream out;
 		out = new PrintStream("C:\\names.txt");
-		out.print("JOEY\nCHANDLER\nROSS\nPatrick\n");
+		out.print(ROBOT_NAMES);
 		out.close();
 	}
 
