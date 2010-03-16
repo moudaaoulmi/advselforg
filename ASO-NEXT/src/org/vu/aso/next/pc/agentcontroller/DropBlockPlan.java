@@ -18,16 +18,19 @@ public class DropBlockPlan extends BeliefUpdatingPlan {
 	public void body() {
 		printDebug("executed DropBlockPlan(" + distance + ", " + angle + ")");
 		
+		// Drive backward for [distance] cm
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		setBelief(Beliefs.DRIVING_BACKWARD, true);
 		getRobot().driveBackward(distance);
 		waitForBeliefChange(Beliefs.DRIVING_BACKWARD);
 		
+		// Turn [angle] degrees left
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
 		setBelief(Beliefs.TURNING, true);
 		getRobot().turnLeft(angle);
 		waitForBeliefChange(Beliefs.TURNING);
 		
+		// No longer carrying a block
 		setBelief(Beliefs.CARRYING_WHITE_BLOCK, false);
 		setBelief(Beliefs.CARRYING_BLACK_BLOCK, false);
 	}

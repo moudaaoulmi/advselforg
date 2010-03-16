@@ -15,7 +15,7 @@ public abstract class BeliefUpdatingPlan extends Plan {
 	public BeliefUpdatingPlan() {
 		formatter = new SimpleDateFormat("HH:mm:ss.SSS");
 	}
-	
+
 	protected NxtBridge getRobot() {
 		return (NxtBridge) getBeliefbase().getBelief(Beliefs.ROBOT).getFact();
 	}
@@ -23,10 +23,15 @@ public abstract class BeliefUpdatingPlan extends Plan {
 	protected Object getBelief(String beliefName) {
 		return getBeliefbase().getBelief(beliefName).getFact();
 	}
-	
+
 	protected void setBelief(String beliefName, Object beliefValue) {
+		setBelief(beliefName, beliefValue, true);
+	}
+
+	protected void setBelief(String beliefName, Object beliefValue, boolean printDebug) {
 		getBeliefbase().getBelief(beliefName).setFact(beliefValue);
-		printDebug("has value '" + beliefValue.toString() + "' for belief '" + beliefName + "'");
+		if (printDebug)
+			printDebug("has value '" + beliefValue.toString() + "' for belief '" + beliefName + "'");
 	}
 
 	protected void printDebug(String message) {

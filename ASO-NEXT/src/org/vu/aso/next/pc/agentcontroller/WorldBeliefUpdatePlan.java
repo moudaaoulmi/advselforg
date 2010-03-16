@@ -42,8 +42,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			processSonarSensor();
 			processLightSensor();
 			processTravelDistance();
-
-			printDebug("processed sensor data");
 		}
 	}
 
@@ -83,12 +81,12 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	private void processTravelDistance() {
 		if (sensorData.getTravelDistance() != (Integer) getBelief(Beliefs.DISTANCE_TRAVELED)) {
-			setBelief(Beliefs.DISTANCE_TRAVELED, sensorData.getTravelDistance());
+			setBelief(Beliefs.DISTANCE_TRAVELED, sensorData.getTravelDistance(), false);
 		}
 	}
 
 	private void processSonarSensor() {
-		setBelief(Beliefs.TOP_SONAR_DISTANCE, sensorData.getDistanceUpperSonar());
+		setBelief(Beliefs.TOP_SONAR_DISTANCE, sensorData.getDistanceUpperSonar(), false);
 	}
 
 	private void processTouchSensor() {
@@ -112,14 +110,19 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	@Override
 	protected void setBelief(String beliefName, Object beliefValue) {
+		setBelief(beliefName, beliefValue, true);
+	}
+
+	@Override
+	protected void setBelief(String beliefName, Object beliefValue, boolean printDebug) {
 		getExternalAccess().getBeliefbase().getBelief(beliefName).setFact(beliefValue);
-		printDebug("has value '" + beliefValue.toString() + "' for belief '" + beliefName + "'");
+		if (printDebug)
+			printDebug("has value '" + beliefValue.toString() + "' for belief '" + beliefName + "'");
 	}
 
 	@Override
 	protected void printDebug(String message) {
-		System.out.println(formatter.format(new Date()) + " "
-				+ (String) getBelief(Beliefs.ROBOT_NAME) + ":WIM "
+		System.out.println(formatter.format(new Date()) + " " + (String) getBelief(Beliefs.ROBOT_NAME) + ":WIM "
 				+ message);
 	}
 }
