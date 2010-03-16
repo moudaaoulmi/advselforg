@@ -28,7 +28,11 @@ public class DropBlockPlan extends BeliefUpdatingPlan {
 		
 		// Turn [angle] degrees left
 		setBelief(Beliefs.TURNING, true);
-		getRobot().turnLeft(angle);
+		if (r.nextBoolean()) {
+			getRobot().turnLeft(angle);
+		} else {
+			getRobot().turnRight(angle);
+		}
 		waitForBeliefChange(Beliefs.TURNING);
 		
 		// No longer carrying a block
