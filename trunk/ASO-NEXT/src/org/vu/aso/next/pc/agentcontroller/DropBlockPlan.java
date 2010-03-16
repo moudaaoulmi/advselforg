@@ -19,8 +19,8 @@ public class DropBlockPlan extends BeliefUpdatingPlan {
 		printDebug("executed DropBlockPlan(" + distance + ", " + angle + ")");
 		
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
-		getRobot().driveBackward(distance);
 		setBelief(Beliefs.DRIVING_BACKWARD, true);
+		getRobot().driveBackward(distance);
 		waitForBeliefChange(Beliefs.DRIVING_BACKWARD);
 		
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
