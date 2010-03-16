@@ -16,8 +16,10 @@ public class RandomTurnPlan extends BeliefUpdatingPlan {
 	public void body() {
 		printDebug("executed RandomTurnPlan()");
 
+		// Turn [angle] degrees left
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
-		getRobot().turnLeft(angle);
 		setBelief(Beliefs.TURNING, true);
+		getRobot().turnLeft(angle);
+		waitForBeliefChange(Beliefs.TURNING);
 	}
 }
