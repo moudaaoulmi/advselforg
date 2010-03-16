@@ -4,6 +4,7 @@ import org.vu.aso.next.common.EMotorPort;
 import org.vu.aso.next.common.EMovingMode;
 import org.vu.aso.next.common.ESensorType;
 import org.vu.aso.next.common.NxtProtocol;
+import org.vu.aso.next.common.NxtSettings;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class NxtBridge {
 			EMotorPort pilotPortRight, Boolean MotorReverse, float wheelDiameter, float trackWidth) {
 
 		try {
-			logstream = new PrintStream("C:\\log.txt");
+			logstream = new PrintStream(NxtSettings.LOG_PATH);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

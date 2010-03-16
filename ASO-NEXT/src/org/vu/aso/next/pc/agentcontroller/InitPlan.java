@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import org.vu.aso.next.common.EMotorPort;
 import org.vu.aso.next.common.ESensorType;
+import org.vu.aso.next.common.NxtSettings;
 import org.vu.aso.next.pc.NxtBridge;
 
 public class InitPlan extends BeliefUpdatingPlan {
@@ -25,7 +26,7 @@ public class InitPlan extends BeliefUpdatingPlan {
 		// Get the first name
 		Scanner in;
 		try {
-			in = new Scanner(new FileInputStream("C:\\names.txt"));
+			in = new Scanner(new FileInputStream(NxtSettings.NAMES_PATH));
 		} catch (FileNotFoundException e) {
 			in = new Scanner(ROBOT_NAMES);
 		}
@@ -39,7 +40,7 @@ public class InitPlan extends BeliefUpdatingPlan {
 		// Print the remainder back to the file
 		PrintStream out;
 		try {
-			out = new PrintStream("C:\\names.txt");
+			out = new PrintStream(NxtSettings.NAMES_PATH);
 			out.print(rest);
 			out.close();
 		} catch (FileNotFoundException e) {
