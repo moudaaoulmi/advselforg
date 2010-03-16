@@ -19,8 +19,6 @@ public class SensorData {
 	private boolean isMoving;
 	private EMovingMode lastCommand;
 	private int travelDistance;
-	
-	private boolean processNextSensorData = true;
 
 	public SensorData() {
 		lastCommand = EMovingMode.FORWARD;
@@ -41,16 +39,6 @@ public class SensorData {
 		travelDistance = Integer.parseInt(message[8]);
 
 		isMoving = message[9].equals("1") ? true : false;
-	}
-	
-	public void discardNextSensorData() {
-		processNextSensorData = false;
-	}
-	
-	public boolean processNextSensorData() {
-		boolean temp = processNextSensorData;
-		processNextSensorData = true;
-		return temp;
 	}
 	
 	public void setLastCommand(EMovingMode mm) {

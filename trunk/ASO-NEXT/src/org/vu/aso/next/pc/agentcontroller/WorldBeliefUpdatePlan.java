@@ -33,18 +33,14 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		while (true) {
 			sensorData = robot.requestSensorData();
 
-			// Read the sensor values if not discarding next sensor data
-			if (sensorData.processNextSensorData()) {
-				processDriveForwardUpdate();
-				processDriveBackwardUpdate();
-				processTurningUpdate();
-				processTouchSensor();
-				processSonarSensor();
-				processLightSensor();
-				processTravelDistance();
-			} else {
-				printDebug("discarded sensor data");
-			}
+			// Read the sensor values
+			processDriveForwardUpdate();
+			processDriveBackwardUpdate();
+			processTurningUpdate();
+			processTouchSensor();
+			processSonarSensor();
+			processLightSensor();
+			processTravelDistance();
 		}
 	}
 
