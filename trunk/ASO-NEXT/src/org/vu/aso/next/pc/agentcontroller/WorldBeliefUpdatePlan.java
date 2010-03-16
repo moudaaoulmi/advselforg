@@ -42,6 +42,8 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 				processSonarSensor();
 				processLightSensor();
 				processTravelDistance();
+			} else {
+				printDebug("discarded sensor data");
 			}
 		}
 	}
