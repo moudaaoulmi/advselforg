@@ -117,6 +117,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		}
 		robot.exit();
 		getExternalAccess().killAgent();
+		System.exit(0);
 	}
 
 	private void writeNamesToFile() throws FileNotFoundException {
