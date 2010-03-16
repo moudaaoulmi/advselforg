@@ -22,7 +22,7 @@ public class NxtProtocol {
 	public final static int TOUCH_SENSOR = 4;
 	public final static int RFID_SENSOR = 5;
 	
-	// OTHER
+	// Other
 	public final static int TRUE = 1;
 	public final static int FALSE = 0;
 	public final static int TERMINATION_BYTE = -1;
