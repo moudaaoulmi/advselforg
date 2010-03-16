@@ -33,5 +33,8 @@ public class DropBlockPlan extends BeliefUpdatingPlan {
 		// No longer carrying a block
 		setBelief(Beliefs.CARRYING_WHITE_BLOCK, false);
 		setBelief(Beliefs.CARRYING_BLACK_BLOCK, false);
+		
+		// Ready for new command
+		setBelief(Beliefs.READY_FOR_COMMAND, true);
 	}
 }
