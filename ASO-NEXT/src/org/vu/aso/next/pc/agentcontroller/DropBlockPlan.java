@@ -24,8 +24,9 @@ public class DropBlockPlan extends BeliefUpdatingPlan {
 		waitForBeliefChange(Beliefs.DRIVING_BACKWARD);
 		
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
-		getRobot().turnLeft(angle);
 		setBelief(Beliefs.TURNING, true);
+		getRobot().turnLeft(angle);
+		waitForBeliefChange(Beliefs.TURNING);
 		
 		setBelief(Beliefs.CARRYING_WHITE_BLOCK, false);
 		setBelief(Beliefs.CARRYING_BLACK_BLOCK, false);

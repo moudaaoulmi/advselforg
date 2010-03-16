@@ -73,6 +73,7 @@ public class NxtBridge {
 		sensorData.setMoving(true);
 		String message = buildMessage(NxtProtocol.FORWARD, distance);
 		communicateToNxt(message);
+
 	}
 
 	public void driveBackward(int distance) {
