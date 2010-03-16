@@ -49,9 +49,6 @@
 		<belief name="topSonarDistance" class="int">
 			<fact>255</fact>
 		</belief>
-		<belief name="oldTopSonarDistance" class="int">
-			<fact>255</fact>
-		</belief>
 		<belief name="distanceTraveled" class="int">
 			<fact>0</fact>
 		</belief>
@@ -86,7 +83,8 @@
 			</precondition>
 		</plan>
 
-		<!-- Rule 2: Avoid walls and other large obstacles -->
+		<!-- Obstacle detected rules -->
+		<!-- Rule 2: Avoid walls and other large obstacles, taking any blocks held -->
 		<plan name="actionAvoidObstacles">
 			<body> new RandomTurnPlan(90,270)</body>
 			<trigger>
@@ -104,7 +102,7 @@
 
 		<!-- Rule 3: Avoid walls and other large obstacles, dropping the black block held -->
 		<plan name="dropBlackBlockPlan">
-			<body>new DropBlockPlan(20, 90, 270)</body>
+			<body>new DropBlockPlan(25, 90, 270)</body>
 			<trigger>
 				<condition>
 					$beliefbase.topSonarDistance &lt; 25
@@ -118,10 +116,10 @@
 			</precondition>
 		</plan>
 
-
-		<!--Rule 4: Leave clusters intact dropping any blocks currently held-->
+		<!-- Cluster detected rules -->
+		<!--Rule 4: Leave clusters intact dropping any block currently held-->
 		<plan name="dropWhiteBlockPlan">
-			<body>new DropBlockPlan(20, 90, 270)</body>
+			<body>new DropBlockPlan(25, 90, 270)</body>
 			<trigger>
 				<condition>
 					$beliefbase.clusterDetected
@@ -134,7 +132,7 @@
 			</precondition>
 		</plan>
 		
-		<!--Rule 5: Leave clusters intact dropping any blocks currently held-->
+		<!--Rule 5: Leave clusters intact taking the black block currently held-->
 		<plan name="avoidClusterPlan">
 			<body>new RandomTurnPlan(90,270)</body>
 			<trigger>
@@ -149,6 +147,7 @@
 			</precondition>
 		</plan>
 		
+		<!-- Object detected rules -->
 		<!-- Rule 6: Light object detected -->
 		<plan name="lightObjectPlan">
 			<body>new LightObjectDetectedPlan()</body>

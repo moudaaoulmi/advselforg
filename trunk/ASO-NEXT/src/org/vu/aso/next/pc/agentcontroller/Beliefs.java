@@ -13,7 +13,6 @@ public class Beliefs {
 	protected static final String OBJECT_IN_GRIPPER = "objectInGripper";
 	protected static final String DISTANCE_TRAVELED = "distanceTraveled";
 	protected static final String TOP_SONAR_DISTANCE = "topSonarDistance";
-	protected static final String OLD_TOP_SONAR_DISTANCE = "oldTopSonarDistance";
 	protected static final String CLUSTER_DETECTED = "clusterDetected";
 	protected static final String CARRYING_WHITE_BLOCK = "carryingWhiteBlock";
 	protected static final String CARRYING_BLACK_BLOCK = "carryingBlackBlock";
