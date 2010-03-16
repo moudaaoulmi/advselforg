@@ -37,7 +37,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 			processDriveForwardUpdate();
 			processDriveBackwardUpdate();
 			processTurningUpdate();
-			//proccesReadyForCommand();
 			processTouchSensor();
 			processSonarSensor();
 			processLightSensor();
@@ -63,12 +62,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		if (!sensorData.isDrivingForward() && (Boolean) getBelief(Beliefs.DRIVING_FORWARD)) {
 			setBelief(Beliefs.DRIVING_FORWARD, false);
 			printDebug("completed driving forward");
-		}
-	}
-
-	private void proccesReadyForCommand() {
-		if (!sensorData.isMoving()) {
-			setBelief(Beliefs.READY_FOR_COMMAND, true);
 		}
 	}
 

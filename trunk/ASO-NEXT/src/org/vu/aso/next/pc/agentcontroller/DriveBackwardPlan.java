@@ -13,10 +13,15 @@ public class DriveBackwardPlan extends BeliefUpdatingPlan {
 	public void body() {
 		printDebug("executed DriveBackwardPlan(" + distance + ")");
 		
-		// Drive backward for [distance] cm
+		// Make sure no other plans are executed
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
+		
+		// Drive backward for [distance] cm
 		setBelief(Beliefs.DRIVING_BACKWARD, true);
 		getRobot().driveBackward(distance);
 		waitForBeliefChange(Beliefs.DRIVING_BACKWARD);
+		
+		// Ready for new command
+		setBelief(Beliefs.READY_FOR_COMMAND, true);
 	}
 }

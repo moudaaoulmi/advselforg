@@ -16,8 +16,5 @@ public class DriveForwardPlan extends BeliefUpdatingPlan {
 		// Drive forward for [distance] cm
 		setBelief(Beliefs.DRIVING_FORWARD, true);
 		getRobot().driveForward(distance);
-
-		// Set readyForCommand true, so new plans can start
-		setBelief(Beliefs.READY_FOR_COMMAND, true);
 	}
 }
