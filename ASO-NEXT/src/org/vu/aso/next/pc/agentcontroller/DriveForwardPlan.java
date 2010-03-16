@@ -12,9 +12,9 @@ public class DriveForwardPlan extends BeliefUpdatingPlan {
 	@Override
 	public void body() {
 		printDebug("executed DriveForwardPlan(" + distance + ")");
-		
+
 		// Drive forward for [distance] cm
-		getRobot().driveForward(distance);
 		setBelief(Beliefs.DRIVING_FORWARD, true);
+		getRobot().driveForward(distance);
 	}
 }

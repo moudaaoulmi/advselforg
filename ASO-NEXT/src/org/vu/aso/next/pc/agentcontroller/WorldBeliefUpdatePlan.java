@@ -33,14 +33,16 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		while (true) {
 			sensorData = robot.requestSensorData();
 
-			// Read the sensor values
-			processDriveForwardUpdate();
-			processDriveBackwardUpdate();
-			processTurningUpdate();
-			processTouchSensor();
-			processSonarSensor();
-			processLightSensor();
-			processTravelDistance();
+			// Read the sensor values if not discarding next sensor data
+			if (sensorData.processNextSensorData()) {
+				processDriveForwardUpdate();
+				processDriveBackwardUpdate();
+				processTurningUpdate();
+				processTouchSensor();
+				processSonarSensor();
+				processLightSensor();
+				processTravelDistance();
+			}
 		}
 	}
 
@@ -83,16 +85,14 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	}
 
 	private void processTouchSensor() {
-		if (sensorData.getTouchSensorPressed() && !sensorData.wasTouchPressed) {
+		if (sensorData.getTouchSensorPressed() && !(Boolean) getBelief(Beliefs.CLUSTER_DETECTED)) {
 			setBelief(Beliefs.CLUSTER_DETECTED, true);
 			printDebug("detected a cluster");
-			sensorData.wasTouchPressed = true;
 		}
 
-		if (!sensorData.getTouchSensorPressed() && sensorData.wasTouchPressed) {
+		if (!sensorData.getTouchSensorPressed() && !(Boolean) getBelief(Beliefs.CLUSTER_DETECTED)) {
 			setBelief(Beliefs.CLUSTER_DETECTED, false);
 			printDebug("released a cluster");
-			sensorData.wasTouchPressed = false;
 		}
 	}
 
