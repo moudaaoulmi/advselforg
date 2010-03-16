@@ -69,9 +69,9 @@ public class NxtBridge {
 	}
 
 	public void driveForward(int distance) {
-		String message = buildMessage(NxtProtocol.FORWARD, distance);
 		sensorData.setLastCommand(EMovingMode.FORWARD);
 		sensorData.setMoving(true);
+		String message = buildMessage(NxtProtocol.FORWARD, distance);
 		communicateToNxt(message);
 	}
 
@@ -83,6 +83,8 @@ public class NxtBridge {
 	}
 
 	public void turnLeft(int angle) {
+		sensorData.setLastCommand(EMovingMode.TURNING);
+		sensorData.setMoving(true);
 		String message;
 		if (angle >= 0) {
 			message = buildMessage(NxtProtocol.TURN_LEFT, angle);
@@ -90,11 +92,11 @@ public class NxtBridge {
 			message = buildMessage(NxtProtocol.TURN_RIGHT, -1 * angle);
 		}
 		communicateToNxt(message);
-		sensorData.setLastCommand(EMovingMode.TURNING);
-		sensorData.setMoving(true);
 	}
 
 	public void turnRight(int angle) {
+		sensorData.setLastCommand(EMovingMode.TURNING);
+		sensorData.setMoving(true);
 		String message = buildMessage(NxtProtocol.TURN_RIGHT, angle);
 		if (angle >= 0) {
 			message = buildMessage(NxtProtocol.TURN_RIGHT, angle);
@@ -102,8 +104,6 @@ public class NxtBridge {
 			message = buildMessage(NxtProtocol.TURN_LEFT, -1 * angle);
 		}
 		communicateToNxt(message);
-		sensorData.setLastCommand(EMovingMode.TURNING);
-		sensorData.setMoving(true);
 	}
 
 	public void resetTravelDistance() {
