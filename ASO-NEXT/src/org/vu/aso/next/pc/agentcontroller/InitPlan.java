@@ -1,5 +1,9 @@
 package org.vu.aso.next.pc.agentcontroller;
 
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.util.Scanner;
+
 import org.vu.aso.next.common.EMotorPort;
 import org.vu.aso.next.common.ESensorType;
 import org.vu.aso.next.pc.NxtBridge;
@@ -10,9 +14,31 @@ public class InitPlan extends BeliefUpdatingPlan {
 
 	String robotName;
 
-	public InitPlan(String robotName) {
-		this.robotName = robotName;
-		setBelief(Beliefs.ROBOT_NAME, robotName);
+	public InitPlan() {
+		try {
+			this.robotName = getRobotName();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		setBelief(Beliefs.ROBOT_NAME, this.robotName);
+	}
+
+	public String getRobotName() throws FileNotFoundException {
+		// Get the first name
+		Scanner in = new Scanner("C:\\names.txt");
+		String name = in.nextLine();
+		String rest = "";
+		while (in.hasNext()) {
+			rest += '\n' + in.nextLine();
+		}
+		in.close();
+
+		// Print the remainder back to the file
+		PrintStream out = new PrintStream("C:\\names.txt");
+		out.print(rest);
+		out.close();
+
+		return name;
 	}
 
 	@Override

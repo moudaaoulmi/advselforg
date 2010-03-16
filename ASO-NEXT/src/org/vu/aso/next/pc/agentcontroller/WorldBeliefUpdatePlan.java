@@ -1,5 +1,7 @@
 package org.vu.aso.next.pc.agentcontroller;
 
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.Date;
 
 import org.vu.aso.next.common.EObjectType;
@@ -14,12 +16,12 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private static final boolean DEFAULT_PRINT_SETTING = false;
 	private static final long serialVersionUID = -7096221399333292349L;
 	private static final long minutes = 60000;
-	private static final long experimentDuration = 1* minutes;
-	
+	private static final long experimentDuration = 1 * minutes;
+
 	private NxtBridge robot;
 	private EObjectType oldObjectType = EObjectType.NO_OBJECT;
 	private SensorData sensorData;
-	
+
 	private Date endTime;
 
 	public void body() {
@@ -31,7 +33,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		new Thread(this).start();
 		getBeliefbase().getBelief(Beliefs.WIM_RUNNING).setFact(true);
 		getBeliefbase().getBelief(Beliefs.READY_FOR_COMMAND).setFact(true);
-		endTime = new Date(System.currentTimeMillis()+ experimentDuration);
+		endTime = new Date(System.currentTimeMillis() + experimentDuration);
 		waitFor(IFilter.NEVER);
 	}
 
@@ -105,13 +107,22 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 				printDebug("released a cluster");
 		}
 	}
-	
+
 	private void exit() {
-		writeNamesToFile();
+		try {
+			writeNamesToFile();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		robot.exit();
+		getExternalAccess().killAgent();
 	}
-	
-	private void writeNamesToFile() {
-		
+
+	private void writeNamesToFile() throws FileNotFoundException {
+		PrintStream out;
+		out = new PrintStream("C:\\names.txt");
+		out.print("JOEY\nCHANDLER\nROSS\nPatrick\n");
+		out.close();
 	}
 
 	@Override

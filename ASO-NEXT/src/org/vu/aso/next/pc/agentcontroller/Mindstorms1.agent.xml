@@ -56,7 +56,7 @@
 
 	<plans>
 		<plan name="start_robot">
-			<body>new InitPlan("JOEY")</body>
+			<body>new InitPlan()</body>
 			<trigger>
 				<condition>!$beliefbase.Initialized</condition>
 			</trigger>

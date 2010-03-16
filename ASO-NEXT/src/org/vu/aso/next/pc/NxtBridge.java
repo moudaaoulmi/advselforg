@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -22,7 +21,6 @@ public class NxtBridge {
 	private InputStream in;
 	private OutputStream out;
 	private SensorData sensorData = new SensorData();
-	private FileOutputStream logfile;
 	private PrintStream logstream;
 	private SimpleDateFormat formatter;
 
@@ -31,11 +29,10 @@ public class NxtBridge {
 			EMotorPort pilotPortRight, Boolean MotorReverse, float wheelDiameter, float trackWidth) {
 
 		try {
-			logfile = new FileOutputStream("C:\\log.txt");
+			logstream = new PrintStream("C:\\log.txt");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		logstream = new PrintStream(logfile);
 		formatter = new SimpleDateFormat("HH:mm:ss.SSS");
 
 		connection = new NXTConnector();
