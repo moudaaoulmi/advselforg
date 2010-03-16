@@ -76,10 +76,10 @@ public class NxtBridge {
 	}
 
 	public void driveBackward(int distance) {
-		String message = buildMessage(NxtProtocol.BACKWARD, distance);
-		communicateToNxt(message);
 		sensorData.setLastCommand(EMovingMode.BACKWARD);
 		sensorData.setMoving(true);
+		String message = buildMessage(NxtProtocol.BACKWARD, distance);
+		communicateToNxt(message);
 	}
 
 	public void turnLeft(int angle) {
