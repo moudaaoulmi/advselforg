@@ -80,7 +80,7 @@
 		<!-- Obstacle detected rules -->
 		<!-- Rule 2: Avoid walls and other large obstacles, taking any blocks held -->
 		<plan name="actionAvoidObstacles">
-			<body> new RandomTurnPlan(90,270)</body>
+			<body> new RandomTurnPlan(90,270) </body>
 			<trigger>
 				<condition>
 					$beliefbase.topSonarDistance &lt; 25
