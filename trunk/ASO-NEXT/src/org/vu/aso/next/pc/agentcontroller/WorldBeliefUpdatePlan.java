@@ -14,8 +14,7 @@ import jadex.runtime.IFilter;
 
 public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnable {
 
-	private static final long MINUTES = 6000;
-	private static final long EXPERIMENT_DURATION_MILLIS = NxtSettings.EXPERIMENT_DURATION * MINUTES;
+	private static final long EXPERIMENT_DURATION_MILLIS = NxtSettings.EXPERIMENT_DURATION_SECONDS * 1000;
 	private static final long serialVersionUID = -7096221399333292349L;
 
 	private NxtBridge robot;
@@ -116,7 +115,6 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 		}
 		robot.exit();
 		getExternalAccess().killAgent();
-		System.exit(0);
 	}
 
 	private void writeNamesToFile() throws FileNotFoundException {
