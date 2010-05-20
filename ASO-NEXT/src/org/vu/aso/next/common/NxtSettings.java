@@ -3,7 +3,7 @@ package org.vu.aso.next.common;
 public class NxtSettings {
 
 	// Experiment parameters
-	public final static int EXPERIMENT_DURATION = 1; // minutes
+	public final static int EXPERIMENT_DURATION_SECONDS = 1 * 60;
 	public final static String ROBOT_NAMES = "JOEY\nCHANDLER\nROSS\nPatrick\n";
 	public final static boolean DEFAULT_PRINT_SETTING = true;
 	
