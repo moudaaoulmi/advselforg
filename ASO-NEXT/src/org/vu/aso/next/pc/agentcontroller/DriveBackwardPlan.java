@@ -1,5 +1,7 @@
 package org.vu.aso.next.pc.agentcontroller;
 
+import org.vu.aso.next.common.NxtSettings;
+
 public class DriveBackwardPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = -8758789822720288236L;
@@ -11,16 +13,17 @@ public class DriveBackwardPlan extends BeliefUpdatingPlan {
 
 	@Override
 	public void body() {
-		printDebug("executed DriveBackwardPlan(" + distance + ")");
-		
+		if (NxtSettings.DEFAULT_PRINT_DEBUG_SETTING)
+			printDebug("executed DriveBackwardPlan(" + distance + ")");
+
 		// Make sure no other plans are executed
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
-		
+
 		// Drive backward for [distance] cm
 		setBelief(Beliefs.DRIVING_BACKWARD, true);
 		getRobot().driveBackward(distance);
 		waitForBeliefChange(Beliefs.DRIVING_BACKWARD);
-		
+
 		// Ready for new command
 		setBelief(Beliefs.READY_FOR_COMMAND, true);
 	}

@@ -55,7 +55,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void processTurningUpdate() {
 		if (!sensorData.isTurning() && (Boolean) getBelief(Beliefs.TURNING)) {
 			setBelief(Beliefs.TURNING, false);
-			if (NxtSettings.DEFAULT_PRINT_SETTING)
+			if (NxtSettings.DEFAULT_PRINT_DEBUG_SETTING)
 				printDebug("completed a turn");
 		}
 	}
@@ -63,7 +63,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void processDriveBackwardUpdate() {
 		if (!sensorData.isDrivingBackward() && (Boolean) getBelief(Beliefs.DRIVING_BACKWARD)) {
 			setBelief(Beliefs.DRIVING_BACKWARD, false);
-			if (NxtSettings.DEFAULT_PRINT_SETTING)
+			if (NxtSettings.DEFAULT_PRINT_DEBUG_SETTING)
 				printDebug("completed driving backward");
 		}
 	}
@@ -71,7 +71,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void processDriveForwardUpdate() {
 		if (!sensorData.isDrivingForward() && (Boolean) getBelief(Beliefs.DRIVING_FORWARD)) {
 			setBelief(Beliefs.DRIVING_FORWARD, false);
-			if (NxtSettings.DEFAULT_PRINT_SETTING)
+			if (NxtSettings.DEFAULT_PRINT_DEBUG_SETTING)
 				printDebug("completed driving forward");
 		}
 	}
@@ -96,13 +96,13 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void processTouchSensor() {
 		if (sensorData.getTouchSensorPressed() && !(Boolean) getBelief(Beliefs.CLUSTER_DETECTED)) {
 			setBelief(Beliefs.CLUSTER_DETECTED, true);
-			if (NxtSettings.DEFAULT_PRINT_SETTING)
+			if (NxtSettings.DEFAULT_PRINT_DEBUG_SETTING)
 				printDebug("detected a cluster");
 		}
 
 		if (!sensorData.getTouchSensorPressed() && (Boolean) getBelief(Beliefs.CLUSTER_DETECTED)) {
 			setBelief(Beliefs.CLUSTER_DETECTED, false);
-			if (NxtSettings.DEFAULT_PRINT_SETTING)
+			if (NxtSettings.DEFAULT_PRINT_DEBUG_SETTING)
 				printDebug("released a cluster");
 		}
 	}
@@ -131,7 +131,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	@Override
 	protected void setBelief(String beliefName, Object beliefValue) {
-		setBelief(beliefName, beliefValue, NxtSettings.DEFAULT_PRINT_SETTING);
+		setBelief(beliefName, beliefValue, NxtSettings.DEFAULT_PRINT_DEBUG_SETTING);
 	}
 
 	@Override
