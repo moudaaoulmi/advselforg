@@ -3,6 +3,7 @@ package org.vu.aso.next.pc.agentcontroller;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.Random;
 import java.util.Scanner;
 
 import org.vu.aso.next.common.EMotorPort;
@@ -17,8 +18,6 @@ public class InitPlan extends BeliefUpdatingPlan {
 	String robotName;
 
 	public InitPlan() {
-		this.robotName = getRobotName();
-		setBelief(Beliefs.ROBOT_NAME, this.robotName);
 	}
 
 	public String getRobotName() {
@@ -51,6 +50,10 @@ public class InitPlan extends BeliefUpdatingPlan {
 
 	@Override
 	public void body() {
+		waitFor(new Random().nextInt(200));
+		this.robotName = getRobotName();
+		setBelief(Beliefs.ROBOT_NAME, this.robotName);
+		
 		printDebug("executed initPlan");
 		NxtBridge robot;
 
