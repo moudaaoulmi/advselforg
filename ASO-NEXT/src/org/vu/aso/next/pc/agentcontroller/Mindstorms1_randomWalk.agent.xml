@@ -1,0 +1,101 @@
+<agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex
+						http://jadex.sourceforge.net/jadex-0.96.xsd"
+	name="Mindstorms1_randomWalk" package="org.vu.aso.next.pc.agentcontroller">
+
+	<imports>
+		<import>java.util.logging.*</import>
+		<import>java.util.*</import>
+		<import>jadex.adapter.fipa.SFipa</import>
+		<import>jadex.adapter.fipa.*</import>
+		<import>jadex.util.*</import>
+		<import>org.vu.aso.next.pc.*</import>
+		<import>org.vu.aso.next.common.*</import>
+	</imports>
+
+	<beliefs>
+		<belief name="robot" class="NxtBridge" />
+		<belief name="robotName" class="String" />
+		<belief name="Initialized" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="clusterDetected" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="WIMRunning" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="readyForCommand" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="drivingBackward" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="drivingForward" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="turning" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="carryingWhiteBlock" class="boolean">
+			<fact>true</fact>
+		</belief>
+		<belief name="carryingBlackBlock" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<belief name="objectInGripper" class="EObjectType">
+			<fact>EObjectType.NO_OBJECT</fact>
+		</belief>
+		<belief name="topSonarDistance" class="int">
+			<fact>255</fact>
+		</belief>
+		<belief name="distanceTraveled" class="int">
+			<fact>0</fact>
+		</belief>
+	</beliefs>
+
+	<plans>
+		<plan name="start_robot">
+			<body>new InitPlan()</body>
+			<trigger>
+				<condition>!$beliefbase.Initialized</condition>
+			</trigger>
+		</plan>
+		<plan name="startWorldUpdatePlan">
+			<body> new WorldBeliefUpdatePlan()</body>
+			<trigger>
+				<condition>$beliefbase.Initialized</condition>
+			</trigger>
+		</plan>
+
+		<!-- General Rules -->
+		<!-- Rule 1: Drive forward -->
+		<plan name="actionDrive" priority="-1">
+			<body>new DriveForwardPlan(10000)</body>
+			<trigger>
+				<condition>$beliefbase.readyForCommand</condition>
+			</trigger>
+		</plan>
+
+		<!-- Obstacle detected rules -->
+		<!-- Rule 2: Avoid walls and other large obstacles, dropping any blocks held -->
+		<plan name="actionAvoidObstacles">
+			<body> new DropBlockPlan(20, 90, 270) </body>
+			<trigger>
+				<condition>
+					$beliefbase.topSonarDistance &lt; 30
+				</condition>
+			</trigger>
+			<precondition>
+				$beliefbase.readyForCommand
+			</precondition>
+		</plan>
+
+	</plans>
+
+	<configurations>
+		<configuration name="default">
+		</configuration>
+	</configurations>
+
+</agent>
