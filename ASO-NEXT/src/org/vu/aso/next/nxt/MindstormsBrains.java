@@ -192,7 +192,9 @@ public class MindstormsBrains {
 
 	private void exit() {
 		monitor = null;
-		stop();
+		if (pilot != null) {
+			stop();
+		}
 		Sound.buzz();
 		System.exit(0);
 	}
