@@ -83,7 +83,7 @@
 			<body> new RandomTurnPlan(90,270) </body>
 			<trigger>
 				<condition>
-					$beliefbase.topSonarDistance &lt; 25
+					$beliefbase.topSonarDistance &lt; 30
 				</condition>
 			</trigger>
 			<precondition>
@@ -97,7 +97,7 @@
 			<body>new DropBlockPlan(20, 90, 270)</body>
 			<trigger>
 				<condition>
-					$beliefbase.topSonarDistance &lt; 25
+					$beliefbase.topSonarDistance &lt; 30
 				</condition>
 			</trigger>
 			<precondition>
