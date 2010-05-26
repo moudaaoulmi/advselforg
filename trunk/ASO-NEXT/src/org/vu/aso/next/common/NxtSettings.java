@@ -13,6 +13,6 @@ public class NxtSettings {
 	
 	// Robot settings
 	public final static int[] LIGHT_OBJECT_INTERVAL = { 48, 70 };
-	public final static int[] DARK_OBJECT_INTERVAL = { 33, 40 };
+	public final static int[] DARK_OBJECT_INTERVAL = { 32, 41 };
 
 }
