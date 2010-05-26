@@ -1,14 +1,13 @@
-	package org.vu.aso.next.pc;
+package org.vu.aso.next.pc;
 
 import org.vu.aso.next.common.EObjectType;
 import org.vu.aso.next.common.EMotorPort;
 import org.vu.aso.next.common.EMovingMode;
+import org.vu.aso.next.common.NxtSettings;
 
 public class SensorData {
 
 	private final static int MINIMUM = 0, MAXIMUM = 1;
-	private final static int[] LIGHT_OBJECT_INTERVAL = { 42, 70 };
-	private final static int[] DARK_OBJECT_INTERVAL = { 28, 38 };
 
 	private int distanceUpperSonar;
 	private int lightSensorValue;
@@ -58,10 +57,10 @@ public class SensorData {
 	}
 
 	public EObjectType getObjectType() {
-		if (lightSensorValue >= LIGHT_OBJECT_INTERVAL[MINIMUM] && lightSensorValue <= LIGHT_OBJECT_INTERVAL[MAXIMUM]) {
+		if (lightSensorValue >= NxtSettings.LIGHT_OBJECT_INTERVAL[MINIMUM] && lightSensorValue <= NxtSettings.LIGHT_OBJECT_INTERVAL[MAXIMUM]) {
 			return EObjectType.LIGHT_OBJECT;
-		} else if (lightSensorValue >= DARK_OBJECT_INTERVAL[MINIMUM]
-				&& lightSensorValue <= DARK_OBJECT_INTERVAL[MAXIMUM]) {
+		} else if (lightSensorValue >= NxtSettings.DARK_OBJECT_INTERVAL[MINIMUM]
+				&& lightSensorValue <= NxtSettings.DARK_OBJECT_INTERVAL[MAXIMUM]) {
 			return EObjectType.DARK_OBJECT;
 		} else {
 			return EObjectType.NO_OBJECT;

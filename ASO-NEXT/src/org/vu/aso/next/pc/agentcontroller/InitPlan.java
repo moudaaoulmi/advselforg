@@ -12,7 +12,6 @@ import org.vu.aso.next.pc.NxtBridge;
 
 public class InitPlan extends BeliefUpdatingPlan {
 
-	private static final String ROBOT_NAMES = "JOEY\nCHANDLER\nROSS\nPatrick\n";
 	private static final long serialVersionUID = 2961883448970106007L;
 
 	String robotName;
@@ -28,7 +27,7 @@ public class InitPlan extends BeliefUpdatingPlan {
 		try {
 			in = new Scanner(new FileInputStream(NxtSettings.NAMES_PATH));
 		} catch (FileNotFoundException e) {
-			in = new Scanner(ROBOT_NAMES);
+			in = new Scanner(NxtSettings.ROBOT_NAMES);
 		}
 		String name = in.nextLine();
 		String rest = "";
