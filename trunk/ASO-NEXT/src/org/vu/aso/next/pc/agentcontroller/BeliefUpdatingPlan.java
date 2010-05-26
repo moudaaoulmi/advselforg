@@ -26,7 +26,7 @@ public abstract class BeliefUpdatingPlan extends Plan {
 	}
 
 	protected void setBelief(String beliefName, Object beliefValue) {
-		setBelief(beliefName, beliefValue, NxtSettings.DEFAULT_PRINT_SETTING);
+		setBelief(beliefName, beliefValue, NxtSettings.DEFAULT_PRINT_DEBUG_SETTING);
 	}
 
 	protected void setBelief(String beliefName, Object beliefValue, boolean printDebug) {

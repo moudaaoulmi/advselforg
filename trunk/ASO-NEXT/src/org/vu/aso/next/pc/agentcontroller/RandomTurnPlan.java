@@ -2,6 +2,8 @@ package org.vu.aso.next.pc.agentcontroller;
 
 import java.util.Random;
 
+import org.vu.aso.next.common.NxtSettings;
+
 public class RandomTurnPlan extends BeliefUpdatingPlan {
 
 	private static final long serialVersionUID = -8758789822720288236L;
@@ -14,7 +16,8 @@ public class RandomTurnPlan extends BeliefUpdatingPlan {
 
 	@Override
 	public void body() {
-		printDebug("executed RandomTurnPlan()");
+		if (NxtSettings.DEFAULT_PRINT_DEBUG_SETTING)
+			printDebug("executed RandomTurnPlan()");
 
 		// Make sure no other plans are executed
 		setBelief(Beliefs.READY_FOR_COMMAND, false);
