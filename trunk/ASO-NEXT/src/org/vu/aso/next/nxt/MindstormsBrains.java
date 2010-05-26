@@ -142,10 +142,14 @@ public class MindstormsBrains {
 
 	private void initSensors(String[] config) {
 		sensors = new INxtSensor[4];
-		initSensor(SensorPort.S1, 0, Integer.parseInt(config[1]), config[2].equals("1") ? true : false);
-		initSensor(SensorPort.S2, 1, Integer.parseInt(config[3]), config[4].equals("1") ? true : false);
-		initSensor(SensorPort.S3, 2, Integer.parseInt(config[5]), config[6].equals("1") ? true : false);
-		initSensor(SensorPort.S4, 3, Integer.parseInt(config[7]), config[8].equals("1") ? true : false);
+		initSensor(SensorPort.S1, 0, Integer.parseInt(config[1]), config[2].equals("1") ? true
+				: false);
+		initSensor(SensorPort.S2, 1, Integer.parseInt(config[3]), config[4].equals("1") ? true
+				: false);
+		initSensor(SensorPort.S3, 2, Integer.parseInt(config[5]), config[6].equals("1") ? true
+				: false);
+		initSensor(SensorPort.S4, 3, Integer.parseInt(config[7]), config[8].equals("1") ? true
+				: false);
 	}
 
 	private void initSensor(SensorPort port, int portNumber, int type, boolean toBeMonitored) {
@@ -182,8 +186,9 @@ public class MindstormsBrains {
 
 	private void initPilot(String[] config) {
 		boolean motorReverse = Integer.parseInt(config[11]) == 1 ? true : false;
-		pilot = new TachoPilot(Float.parseFloat(config[12]), Float.parseFloat(config[13]), motors[Integer
-				.parseInt(config[9]) - 1], motors[Integer.parseInt(config[10]) - 1], motorReverse);
+		pilot = new TachoPilot(Float.parseFloat(config[12]), Float.parseFloat(config[13]),
+				motors[Integer.parseInt(config[9]) - 1], motors[Integer.parseInt(config[10]) - 1],
+				motorReverse);
 		pilot.setMoveSpeed(15);
 		pilot.regulateSpeed(true);
 	}
