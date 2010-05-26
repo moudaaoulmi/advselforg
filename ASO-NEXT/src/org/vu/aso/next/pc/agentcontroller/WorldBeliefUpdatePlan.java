@@ -78,7 +78,7 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 
 	private void processLightSensor() {
 		if (sensorData.getObjectType() != oldObjectType) {
-			setBelief(Beliefs.OBJECT_IN_GRIPPER, sensorData.getObjectType());
+			setBelief(Beliefs.OBJECT_IN_GRIPPER, sensorData.getObjectType(), true);
 			oldObjectType = sensorData.getObjectType();
 		}
 	}
@@ -96,14 +96,12 @@ public class WorldBeliefUpdatePlan extends BeliefUpdatingPlan implements Runnabl
 	private void processTouchSensor() {
 		if (sensorData.getTouchSensorPressed() && !(Boolean) getBelief(Beliefs.CLUSTER_DETECTED)) {
 			setBelief(Beliefs.CLUSTER_DETECTED, true);
-			if (NxtSettings.DEFAULT_PRINT_DEBUG_SETTING)
-				printDebug("detected a cluster");
+			printDebug("detected a cluster");
 		}
 
 		if (!sensorData.getTouchSensorPressed() && (Boolean) getBelief(Beliefs.CLUSTER_DETECTED)) {
 			setBelief(Beliefs.CLUSTER_DETECTED, false);
-			if (NxtSettings.DEFAULT_PRINT_DEBUG_SETTING)
-				printDebug("released a cluster");
+			printDebug("released a cluster");
 		}
 	}
 
