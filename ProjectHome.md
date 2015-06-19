@@ -1,0 +1,1 @@
+Project for the course Advanced Selforganisation by Joost Huizinga, Jan van der Lugt and Patrick Sannes. The goal is to create a mini-swarm of Mindstorms-robots that can cluster/sort some objects with selforganising properties.
